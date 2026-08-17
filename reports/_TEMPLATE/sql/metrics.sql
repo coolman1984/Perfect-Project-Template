@@ -1,0 +1,15 @@
+-- metrics.sql — trusted KPI calculations (Constitution Part 10.2)
+--
+-- This file is the ONLY place these numbers are computed. Python formats them;
+-- JavaScript displays them. Neither recalculates them.
+--
+-- Rules:
+--   * Weighted rates come from summed numerator / summed denominator.
+--     Never average row percentages unless the definition requires it (26.5).
+--   * A zero denominator yields NULL, never zero. A false zero on a management
+--     dashboard is worse than a blank.
+--   * Round only for presentation, after calculation and reconciliation.
+--   * Mark partial periods and exclude them from automatic comparison.
+--
+-- Each metric is anchored so metrics.toml can reference it:
+--   -- name: defect_rate

@@ -1,0 +1,71 @@
+# Machine contract for <REPORT_TITLE> (Constitution Part 5).
+#
+# Validated against contracts/report_config.schema.json before every run.
+#
+# Rules:
+#   - Version this file in Git.
+#   - Never silently change a business key or a metric meaning — that raises
+#     report_version.
+#   - No file path, sheet name, column name or threshold ever appears inside a
+#     .py file.
+#   - PENDING_APPROVAL is legal in discovery/prototype mode and FORBIDDEN in
+#     production mode (Part 41.3). An agent may create these; only a named
+#     human may resolve them.
+
+report_id      = "<REPORT_ID>"
+report_version = 1
+mode           = "prototype"          # discovery | prototype | production
+load_mode      = "PENDING_APPROVAL"   # append | upsert | snapshot | replace_period
+timezone       = "PENDING_APPROVAL"
+currency       = "PENDING_APPROVAL"
+
+[excel]
+sheet              = "PENDING_APPROVAL"
+header_row         = "PENDING_APPROVAL"
+data_start_row     = "PENDING_APPROVAL"
+open_mode          = "dedicated_then_attach"   # safe default (Part 7.1)
+calculation_policy = "as_saved"                # never recalculate silently
+# Priority order: table: > range: > header_columns > discover (Part 7.2).
+# Never trust UsedRange — Excel remembers deleted rows.
+data_area          = "PENDING_APPROVAL"
+include_hidden_rows = true                     # decide once, record the decision
+adapter            = "com"                     # fixture is dev/test only (Part 44.3)
+
+[extraction]
+# Chunks are sized in CELLS, not rows: a 272-column file and a 12-column file
+# need very different row counts for the same memory (Part 7.3).
+target_cells_per_chunk = 250000
+min_rows_per_chunk     = 250
+max_rows_per_chunk     = 10000
+# Read only approved columns (Part 27.2). Empty means "all", which is rarely right.
+projected_columns      = []
+
+[history]
+business_key   = "PENDING_APPROVAL"   # a list of column names
+event_date     = "PENDING_APPROVAL"
+lookback_days  = "PENDING_APPROVAL"
+deletion_rule  = "PENDING_APPROVAL"   # ignore | mark_inactive | soft_delete | close_version | physical
+
+[quality]
+required_columns_block   = true
+max_duplicate_key_rate   = "PENDING_APPROVAL"
+max_required_null_rate   = "PENDING_APPROVAL"
+max_row_count_change_pct = "PENDING_APPROVAL"
+# The strongest check in the system. Difference must be EXACTLY zero (Part 9.4).
+control_total_column     = "PENDING_APPROVAL"
+
+[output]
+audience             = "PENDING_APPROVAL"
+storage_allowed      = "PENDING_APPROVAL"   # IT-approved folders only (Part 13.5)
+retention_days       = "PENDING_APPROVAL"
+ai_narrative_allowed = false                # business-owner decision (Part 3.1)
+
+# Every human-owned decision needs a named approver, a UTC timestamp and an
+# evidence reference. A filled value with an empty approver counts as
+# unapproved (Part 41.2).
+[approvals]
+business_key         = { approved_by = "", approved_at = "", evidence = "" }
+load_mode            = { approved_by = "", approved_at = "", evidence = "" }
+deletion_rule        = { approved_by = "", approved_at = "", evidence = "" }
+control_total_column = { approved_by = "", approved_at = "", evidence = "" }
+storage_allowed      = { approved_by = "", approved_at = "", evidence = "" }

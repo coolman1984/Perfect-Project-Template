@@ -1,0 +1,60 @@
+# Constitution Part 20.9: RUN_TESTS, the local pre-commit gate and any available
+# CI must run `verify`. A material change cannot be committed or released while
+# it fails.
+#
+# This workflow installs NOTHING. The tool tier is standard-library only
+# (Part 37.2 rule 1), which is exactly what makes it runnable here.
+
+name: Template checks
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Map freshness (Part 20.5)
+        run: ./project_tool.sh map verify
+
+      - name: Architecture baseline (Part 23.9)
+        run: ./project_tool.sh architecture verify --baseline
+
+      - name: Architecture source scan (Part 23.10)
+        run: ./project_tool.sh architecture verify --source-scan
+
+      - name: Constitution consistency (Part 34.3)
+        run: ./project_tool.sh constitution audit
+
+      - name: Project memory admission (Part 21.6)
+        run: ./project_tool.sh memory validate
+
+      - name: Acceptance ledger integrity (Part 38)
+        run: ./project_tool.sh gates status
+
+      - name: Report configuration (Part 41)
+        run: ./project_tool.sh report validate
+
+      - name: Test suite (Part 15)
+        run: python3 -m unittest discover -s tests -t . --verbose
+
+      - name: Doctests
+        run: |
+          python3 -m doctest app/excel/conversion.py -v
+          python3 -m doctest app/excel/port.py
+          python3 -m doctest app/local_transport.py
+
+      # Environment-bound gates cannot run here and must not appear to pass.
+      # They stay `conditional` in acceptance/gates.yaml until a real Windows
+      # machine with Excel and the protected files exercises them (Part 44.3).
+      - name: Report environment-bound gates
+        run: ./project_tool.sh gates status --severity block

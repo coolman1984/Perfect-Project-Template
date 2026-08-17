@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "baseline_version": 1,
+  "_comment": [
+    "Machine-enforced component contract (Constitution Parts 0.8, 23.8, 23.9).",
+    "Verified by: PROJECT_TOOL architecture verify --baseline",
+    "",
+    "An agent may NOT remove a component, add an external prerequisite, or add an",
+    "entry to approved_deviations. Those require an explicit user-approved",
+    "deviation request under Part 0.7. Versions marked PIN_AT_BUILD are pinned",
+    "during Phase -1 after compatibility and security testing; pinning a version",
+    "is ordinary work, removing a component is not."
+  ],
+  "project_slug": "PENDING_APPROVAL",
+  "approved_external_prerequisites": [
+    "Windows 10/11 x64",
+    "Microsoft Excel desktop",
+    "interactive logged-in user session"
+  ],
+  "forbidden_runtime_requirements": [
+    "internet",
+    "administrator_or_elevation",
+    "windows_service_or_iis",
+    "firewall_or_url_reservation_change",
+    "system_python",
+    "system_node",
+    "pip",
+    "npm",
+    "vscode",
+    "terminal_for_normal_use",
+    "cdn"
+  ],
+  "required_components": [
+    {
+      "id": "python-runtime",
+      "capability": "application execution",
+      "delivery": "bundled",
+      "required_paths": ["app/"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "PSF",
+      "smoke_test": "app --self-test runtime",
+      "forbidden_substitute": "system Python, py launcher, Microsoft Store Python, first-run download"
+    },
+    {
+      "id": "native-runtime-dlls",
+      "capability": "low-level execution of the exact packaged wheels",
+      "delivery": "bundled or proven in the approved Windows image",
+      "required_paths": [],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "Microsoft redistributable terms",
+      "smoke_test": "app --self-test native",
+      "forbidden_substitute": "assuming the build PC's Visual C++ state exists everywhere"
+    },
+    {
+      "id": "pywin32",
+      "capability": "controlled Excel desktop automation over COM",
+      "delivery": "bundled",
+      "required_paths": ["app/excel/com_adapter.py"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "PSF-like",
+      "smoke_test": "app --self-test excel",
+      "forbidden_substitute": "PowerShell/VBA-only redesign, cell-by-cell automation"
+    },
+    {
+      "id": "duckdb",
+      "capability": "trusted local history and analytical SQL",
+      "delivery": "bundled",
+      "required_paths": ["app/data/database.py"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "MIT",
+      "smoke_test": "app --self-test database",
+      "forbidden_substitute": "CSV/JSON files, browser storage, Excel sheets, in-memory-only history",
+      "settings": {
+        "autoinstall_known_extensions": false,
+        "autoload_known_extensions": false
+      }
+    },
+    {
+      "id": "parquet",
+      "capability": "approved recovery and rebuild archive",
+      "delivery": "bundled through the verified DuckDB build",
+      "required_paths": ["app/data/archive.py"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "Apache-2.0",
+      "smoke_test": "app --self-test archive",
+      "forbidden_substitute": "unversioned CSV dump, or no recovery archive when policy permits one"
+    },
+    {
+      "id": "fastapi-stack",
+      "capability": "typed loopback API, validated uploads, durable progress",
+      "delivery": "bundled",
+      "required_paths": ["app/server.py"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "MIT / BSD",
+      "smoke_test": "app --self-test api",
+      "forbidden_substitute": "static HTML-only product, ad-hoc file server, batch-script workflow"
+    },
+    {
+      "id": "loopback-transport",
+      "capability": "renderer-to-application boundary, lifecycle and security",
+      "delivery": "bundled process; 127.0.0.1; asInvoker; OS-selected or bounded high port",
+      "required_paths": ["app/local_transport.py"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "project",
+      "smoke_test": "app --self-test transport",
+      "forbidden_substitute": "LAN/public bind, file:// application, direct browser access to COM/DB/files, Windows Service, IIS/HTTP.sys, firewall or URL-reservation change, administrator requirement"
+    },
+    {
+      "id": "echarts",
+      "capability": "professional interactive charts with accessible summaries",
+      "delivery": "pinned local vendor asset",
+      "required_paths": ["web/vendor/"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "Apache-2.0",
+      "smoke_test": "browser verification: charts render offline",
+      "forbidden_substitute": "CDN, online chart service, screenshot-only charts, reduced chart set"
+    },
+    {
+      "id": "web-frontend",
+      "capability": "one-page responsive local application",
+      "delivery": "bundled local assets",
+      "required_paths": ["web/index.html", "web/styles.css", "web/app.js"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "project",
+      "smoke_test": "browser verification: shell loads offline",
+      "forbidden_substitute": "online framework/runtime, Excel-based UI"
+    },
+    {
+      "id": "config-validation",
+      "capability": "machine-checked configuration and data contracts",
+      "delivery": "bundled",
+      "required_paths": ["contracts/"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "MIT",
+      "smoke_test": "PROJECT_TOOL report validate",
+      "forbidden_substitute": "unchecked configuration, hard-coded report rules"
+    },
+    {
+      "id": "pyinstaller",
+      "capability": "reproducible self-contained Windows one-folder release",
+      "delivery": "build kit",
+      "required_paths": [],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "GPL-2.0-with-exception",
+      "smoke_test": "BUILD_RELEASE.bat then VERIFY_OFFLINE.bat",
+      "forbidden_substitute": "source-only delivery, requiring user installation"
+    },
+    {
+      "id": "wheelhouse",
+      "capability": "offline developer/agent rebuild",
+      "delivery": "hash-locked, in the project/update kit only",
+      "required_paths": ["offline_packages/"],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "mixed, see THIRD_PARTY_NOTICES.md",
+      "smoke_test": "offline rebuild with --no-index --find-links",
+      "forbidden_substitute": "employee runtime repair via pip, live package index, unverified copied environment"
+    },
+    {
+      "id": "browser-renderer",
+      "capability": "renders the local one-page application",
+      "delivery": "proven part of the approved Windows image, or packaged WebView2 Fixed Version",
+      "required_paths": [],
+      "version": "PIN_AT_BUILD",
+      "sha256": "POPULATE_FROM_RELEASE",
+      "license": "Microsoft terms",
+      "smoke_test": "START_APP.bat opens the loopback URL",
+      "forbidden_substitute": "online bootstrapper, assuming the browser is probably installed"
+    },
+    {
+      "id": "project-intelligence",
+      "capability": "agent onboarding, map freshness and token control",
+      "delivery": "bundled in the project/update kit, isolated from the user runtime",
+      "required_paths": ["tools/project_tool.py", "tools/project_intelligence/"],
+      "version": "1.0.0",
+      "sha256": "N/A_SOURCE_TRACKED_BY_MAP_MANIFEST",
+      "license": "project",
+      "smoke_test": "PROJECT_TOOL doctor",
+      "forbidden_substitute": "deleting the map or skill to reduce package size"
+    }
+  ],
+  "optional_components": [
+    {
+      "id": "sql-server-connector",
+      "capability": "central synchronization when explicitly enabled and approved",
+      "delivery": "bundled with native prerequisites when enabled",
+      "enabled": false,
+      "disabled_reason": "Part 13.4: skip until someone outside the team needs the data. Phase 6 is NOT_APPLICABLE until enabled.",
+      "version": "PIN_AT_BUILD",
+      "smoke_test": "app --self-test sqlserver",
+      "forbidden_substitute": "silently disabling synchronization, unapproved driver"
+    },
+    {
+      "id": "tree-sitter",
+      "capability": "richer symbol-level map ranking",
+      "delivery": "project kit only, optional accelerator",
+      "enabled": false,
+      "disabled_reason": "Part 37.2 rule 4: absence degrades to stdlib AST parsing and is never a failure.",
+      "version": "PIN_AT_BUILD",
+      "smoke_test": "PROJECT_TOOL map doctor",
+      "forbidden_substitute": "making the map engine fail when it is absent"
+    }
+  ],
+  "approved_deviations": []
+}

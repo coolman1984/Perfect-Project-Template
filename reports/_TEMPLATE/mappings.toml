@@ -1,0 +1,31 @@
+# Column mapping for <REPORT_TITLE> (Constitution Parts 7.2, 7.6, 27.3).
+#
+# Map by APPROVED NAME, never by position. A moved column must still work; a
+# renamed critical column must FAIL loudly. Never fuzzy-match an important field.
+
+[normalization]
+# The deterministic rules in Part 7.6 are implemented in app/excel/conversion.py
+# and are not configurable. "  Total Cost (USD) " always becomes total_cost_usd.
+apply_standard_rules = true
+
+# field_name = { source_names = [...], type = "...", required = true/false }
+#
+# source_names lists every APPROVED alias for this field. Adding an alias is a
+# mapping change with an approval record — not a convenience edit.
+[fields]
+# example_field = { source_names = ["Example Field", "Example  Field"], type = "text", required = true }
+
+# Merged cells carry their value only in the top-left cell. Fill down/right only
+# for explicitly approved columns (Part 7.5) — never globally.
+[merged_cells]
+fill_down  = []
+fill_right = []
+
+# Duplicate headers get deterministic _2, _3 suffixes. The mapping must choose
+# the intended one EXPLICITLY (Part 27.3).
+[duplicate_headers]
+# manuf_part   = "the part number as received"
+# manuf_part_2 = "IGNORED: legacy duplicate column"
+
+[approvals]
+fields = { approved_by = "", approved_at = "", evidence = "" }

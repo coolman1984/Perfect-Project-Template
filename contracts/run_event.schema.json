@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/run_event.schema.json",
+  "title": "Durable run progress event",
+  "description": "Constitution Part 22.4. Progress is an event stream, not animation. Events are STORED BEFORE DELIVERY so a browser refresh or temporary closure never loses progress, and the renderer can never become the source of truth (Part 25.5.1 rule 6).",
+  "type": "object",
+  "required": ["run_id", "sequence", "time", "stage", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "run_id": { "type": "string", "pattern": "^RUN-\\d{8}-\\d{3}$" },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic per run. Clients resume with ?since=<sequence>."
+    },
+    "time": { "type": "string", "description": "ISO-8601 with offset." },
+    "stage": {
+      "type": "string",
+      "description": "A state name from contracts/run_states.json."
+    },
+    "status": { "enum": ["RUNNING", "WAITING", "WARNING", "FAILED", "COMPLETE", "CANCELLED"] },
+    "percent": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+    "message": {
+      "type": "string",
+      "description": "Plain language for the operator. Never a stack trace (Part 22.8)."
+    },
+    "rows_done": { "type": ["integer", "null"], "minimum": 0 },
+    "rows_total": { "type": ["integer", "null"], "minimum": 0 },
+    "warning_count": { "type": "integer", "minimum": 0, "default": 0 },
+    "action_required": {
+      "type": "boolean",
+      "default": false,
+      "description": "True moves the run to WAITING_FOR_USER with one direct instruction (Part 22.5)."
+    },
+    "action_instruction": { "type": ["string", "null"] },
+    "question_id": {
+      "type": ["string", "null"],
+      "description": "POST /api/runs/{id}/answer validates against this exact id (Part 25.5)."
+    },
+    "error_code": {
+      "type": ["string", "null"],
+      "description": "Must exist in contracts/error_codes.json (Part 42.2)."
+    }
+  }
+}

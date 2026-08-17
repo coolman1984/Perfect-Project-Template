@@ -1,0 +1,335 @@
+{
+  "schema_version": "1.0",
+  "_comment": [
+    "Single source of truth for error codes (Constitution Parts 12.3, 12.4, 22.8, 42.2).",
+    "Application code raises codes from this registry only. The four-part",
+    "operator error screen (Part 22.8) is assembled from these fields, which is",
+    "what makes non-technical error design a build-time guarantee.",
+    "",
+    "class:    RETRYABLE | USER_ACTION | BLOCKING_DATA | BLOCKING_SYSTEM",
+    "preserves_history: true means trusted history and the last approved",
+    "dashboard are untouched — the operator must always be told this (Part 12.6)."
+  ],
+  "codes": [
+    {
+      "code": "SRC_NOT_FOUND",
+      "class": "USER_ACTION",
+      "retryable": false,
+      "part": "12.3",
+      "operator_message_en": "A required source file was not found.",
+      "operator_message_ar": "لم يتم العثور على أحد الملفات المطلوبة.",
+      "next_action": "Add the missing file and press Retry.",
+      "preserves_history": true
+    },
+    {
+      "code": "SRC_FILE_NOT_READY",
+      "class": "RETRYABLE",
+      "retryable": true,
+      "part": "7.5",
+      "operator_message_en": "The file is still being copied or written.",
+      "operator_message_ar": "لا يزال الملف قيد النسخ أو الكتابة.",
+      "next_action": "Wait for the copy to finish; the application retries automatically.",
+      "preserves_history": true
+    },
+    {
+      "code": "EXCEL_NOT_AVAILABLE",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "12.3",
+      "operator_message_en": "Microsoft Excel is not available on this computer.",
+      "operator_message_ar": "برنامج مايكروسوفت إكسل غير متاح على هذا الجهاز.",
+      "next_action": "Contact IT: Excel desktop is a required prerequisite.",
+      "preserves_history": true
+    },
+    {
+      "code": "EXCEL_OPEN_FAILED",
+      "class": "RETRYABLE",
+      "retryable": true,
+      "part": "7.1",
+      "operator_message_en": "The workbook could not be opened automatically.",
+      "operator_message_ar": "تعذر فتح المصنف تلقائيًا.",
+      "next_action": "The application will try again, then ask you to open it manually.",
+      "preserves_history": true
+    },
+    {
+      "code": "EXCEL_WORKBOOK_AMBIGUOUS",
+      "class": "USER_ACTION",
+      "retryable": false,
+      "part": "7.1",
+      "operator_message_en": "More than one open workbook has a similar name.",
+      "operator_message_ar": "يوجد أكثر من مصنف مفتوح بأسماء متشابهة.",
+      "next_action": "Close the workbooks you are not reporting on, then press Retry.",
+      "preserves_history": true
+    },
+    {
+      "code": "DRM_USER_ACTION_REQUIRED",
+      "class": "USER_ACTION",
+      "retryable": true,
+      "part": "22.5",
+      "operator_message_en": "This protected file must be opened by you first.",
+      "operator_message_ar": "يجب أن تفتح هذا الملف المحمي بنفسك أولاً.",
+      "next_action": "Open the file in Excel, confirm you can see the data, leave it open, then press Retry.",
+      "preserves_history": true
+    },
+    {
+      "code": "EXCEL_READ_FAILED",
+      "class": "RETRYABLE",
+      "retryable": true,
+      "part": "12.3",
+      "operator_message_en": "Reading the data from Excel was interrupted.",
+      "operator_message_ar": "تمت مقاطعة قراءة البيانات من إكسل.",
+      "next_action": "The run resumes from its last checkpoint. Keep the workbook open.",
+      "preserves_history": true
+    },
+    {
+      "code": "SCHEMA_REQUIRED_COLUMN_MISSING",
+      "class": "BLOCKING_DATA",
+      "retryable": false,
+      "part": "9.1",
+      "operator_message_en": "A required column is missing from the source file.",
+      "operator_message_ar": "عمود مطلوب غير موجود في الملف المصدر.",
+      "next_action": "Open the quality report to see the exact column name, then confirm the change with the file owner.",
+      "preserves_history": true
+    },
+    {
+      "code": "SCHEMA_TYPE_CHANGED",
+      "class": "BLOCKING_DATA",
+      "retryable": false,
+      "part": "9.1",
+      "operator_message_en": "A critical column changed its type.",
+      "operator_message_ar": "تغير نوع بيانات عمود مهم.",
+      "next_action": "Review schema_diff.json with the file owner before loading.",
+      "preserves_history": true
+    },
+    {
+      "code": "DATA_DUPLICATE_BUSINESS_KEY",
+      "class": "BLOCKING_DATA",
+      "retryable": false,
+      "part": "9.2",
+      "operator_message_en": "The same record appears more than once in the source.",
+      "operator_message_ar": "نفس السجل يظهر أكثر من مرة في الملف المصدر.",
+      "next_action": "Open the quality report to see the duplicated keys.",
+      "preserves_history": true
+    },
+    {
+      "code": "DQ_CONTROL_TOTAL_MISMATCH",
+      "class": "BLOCKING_DATA",
+      "retryable": false,
+      "part": "9.4",
+      "operator_message_en": "The totals in the source file and the database do not match. Your previous dashboard is unchanged and still correct.",
+      "operator_message_ar": "الإجماليات في الملف المصدر وقاعدة البيانات غير متطابقة. لوحتك السابقة لم تتغير وما زالت صحيحة.",
+      "next_action": "Open the quality report to see which source and column differ.",
+      "preserves_history": true
+    },
+    {
+      "code": "CONFIG_PENDING_APPROVAL",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "41.3",
+      "operator_message_en": "This report still has business rules waiting for approval.",
+      "operator_message_ar": "لا تزال هناك قواعد عمل بانتظار الاعتماد لهذا التقرير.",
+      "next_action": "The report owner must approve the open definitions before a production run.",
+      "preserves_history": true
+    },
+    {
+      "code": "RESOURCE_DISK_LOW",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "27.2",
+      "operator_message_en": "There is not enough free disk space to process safely.",
+      "operator_message_ar": "لا توجد مساحة كافية على القرص لإتمام المعالجة بأمان.",
+      "next_action": "Free disk space, then press Retry.",
+      "preserves_history": true
+    },
+    {
+      "code": "RESOURCE_MEMORY_RISK",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "27.2",
+      "operator_message_en": "This file is too large to process with the memory available.",
+      "operator_message_ar": "هذا الملف كبير جدًا بالنسبة للذاكرة المتاحة.",
+      "next_action": "Close other applications and press Retry, or contact support.",
+      "preserves_history": true
+    },
+    {
+      "code": "REPORT_LOCKED",
+      "class": "RETRYABLE",
+      "retryable": true,
+      "part": "27.5",
+      "operator_message_en": "This report is already being processed.",
+      "operator_message_ar": "تتم معالجة هذا التقرير بالفعل.",
+      "next_action": "Wait for the current run to finish.",
+      "preserves_history": true
+    },
+    {
+      "code": "PACKAGE_COMPONENT_MISSING",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "23.11",
+      "operator_message_en": "Part of the application is missing or damaged.",
+      "operator_message_ar": "جزء من التطبيق مفقود أو تالف.",
+      "next_action": "Run SETUP_OFFLINE.bat to restore the application from its sealed repair copy.",
+      "preserves_history": true
+    },
+    {
+      "code": "PACKAGE_COMPONENT_BLOCKED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "23.11",
+      "operator_message_en": "Part of the application was blocked by this computer's security software.",
+      "operator_message_ar": "تم حظر جزء من التطبيق بواسطة برنامج الحماية على هذا الجهاز.",
+      "next_action": "Give the support code to IT; the application will not run a reduced version.",
+      "preserves_history": true
+    },
+    {
+      "code": "ARCHITECTURE_BASELINE_MISMATCH",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "23.10",
+      "operator_message_en": "This installation does not match its approved version.",
+      "operator_message_ar": "هذه النسخة لا تطابق الإصدار المعتمد.",
+      "next_action": "Give the support code to IT and reinstall the approved release.",
+      "preserves_history": true
+    },
+    {
+      "code": "UNEXPECTED_NETWORK_ATTEMPT",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "23.10",
+      "operator_message_en": "The application tried to use the internet, which is not allowed.",
+      "operator_message_ar": "حاول التطبيق استخدام الإنترنت، وهذا غير مسموح.",
+      "next_action": "Give the support code to IT. Do not continue using this build.",
+      "preserves_history": true
+    },
+    {
+      "code": "LOCAL_LOOPBACK_BIND_FAILED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "0.9",
+      "operator_message_en": "The application could not start its local connection.",
+      "operator_message_ar": "تعذر على التطبيق بدء الاتصال المحلي.",
+      "next_action": "Give the support code to IT: local loopback access is being blocked by endpoint policy.",
+      "preserves_history": true
+    },
+    {
+      "code": "LOCAL_ORIGIN_REJECTED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "22.10",
+      "operator_message_en": "A request came from an unexpected source and was refused.",
+      "operator_message_ar": "تم رفض طلب وارد من مصدر غير متوقع.",
+      "next_action": "Close other browser tabs and reopen the application from START_APP.bat.",
+      "preserves_history": true
+    },
+    {
+      "code": "LOCAL_TRANSPORT_INTEGRITY_FAILED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "25.5.1",
+      "operator_message_en": "The application could not verify its own connection safely.",
+      "operator_message_ar": "تعذر على التطبيق التحقق من سلامة اتصاله.",
+      "next_action": "Close the application completely and start it again from START_APP.bat.",
+      "preserves_history": true
+    },
+    {
+      "code": "ELEVATION_FORBIDDEN",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "27.6",
+      "operator_message_en": "The application asked for administrator rights, which it must never need.",
+      "operator_message_ar": "طلب التطبيق صلاحيات المسؤول، وهو أمر لا يجب أن يحدث أبدًا.",
+      "next_action": "Do not approve the prompt. Give the support code to IT; this is a packaging defect.",
+      "preserves_history": true
+    },
+    {
+      "code": "DUCKDB_WRITE_FAILED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "12.3",
+      "operator_message_en": "The database could not be updated. Your previous data is unchanged.",
+      "operator_message_ar": "تعذر تحديث قاعدة البيانات. بياناتك السابقة لم تتغير.",
+      "next_action": "Check free disk space, then give the support code to IT if it repeats.",
+      "preserves_history": true
+    },
+    {
+      "code": "HISTORY_COMMIT_FAILED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "8.5",
+      "operator_message_en": "The update was cancelled and rolled back. Your trusted history is unchanged.",
+      "operator_message_ar": "تم إلغاء التحديث والتراجع عنه. سجلك الموثوق لم يتغير.",
+      "next_action": "Retry the run. If it repeats, give the support code to IT.",
+      "preserves_history": true
+    },
+    {
+      "code": "SQL_CONNECT_FAILED",
+      "class": "RETRYABLE",
+      "retryable": true,
+      "part": "13.4",
+      "operator_message_en": "The central database is not reachable. Your local report is complete and correct.",
+      "operator_message_ar": "قاعدة البيانات المركزية غير متاحة. تقريرك المحلي مكتمل وصحيح.",
+      "next_action": "No action needed. Sharing will retry automatically.",
+      "preserves_history": true
+    },
+    {
+      "code": "SQL_BULKCOPY_FAILED",
+      "class": "RETRYABLE",
+      "retryable": true,
+      "part": "23.4",
+      "operator_message_en": "Sending data to the central database did not finish.",
+      "operator_message_ar": "لم يكتمل إرسال البيانات إلى قاعدة البيانات المركزية.",
+      "next_action": "No action needed. The pending item retries automatically.",
+      "preserves_history": true
+    },
+    {
+      "code": "SQL_RECONCILIATION_FAILED",
+      "class": "BLOCKING_DATA",
+      "retryable": false,
+      "part": "27.5",
+      "operator_message_en": "Local and central totals do not agree.",
+      "operator_message_ar": "الإجماليات المحلية والمركزية غير متطابقة.",
+      "next_action": "Give the support code to the database owner. Sharing is paused until it is resolved.",
+      "preserves_history": true
+    },
+    {
+      "code": "ANALYTICS_TEST_FAILED",
+      "class": "BLOCKING_DATA",
+      "retryable": false,
+      "part": "12.3",
+      "operator_message_en": "A calculation check failed, so no new numbers were published.",
+      "operator_message_ar": "فشل أحد فحوص الحساب، لذلك لم يتم نشر أرقام جديدة.",
+      "next_action": "Your previous dashboard is still shown. Give the support code to support.",
+      "preserves_history": true
+    },
+    {
+      "code": "JSON_CONTRACT_FAILED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "11.1",
+      "operator_message_en": "The dashboard data did not pass its format check.",
+      "operator_message_ar": "لم تجتز بيانات اللوحة فحص التنسيق.",
+      "next_action": "Your previous dashboard is still shown. Give the support code to support.",
+      "preserves_history": true
+    },
+    {
+      "code": "DASHBOARD_BUILD_FAILED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "12.3",
+      "operator_message_en": "The new dashboard could not be built.",
+      "operator_message_ar": "تعذر إنشاء اللوحة الجديدة.",
+      "next_action": "Your previous dashboard is still shown. Retry, then contact support.",
+      "preserves_history": true
+    },
+    {
+      "code": "DASHBOARD_VERIFY_FAILED",
+      "class": "BLOCKING_SYSTEM",
+      "retryable": false,
+      "part": "11.5",
+      "operator_message_en": "The new dashboard did not pass its automatic checks, so it was not published.",
+      "operator_message_ar": "لم تجتز اللوحة الجديدة الفحوص التلقائية، لذلك لم يتم نشرها.",
+      "next_action": "Your previous dashboard is still shown and still correct. Contact support with the code.",
+      "preserves_history": true
+    }
+  ]
+}

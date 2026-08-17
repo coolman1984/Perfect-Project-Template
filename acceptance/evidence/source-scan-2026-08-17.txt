@@ -1,0 +1,5 @@
+
+=== architecture verify --source-scan ===
+  .  scanned 91 executable/runtime file(s)
+
+architecture verify --source-scan: PASS (0 warning(s))

@@ -1,0 +1,13 @@
+# Cline entry pointer (Constitution Part 20.2)
+#
+# No rules live here. They live in AGENTS.md and PROJECT_SKILL.md.
+# Forking rules across entry files is how projects drift.
+
+1. Read AGENTS.md, then PROJECT_SKILL.md, then .ai/READ_FIRST.md.
+2. Run: ./project_tool.sh doctor      (or PROJECT_TOOL.bat doctor on Windows)
+3. Run: ./project_tool.sh map context --task "<your task>" --budget 4000
+4. Read .ai/CONTEXT_PACK.md and .ai/CURRENT_STATE.md.
+5. Open only the files the task router named. Do not scan the repository.
+6. Never invent business meaning — write PENDING_APPROVAL and ask (Part 41).
+7. Before "done": map verify, architecture verify --source-scan,
+   constitution audit, memory validate, gates status.

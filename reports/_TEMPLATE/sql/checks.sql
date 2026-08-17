@@ -1,0 +1,22 @@
+-- checks.sql — report-specific validation (Constitution Part 9)
+--
+-- Each check returns: check_id, scope, severity, status, expected, actual,
+-- difference, tolerance, message, evidence.
+--
+-- A check that cannot express its expectation as a number should still return
+-- the evidence that a human would look at.
+
+-- Control total (Part 9.4). Difference must be EXACTLY zero.
+-- SELECT
+--     'control_total_<column>'      AS check_id,
+--     'dataset'                     AS scope,
+--     'fail'                        AS severity,
+--     CASE WHEN source_total = db_total THEN 'PASS' ELSE 'FAIL' END AS status,
+--     source_total                  AS expected,
+--     db_total                      AS actual,
+--     source_total - db_total       AS difference,
+--     0                             AS tolerance
+-- FROM ...;
+
+-- Population equation (Part 25.3).
+-- source_rows = accepted_rows + rejected_rows + intentionally_filtered_rows

@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/dashboard.schema.json",
+  "title": "Dashboard data package",
+  "description": "Constitution Parts 11.1 and 25.4. This is a dashboard PACKAGE, not a database export: values arrive already calculated and already rounded. The browser never sums a million rows and never holds a second copy of a KPI formula (rule 6).",
+  "type": "object",
+  "required": ["schema_version", "report", "freshness", "quality", "kpis", "charts", "lineage"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+    "demo_data": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when produced through the fixture adapter. The UI, HTML export and manifest must all watermark DEMO DATA (Parts 0.4 rule 7, 44.3 rule 2)."
+    },
+    "unapproved_definitions": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when any PENDING_APPROVAL sentinel remains. Outputs must be watermarked UNAPPROVED DEFINITION (Part 41.3)."
+    },
+    "report": {
+      "type": "object",
+      "required": ["id", "title", "period", "version"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "period": { "type": "string" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "required": ["data_date", "generated_at", "run_id"],
+      "properties": {
+        "data_date": { "type": "string" },
+        "generated_at": { "type": "string" },
+        "run_id": { "type": "string" },
+        "is_partial": {
+          "type": "boolean",
+          "default": false,
+          "description": "Partial periods are excluded from automatic comparison (Part 26.5)."
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": ["status", "passed", "warnings", "failed"],
+      "properties": {
+        "status": { "enum": ["PASS", "WARNING", "FAIL"] },
+        "passed": { "type": "integer", "minimum": 0 },
+        "warnings": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "control_totals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "source_value", "database_value", "difference"],
+            "properties": {
+              "name": { "type": "string" },
+              "source_value": { "type": "number" },
+              "database_value": { "type": "number" },
+              "difference": {
+                "type": "number",
+                "description": "Exactly zero at the defined precision, never approximately (Part 9.4)."
+              }
+            }
+          }
+        }
+      }
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "definitions": { "type": "array", "items": { "type": "object" } },
+        "active": { "type": "object" }
+      }
+    },
+    "kpis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "value", "display", "unit", "direction", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "value": {
+            "type": ["number", "null"],
+            "description": "null for an undefined rate or zero denominator. Never a false zero (Part 26.5)."
+          },
+          "display": { "type": "string", "description": "Pre-rounded for presentation only." },
+          "unit": { "type": "string" },
+          "period": { "type": "string" },
+          "comparison": {
+            "type": ["object", "null"],
+            "properties": {
+              "base": { "type": "string" },
+              "value": { "type": ["number", "null"] },
+              "change_absolute": { "type": ["number", "null"] },
+              "change_percent": { "type": ["number", "null"] }
+            }
+          },
+          "direction": { "enum": ["up_good", "down_good", "neutral"] },
+          "status": { "enum": ["good", "warning", "bad", "neutral", "unknown"] },
+          "evidence_ref": { "type": "string" },
+          "updated_at": { "type": "string" }
+        }
+      }
+    },
+    "charts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "type", "accessible_summary"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": {
+            "type": "string",
+            "description": "A plain-language question, e.g. 'Are we above target?' (Part 11.4)."
+          },
+          "type": {
+            "enum": ["line", "bar", "hbar", "pareto", "heatmap", "scatter",
+                     "waterfall", "bullet", "histogram", "boxplot", "control", "timeline"],
+            "description": "Part 26.2 chart selection map. Pie and 3D are forbidden (Part 11.4)."
+          },
+          "dimensions": { "type": "array", "items": { "type": "string" } },
+          "series": { "type": "array", "items": { "type": "object" } },
+          "unit": { "type": "string" },
+          "accessible_summary": {
+            "type": "string",
+            "description": "Required: meaning must never depend on the visual alone (Part 22.9)."
+          },
+          "evidence_ref": { "type": "string" }
+        }
+      }
+    },
+    "tables": { "type": "array", "items": { "type": "object" } },
+    "insights": {
+      "type": "array",
+      "maxItems": 5,
+      "description": "At most five. More is noise (Part 10.3).",
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "confidence", "evidence_refs"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "enum": ["period_change", "contributor", "persistence",
+                             "concentration", "risk", "opportunity", "data_quality"] },
+          "text": { "type": "string" },
+          "confidence": { "enum": ["verified", "approved", "inferred"] },
+          "evidence_refs": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "what", "why_now", "evidence_ref"],
+        "properties": {
+          "id": { "type": "string" },
+          "what": { "type": "string" },
+          "why_now": { "type": "string" },
+          "evidence_ref": { "type": "string" },
+          "suggested_owner": { "type": "string" },
+          "urgency": { "enum": ["now", "this_week", "monitor"] },
+          "confirmation_metric": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "required": ["sources", "rows"],
+      "properties": {
+        "sources": { "type": "array", "items": { "type": "object" } },
+        "rows": { "type": "integer", "minimum": 0 },
+        "mapping_version": { "type": "string" },
+        "metric_version": { "type": "string" }
+      }
+    },
+    "downloads": { "type": "array", "items": { "type": "object" } }
+  }
+}

@@ -1,0 +1,20 @@
+-- clean.sql — raw to typed clean data (Constitution Part 6, layer 5)
+--
+-- PROOF REQUIRED: zero nulls in the business key after this step.
+--
+-- Rules:
+--   * Type explicitly. Money and quantities are DECIMAL(18,4), never FLOAT —
+--     this is what makes reconciliation land on exactly zero (Part 7.4).
+--   * Keep identifiers as TEXT and preserve leading zeroes (Part 27.3).
+--   * Excel error values become NULL and are COUNTED. Never coerce to zero.
+--   * Deduplicate only by the approved rule; never drop a row silently.
+--   * Carry every lineage column through unchanged (Part 7.7).
+
+-- CREATE OR REPLACE VIEW clean.<REPORT_ID> AS
+-- SELECT
+--     -- business columns, explicitly typed
+--     -- lineage, carried through untouched:
+--     _run_id, _report_id, _source_id, _source_file, _source_file_hash,
+--     _source_sheet, _source_row_number, _extracted_at, _schema_version
+-- FROM raw.<REPORT_ID>
+-- WHERE _run_id = $run_id;

@@ -1,0 +1,60 @@
+# Quality rules for <REPORT_TITLE> (Constitution Part 9).
+#
+# Every run ends with exactly one verdict:
+#   PASS     safe to commit
+#   WARNING  continue only if that rule is non-blocking
+#   FAIL     trusted history is not touched
+
+# Structural checks (Part 9.1)
+[structural]
+required_sheet_exists    = { severity = "fail" }
+header_exists            = { severity = "fail" }
+required_columns_exist   = { severity = "fail" }
+no_duplicate_headers     = { severity = "warning" }
+critical_types_match     = { severity = "fail" }
+schema_version_matches   = { severity = "fail" }
+new_optional_column      = { severity = "warning" }   # load it, log it
+critical_column_renamed  = { severity = "fail" }      # never fuzzy-match
+
+# Row checks (Part 9.2)
+[row]
+business_key_not_blank   = { severity = "fail" }
+business_key_unique      = { severity = "fail" }
+required_fields_not_blank = { severity = "fail" }
+date_valid_and_in_range  = { severity = "fail" }
+quantity_not_negative    = { severity = "fail" }
+category_in_approved_list = { severity = "warning" }
+no_excel_error_in_critical_field = { severity = "fail" }
+
+# Dataset checks (Part 9.3)
+[dataset]
+row_count_change_pct     = { severity = "warning", tolerance = "PENDING_APPROVAL" }
+min_max_date_plausible   = { severity = "warning" }
+latest_period_present    = { severity = "warning" }
+null_rate_movement       = { severity = "warning" }
+category_count_movement  = { severity = "warning" }
+source_file_freshness    = { severity = "warning" }
+
+# Control-total reconciliation — the strongest check (Part 9.4).
+# Not "approximately". EXACTLY zero at the defined decimal precision.
+[control_total]
+column    = "PENDING_APPROVAL"
+tolerance = 0
+severity  = "fail"
+
+# Population equation (Part 25.3):
+#   source_rows = accepted + rejected + intentionally_filtered
+# Filters and exclusions are named evidence, never balancing figures.
+[population]
+must_balance = true
+severity     = "fail"
+
+# Quarantine (Part 9.5): rejected rows are retained with run_id,
+# source_row_number, reason_code, reason_message and raw_values.
+# Nothing is ever silently deleted.
+[quarantine]
+enabled           = true
+retain_raw_values = true
+
+[approvals]
+thresholds = { approved_by = "", approved_at = "", evidence = "" }

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/run_manifest.schema.json",
+  "title": "Run completion evidence",
+  "description": "Constitution Parts 12.7 and 25.1. The record card of one run: what ran, what happened, what was PROVEN. Immutable once written (Part 22.7).",
+  "type": "object",
+  "required": ["run_id", "report_id", "report_version", "application_version",
+               "status", "started_at", "finished_at", "sources", "counts",
+               "quality", "population"],
+  "properties": {
+    "run_id": { "type": "string", "pattern": "^RUN-\\d{8}-\\d{3}$" },
+    "report_id": { "type": "string" },
+    "report_version": { "type": "integer", "minimum": 1 },
+    "application_version": { "type": "string" },
+    "requested_period": { "type": "string" },
+    "status": { "enum": ["COMPLETE", "FAILED", "CANCELLED"] },
+    "stage": { "type": "string" },
+    "started_at": { "type": "string" },
+    "finished_at": { "type": "string" },
+
+    "demo_data": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when the fixture adapter produced this run. Never presented as production evidence (Part 0.4 rule 7)."
+    },
+    "unapproved_definitions": { "type": "boolean", "default": false },
+    "adapter": { "enum": ["com", "fixture"] },
+
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source_id", "source_role", "file_name",
+                     "physical_file_hash_before", "physical_file_hash_after"],
+        "properties": {
+          "source_id": { "type": "string" },
+          "source_role": { "type": "string" },
+          "file_name": { "type": "string" },
+          "safe_path_reference": { "type": "string" },
+          "physical_file_hash_before": { "type": "string" },
+          "physical_file_hash_after": {
+            "type": "string",
+            "description": "Must equal ...before. A changed source is a gate failure (Part 31.1)."
+          },
+          "logical_content_hash": { "type": "string" },
+          "file_size": { "type": "integer" },
+          "modified_time": { "type": "string" },
+          "workbook_identity": { "type": "string" },
+          "sheet_name": { "type": "string" },
+          "rows_extracted": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+
+    "counts": {
+      "type": "object",
+      "required": ["rows_extracted", "rows_rejected", "rows_inserted",
+                   "rows_updated", "rows_unchanged"],
+      "properties": {
+        "rows_extracted": { "type": "integer", "minimum": 0 },
+        "rows_rejected": { "type": "integer", "minimum": 0 },
+        "rows_inserted": { "type": "integer", "minimum": 0 },
+        "rows_updated": { "type": "integer", "minimum": 0 },
+        "rows_unchanged": { "type": "integer", "minimum": 0 },
+        "rows_filtered": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "population": {
+      "type": "object",
+      "required": ["source_rows", "accepted_rows", "rejected_rows",
+                   "intentionally_filtered_rows", "balances"],
+      "description": "Part 25.3: source_rows = accepted + rejected + intentionally_filtered. Filters are named evidence, never balancing figures.",
+      "properties": {
+        "source_rows": { "type": "integer", "minimum": 0 },
+        "accepted_rows": { "type": "integer", "minimum": 0 },
+        "rejected_rows": { "type": "integer", "minimum": 0 },
+        "intentionally_filtered_rows": { "type": "integer", "minimum": 0 },
+        "filter_reasons": { "type": "array", "items": { "type": "object" } },
+        "balances": { "const": true }
+      }
+    },
+
+    "quality": {
+      "type": "object",
+      "required": ["status", "checks_passed", "checks_failed", "control_totals"],
+      "properties": {
+        "status": { "enum": ["PASS", "WARNING", "FAIL"] },
+        "checks_passed": { "type": "integer", "minimum": 0 },
+        "checks_warned": { "type": "integer", "minimum": 0 },
+        "checks_failed": { "type": "integer", "minimum": 0 },
+        "control_totals": { "type": "array", "items": { "type": "object" } },
+        "quarantined_rows": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "archive_status": { "enum": ["DONE", "SKIPPED", "FAILED", "NOT_CONFIGURED"] },
+    "sql_sync_status": { "enum": ["DONE", "PENDING", "FAILED", "DISABLED"] },
+    "error_code": { "type": ["string", "null"] },
+    "error_message": { "type": ["string", "null"] },
+    "output_json": { "type": ["string", "null"] },
+    "output_html": { "type": ["string", "null"] },
+
+    "performance": {
+      "type": "object",
+      "description": "Part 31.3: record, do not guess.",
+      "properties": {
+        "excel_open_seconds": { "type": "number" },
+        "rows_per_second": { "type": "number" },
+        "peak_ram_mb": { "type": "number" },
+        "peak_temp_disk_mb": { "type": "number" },
+        "extraction_seconds": { "type": "number" },
+        "quality_seconds": { "type": "number" },
+        "history_seconds": { "type": "number" },
+        "analytics_seconds": { "type": "number" },
+        "json_bytes": { "type": "integer" },
+        "html_bytes": { "type": "integer" }
+      }
+    },
+
+    "versions": {
+      "type": "object",
+      "properties": {
+        "schema_version": { "type": "string" },
+        "mapping_version": { "type": "string" },
+        "metric_version": { "type": "string" },
+        "dashboard_contract_version": { "type": "string" }
+      }
+    }
+  }
+}

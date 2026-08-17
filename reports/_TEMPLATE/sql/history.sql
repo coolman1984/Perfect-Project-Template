@@ -1,0 +1,20 @@
+-- history.sql — load behaviour for this report (Constitution Part 8)
+--
+-- Exactly ONE declared load mode: append | upsert | snapshot | replace_period.
+--
+-- Two hashes give insert/update/unchanged in one pass, with no guessing:
+--   business_key_hash  "Is this the same business record?"
+--   row_content_hash   "Did any of its values change?"
+--
+-- Safe commit sequence (Part 8.5):
+--   BEGIN
+--     validate staged rows
+--     update changed rows
+--     insert new rows
+--     apply the approved deletion rule
+--     reconcile counts and totals
+--   COMMIT           -- on any failure: ROLLBACK, history untouched
+--
+-- replace_period deletes ONE approved period and inserts the new one. It never
+-- deletes all history, and the requested period is validated against the
+-- source's actual min/max dates first (Part 27.4).

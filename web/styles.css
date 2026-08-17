@@ -1,0 +1,283 @@
+/*
+  Design tokens and layout (Constitution Parts 11.4, 22.9, 26.4, 26.13).
+
+  One system serves light, dark, print and any future brand theme. The starter
+  values below are STARTING VALUES, not automatic approval: test every
+  text/control/state pair to WCAG 2.2 AA and verify printed greyscale meaning,
+  then adjust the theme rather than shrinking or muting important information.
+
+  Non-negotiables:
+    * Local system font stack. No online font (Part 23.6).
+    * Colour never carries meaning alone — always pair with icon, text or
+      pattern (Part 11.4).
+    * Body text at least 16px; important numbers materially larger (Part 22.9).
+    * Tabular figures so digits align in columns.
+    * All motion stops under prefers-reduced-motion.
+*/
+
+:root {
+  /* Spacing scale: 4/8 base (Part 26.13) */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-6: 24px; --space-8: 32px; --space-12: 48px;
+
+  /* Radius: restrained and consistent */
+  --radius-control: 12px;
+  --radius-hero: 16px;
+
+  /* Type: local stack only */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+             "Noto Sans Arabic", Roboto, Helvetica, Arial, sans-serif;
+  --font-size-body: 16px;
+  --font-size-kpi: 40px;
+  --line-height-body: 1.5;
+
+  /* One accent. Everything else greyscale. Colour carries meaning, not decoration. */
+  --color-primary: #2563EB;
+  --color-success: #15803D;
+  --color-warning: #B45309;
+  --color-danger:  #B91C1C;
+  --color-neutral: #64748B;
+
+  --color-surface:     #FFFFFF;
+  --color-surface-alt: #F6F8FC;
+  --color-text:        #101828;
+  --color-text-muted:  #475467;
+  --color-border:      #D0D5DD;
+
+  /* Motion: 150-250ms UI, 250-450ms charts. Nothing bounces (Parts 11.4, 22.11). */
+  --motion-ui: 180ms;
+  --motion-chart: 320ms;
+  --easing: cubic-bezier(0.2, 0, 0.2, 1);
+
+  --max-width: 1600px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-surface:     #111827;
+    --color-surface-alt: #080D18;
+    --color-text:        #F9FAFB;
+    --color-text-muted:  #9CA3AF;
+    --color-border:      #374151;
+    --color-primary:     #60A5FA;
+    --color-success:     #4ADE80;
+    --color-warning:     #FBBF24;
+    --color-danger:      #F87171;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-surface:     #111827;
+  --color-surface-alt: #080D18;
+  --color-text:        #F9FAFB;
+  --color-text-muted:  #9CA3AF;
+  --color-border:      #374151;
+  --color-primary:     #60A5FA;
+  --color-success:     #4ADE80;
+  --color-warning:     #FBBF24;
+  --color-danger:      #F87171;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  background: var(--color-surface-alt);
+  font-variant-numeric: tabular-nums;   /* digits align in columns */
+}
+
+/* Right-to-left is a layout change, not only translated words (Part 22.9). */
+[dir="rtl"] { text-align: right; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute; left: -9999px;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary); color: #fff;
+}
+.skip-link:focus { left: var(--space-4); top: var(--space-4); z-index: 100; }
+
+/* Strong, high-contrast focus everywhere (Part 26.4). */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Comfortable targets; usable at 125-150% Windows scaling (Part 22.9). */
+button, select, input[type="file"] {
+  min-height: 44px;
+  font: inherit;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+
+.command-header,
+.filter-ribbon {
+  position: sticky;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 10;
+}
+
+.command-header {
+  top: 0;
+  min-height: 64px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4);
+  padding: var(--space-3) var(--space-6);
+}
+
+.filter-ribbon {
+  top: 64px;
+  min-height: 56px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);
+  padding: var(--space-2) var(--space-6);
+}
+
+.identity h1 { margin: 0; font-size: 20px; }
+.period { margin: 0; color: var(--color-text-muted); }
+
+.state-strip { display: flex; align-items: center; gap: var(--space-3); margin-inline-start: auto; }
+.header-controls { display: flex; gap: var(--space-2); }
+
+/* Status badge: icon + text, so meaning survives greyscale printing. */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-control);
+  border: 1px solid var(--color-border);
+  font-weight: 600;
+}
+.badge[data-status="PASS"]    { color: var(--color-success); border-color: currentColor; }
+.badge[data-status="WARNING"] { color: var(--color-warning); border-color: currentColor; }
+.badge[data-status="FAIL"]    { color: var(--color-danger);  border-color: currentColor; }
+
+.watermark {
+  padding: var(--space-1) var(--space-3);
+  border: 2px dashed var(--color-warning);
+  color: var(--color-warning);
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+main { max-width: var(--max-width); margin: 0 auto; padding: var(--space-6); }
+
+.region { margin-bottom: var(--space-12); }
+
+/* 12-column desktop, 8-column tablet, single-column mobile (Part 26.11). */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-4);
+}
+.span-4  { grid-column: span 4; }
+.span-5  { grid-column: span 5; }
+.span-7  { grid-column: span 7; }
+.span-8  { grid-column: span 8; }
+.span-12 { grid-column: span 12; }
+
+.panel {
+  margin: 0;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-hero);
+}
+/* A chart title is a plain-language QUESTION: "Are we above target?" */
+.panel-title { font-weight: 600; margin-bottom: var(--space-3); }
+.chart { min-height: 340px; }
+#hero-trend .chart, #diagnostic .chart { min-height: 360px; }
+
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  min-height: 132px;
+}
+.kpi-card {
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+}
+.kpi-value { font-size: var(--font-size-kpi); font-weight: 700; line-height: 1.1; }
+/* Unit and period are always visible, never only in a tooltip (Part 26.5). */
+.kpi-unit, .kpi-period { color: var(--color-text-muted); font-size: 14px; }
+/* Direction arrows pair with colour, for print and colour-blind readers. */
+.kpi-comparison[data-direction="good"]::before { content: "▲ "; color: var(--color-success); }
+.kpi-comparison[data-direction="bad"]::before  { content: "▼ "; color: var(--color-danger); }
+.kpi-comparison[data-direction="flat"]::before { content: "→ "; color: var(--color-neutral); }
+
+.active-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.active-chips li {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-primary); border-radius: 999px;
+}
+
+.dropzone {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-hero);
+  padding: var(--space-8);
+  text-align: center;
+  background: var(--color-surface);
+}
+.dropzone:hover, .dropzone:focus { border-color: var(--color-primary); }
+
+.progress-bar {
+  height: 8px; border-radius: 999px; overflow: hidden;
+  background: var(--color-border);
+}
+/* Width is driven by durable event data only. Never fake activity (Part 22.11). */
+.progress-fill {
+  height: 100%; width: 0;
+  background: var(--color-primary);
+  transition: width var(--motion-ui) var(--easing);
+}
+
+table { width: 100%; border-collapse: collapse; background: var(--color-surface); }
+th, td { padding: var(--space-3); border-bottom: 1px solid var(--color-border); text-align: start; }
+th { font-weight: 600; }
+
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: repeat(8, 1fr); }
+  .span-4, .span-5 { grid-column: span 4; }
+  .span-7, .span-8, .span-12 { grid-column: span 8; }
+}
+
+@media (max-width: 700px) {
+  .grid { grid-template-columns: 1fr; }
+  .span-4, .span-5, .span-7, .span-8, .span-12 { grid-column: span 1; }
+  .filter-ribbon { overflow-x: auto; flex-wrap: nowrap; }
+}
+
+/* Managers still hand out paper (Part 11.4). */
+@media print {
+  :root { --color-surface: #fff; --color-surface-alt: #fff; --color-text: #000; }
+  .command-header, .filter-ribbon { position: static; }
+  .header-controls, .dropzone, #process-button, #reset-filters,
+  .operate-region, .story { display: none !important; }
+  .panel { break-inside: avoid; border: 1px solid #999; }
+  /* Active filters, comparison, data date, quality and run ID must survive. */
+  .state-strip, .active-chips, .lineage { display: flex !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

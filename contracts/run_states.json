@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "_comment": [
+    "Run state machine (Constitution Parts 12.2, 25.6, 42.3).",
+    "app/state_machine.py loads this file rather than hard-coding transitions,",
+    "so adding a state is a contract change with a version bump (Part 25.7).",
+    "tests/unit/test_state_machine.py proves: every state is reachable from the",
+    "initial state, terminal states have no outgoing edges, and no transition",
+    "exists that Part 25.6 does not permit."
+  ],
+  "initial_state": "CREATED",
+  "terminal_states": ["COMPLETE", "FAILED", "CANCELLED"],
+  "states": {
+    "CREATED": {
+      "description": "Run record exists; nothing has been touched yet.",
+      "to": ["CHECKING_SOURCE", "FAILED", "CANCELLED"]
+    },
+    "CHECKING_SOURCE": {
+      "description": "Resolving source files, stability and hashes (Part 12.1 steps 2-5).",
+      "to": ["WAITING_FOR_FILE", "OPENING_EXCEL", "FAILED", "CANCELLED"]
+    },
+    "WAITING_FOR_FILE": {
+      "description": "A required source is missing or still being written.",
+      "to": ["CHECKING_SOURCE", "FAILED", "CANCELLED"]
+    },
+    "OPENING_EXCEL": {
+      "description": "Acquiring a dedicated or attached Excel session (Part 7.1).",
+      "to": ["WAITING_FOR_USER", "EXTRACTING", "FAILED", "CANCELLED"]
+    },
+    "WAITING_FOR_USER": {
+      "description": "A person must act, e.g. open a DRM-protected workbook (Part 22.5). Checkpoint preserved.",
+      "to": ["OPENING_EXCEL", "EXTRACTING", "FAILED", "CANCELLED"]
+    },
+    "EXTRACTING": {
+      "description": "Reading adaptive Value2 blocks (Part 7.3).",
+      "to": ["STAGING", "WAITING_FOR_USER", "FAILED", "CANCELLED"]
+    },
+    "STAGING": {
+      "description": "Writing chunks and checkpoints to raw staging (Part 6 layer 3).",
+      "to": ["EXTRACTING", "VALIDATING", "FAILED", "CANCELLED"]
+    },
+    "VALIDATING": {
+      "description": "Quality gate. FAIL here never touches trusted history (Part 9).",
+      "to": ["CLEANING", "FAILED", "CANCELLED"]
+    },
+    "CLEANING": {
+      "description": "Typing, naming, deduplicating (Part 6 layer 5).",
+      "to": ["UPDATING_HISTORY", "FAILED", "CANCELLED"]
+    },
+    "UPDATING_HISTORY": {
+      "description": "Transactional history update (Part 8.5). Rollback on any failure.",
+      "to": ["ARCHIVING", "CALCULATING", "FAILED"]
+    },
+    "ARCHIVING": {
+      "description": "Parquet archive when policy permits (Part 13.3).",
+      "to": ["SYNCING_SQL_SERVER", "CALCULATING", "FAILED"]
+    },
+    "SYNCING_SQL_SERVER": {
+      "description": "Optional central sync. Failure queues, never re-extracts (Part 13.4).",
+      "to": ["CALCULATING", "FAILED"]
+    },
+    "CALCULATING": {
+      "description": "Trusted metric SQL (Part 10.2).",
+      "to": ["BUILDING_INSIGHTS", "FAILED"]
+    },
+    "BUILDING_INSIGHTS": {
+      "description": "Deterministic evidence objects (Part 26.6).",
+      "to": ["BUILDING_JSON", "FAILED"]
+    },
+    "BUILDING_JSON": {
+      "description": "Validated dashboard package (Part 11.1).",
+      "to": ["BUILDING_DASHBOARD", "FAILED"]
+    },
+    "BUILDING_DASHBOARD": {
+      "description": "Standalone HTML assembly (Part 11.2).",
+      "to": ["VERIFYING", "FAILED"]
+    },
+    "VERIFYING": {
+      "description": "Headless browser and offline verification (Part 11.5).",
+      "to": ["COMPLETE", "FAILED"]
+    },
+    "COMPLETE": {
+      "description": "Terminal. Output published atomically; run evidence immutable.",
+      "to": []
+    },
+    "FAILED": {
+      "description": "Terminal. Last approved dashboard and trusted history preserved (Part 12.6).",
+      "to": []
+    },
+    "CANCELLED": {
+      "description": "Terminal. Cancellation honoured only at a safe boundary (Part 25.5).",
+      "to": []
+    }
+  }
+}

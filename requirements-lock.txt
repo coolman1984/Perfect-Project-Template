@@ -1,0 +1,16 @@
+# Exact dependency and hash record (Constitution Parts 23.6, 30.8).
+#
+# POPULATED AT BUILD TIME. Every direct AND transitive dependency is pinned with
+# a SHA-256 hash. The developer/agent rebuild installs only from the local
+# wheelhouse:
+#
+#   pip install --no-index --find-links offline_packages -r requirements-lock.txt --require-hashes
+#
+# The employee runtime never runs pip. Employee repair restores sealed release
+# files from repair_payload/ (Part 23.12).
+#
+# "Present in requirements" is NOT proof that the release contains it. Run the
+# runtime import/resource audit from the final app/ folder (Part 30.8).
+
+# <package>==<version> \
+#     --hash=sha256:<hash>

@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/report_config.schema.json",
+  "title": "Report machine contract (report.toml)",
+  "description": "Constitution Part 5, validated before every run. No file path, sheet name, column name or threshold ever appears inside a .py file. PENDING_APPROVAL is a legal value in discovery/prototype mode and forbidden in production (Part 41.3).",
+  "type": "object",
+  "required": ["report_id", "report_version", "load_mode", "timezone", "currency",
+               "excel", "extraction", "history", "quality", "output"],
+  "properties": {
+    "report_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{2,48}$" },
+    "report_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Raise when grain, business key, load mode, metric meaning or population changes (Part 25.7)."
+    },
+    "load_mode": { "enum": ["append", "upsert", "snapshot", "replace_period", "PENDING_APPROVAL"] },
+    "timezone": { "type": "string" },
+    "currency": { "type": "string" },
+    "mode": {
+      "enum": ["discovery", "prototype", "production"],
+      "default": "prototype",
+      "description": "Production forbids every PENDING_APPROVAL sentinel (Part 41.3)."
+    },
+
+    "excel": {
+      "type": "object",
+      "required": ["sheet", "header_row", "data_start_row", "open_mode", "data_area"],
+      "properties": {
+        "sheet": { "type": "string", "description": "Named explicitly. Never 'read all sheets' (Part 7.5)." },
+        "header_row": { "type": ["integer", "string"], "minimum": 1 },
+        "data_start_row": { "type": ["integer", "string"], "minimum": 1 },
+        "open_mode": { "enum": ["dedicated", "attach", "dedicated_then_attach"] },
+        "calculation_policy": { "enum": ["as_saved", "recalculate_approved"], "default": "as_saved" },
+        "data_area": {
+          "type": "string",
+          "description": "table:<name> | range:<ref> | header_columns | discover. Priority order in Part 7.2; never trust UsedRange."
+        },
+        "include_hidden_rows": { "type": ["boolean", "string"], "default": true },
+        "adapter": {
+          "enum": ["com", "fixture"],
+          "default": "com",
+          "description": "fixture is DEV/TEST ONLY and must never appear in a release (Part 44.3)."
+        }
+      }
+    },
+
+    "extraction": {
+      "type": "object",
+      "required": ["target_cells_per_chunk", "min_rows_per_chunk", "max_rows_per_chunk"],
+      "properties": {
+        "target_cells_per_chunk": { "type": "integer", "minimum": 1000 },
+        "min_rows_per_chunk": { "type": "integer", "minimum": 1 },
+        "max_rows_per_chunk": { "type": "integer", "minimum": 1 },
+        "projected_columns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Read only approved columns (Part 27.2)."
+        }
+      }
+    },
+
+    "history": {
+      "type": "object",
+      "required": ["business_key", "event_date", "lookback_days", "deletion_rule"],
+      "properties": {
+        "business_key": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            { "const": "PENDING_APPROVAL" }
+          ],
+          "description": "Human decision (Part 3.1). An agent may never invent it."
+        },
+        "event_date": { "type": "string" },
+        "lookback_days": { "type": ["integer", "string"], "minimum": 0 },
+        "deletion_rule": {
+          "enum": ["ignore", "mark_inactive", "soft_delete", "close_version",
+                   "physical", "PENDING_APPROVAL"],
+          "description": "Human decision (Part 8.4). Never inferred from a row disappearing."
+        }
+      }
+    },
+
+    "quality": {
+      "type": "object",
+      "required": ["control_total_column"],
+      "properties": {
+        "required_columns_block": { "type": "boolean", "default": true },
+        "max_duplicate_key_rate": { "type": ["number", "string"], "minimum": 0, "maximum": 1 },
+        "max_required_null_rate": { "type": ["number", "string"], "minimum": 0, "maximum": 1 },
+        "max_row_count_change_pct": { "type": ["number", "string"], "minimum": 0 },
+        "control_total_column": {
+          "type": "string",
+          "description": "The strongest check (Part 9.4). Difference must be exactly zero."
+        }
+      }
+    },
+
+    "output": {
+      "type": "object",
+      "required": ["audience", "storage_allowed"],
+      "properties": {
+        "audience": { "type": "string" },
+        "storage_allowed": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            { "const": "PENDING_APPROVAL" }
+          ],
+          "description": "IT-approved locations only (Part 13.5)."
+        },
+        "retention_days": { "type": ["integer", "string"] },
+        "ai_narrative_allowed": {
+          "type": ["boolean", "string"],
+          "default": false,
+          "description": "Business-owner decision (Part 3.1). AI never produces a KPI value (Part 10.3)."
+        }
+      }
+    },
+
+    "approvals": {
+      "type": "object",
+      "description": "Part 41.2: a filled value with an empty approver counts as unapproved.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["approved_by", "approved_at", "evidence"],
+        "properties": {
+          "approved_by": { "type": "string" },
+          "approved_at": { "type": "string" },
+          "evidence": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+
+=== architecture verify --baseline ===
+  .  baseline v1: 14 required component(s), 0 approved deviation(s)
+
+architecture verify --baseline: PASS (0 warning(s))
+.
+=== architecture verify --source-scan ===
+  .  scanned 91 executable/runtime file(s)
+
+architecture verify --source-scan: PASS (0 warning(s))
+.
+=== architecture verify --simulate-clean-pc ===
+  BLOCKED: this gate requires a real Windows target (Part 30.4).
+  It cannot be satisfied from this workspace and must stay
+  CONDITIONAL in acceptance/gates.yaml until it runs there.
+.
+=== architecture verify --standard-user-loopback ===
+  BLOCKED: this gate requires a real Windows target (Part 31.1).
+  It cannot be satisfied from this workspace and must stay
+  CONDITIONAL in acceptance/gates.yaml until it runs there.
+...........
+=== constitution cross-references ===
+  .  32 distinct Part references, all resolve
+
+constitution cross-references: PASS (0 warning(s))
+.
+=== constitution commands ===
+  .  7 command group(s) named, 7 implemented
+
+constitution commands: PASS (0 warning(s))
+.
+=== constitution audit ===
+  .  45 Parts, 0-44, in order
+  .  32 distinct Part references, all resolve
+  .  checked 7 downgrade phrases in context
+  .  7 command group(s) named, 7 implemented
+  .  constitution version 7.2
+  .  Machine checks only. Part 34.3 also requires a semantic review against Part 34.2, recorded in docs/CONSTITUTION_AUDIT.md.
+
+constitution audit: PASS (0 warning(s))
+.
+=== constitution architecture-terms ===
+  .  checked 7 downgrade phrases in context
+
+constitution architecture-terms: PASS (0 warning(s))
+........................................................................................
+----------------------------------------------------------------------
+Ran 105 tests in 0.224s
+
+OK

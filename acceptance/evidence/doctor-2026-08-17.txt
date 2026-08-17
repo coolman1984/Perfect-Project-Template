@@ -1,0 +1,131 @@
+########################################################################
+# PROJECT_TOOL doctor — aggregate readiness
+########################################################################
+
+=== map doctor ===
+  .  repo root: /home/user/Perfect-Project-Template
+  .  git available: True
+  .  manifest present: True
+  .  python AST parser: available (baseline structural parsing)
+  .  tree-sitter: absent — degrading to stdlib AST parsing, which is expected and not a failure (Part 37.2 rule 4)
+  .  source files discoverable: 150
+
+map doctor: PASS (0 warning(s))
+
+=== map verify ===
+  .  CURRENT_STATE.md still carries PENDING_APPROVAL items (expected pre-Phase 0)
+  .  manifest matches the working tree (149 files)
+
+map verify: PASS (0 warning(s))
+
+=== constitution audit ===
+  .  45 Parts, 0-44, in order
+  .  32 distinct Part references, all resolve
+  .  checked 7 downgrade phrases in context
+  .  7 command group(s) named, 7 implemented
+  .  constitution version 7.2
+  .  Machine checks only. Part 34.3 also requires a semantic review against Part 34.2, recorded in docs/CONSTITUTION_AUDIT.md.
+
+constitution audit: PASS (0 warning(s))
+
+=== architecture verify --baseline ===
+  .  baseline v1: 14 required component(s), 0 approved deviation(s)
+
+architecture verify --baseline: PASS (0 warning(s))
+
+=== architecture verify --source-scan ===
+  .  scanned 91 executable/runtime file(s)
+
+architecture verify --source-scan: PASS (0 warning(s))
+
+=== memory validate ===
+  .  4 memory record(s), 4 unique id(s)
+
+memory validate: PASS (0 warning(s))
+=== gates status ===
+  ledger: acceptance/gates.yaml  (43 gates)
+  not_applicable=1  not_started=42
+
+  GATE                                   SEV    STATUS          EVIDENCE
+  GATE_PHASE_MINUS2_INSTANTIATION        block  not_started     Run PROJECT_TOOL doctor and save its output 
+  GATE_ARCHITECTURE_BASELINE             block  not_started     Pin versions in IMPLEMENTATION_BASELINE.lock
+  GATE_NO_RUNTIME_DOWNLOADS              block  not_started     Run architecture verify --source-scan and sa
+  GATE_BUSINESS_DEFINITION_APPROVED      block  not_started     Fill report_definition.md with the business 
+  GATE_SECURITY_STORAGE_APPROVAL         block  not_started     Get written answers to the five questions in
+  GATE_PROTECTED_FILE_PROOF              block  not_started     Run on a Windows PC with Excel and the real 
+  GATE_SOURCE_IMMUTABILITY               block  not_started     Assert hash equality in the extraction integ
+  GATE_NO_CELL_BY_CELL                   block  not_started     Add the static check and a benchmark compari
+  GATE_EXTRACTION_COMPLETENESS           block  not_started     Prove in the vertical-slice integration test
+  GATE_POPULATION_EQUATION               block  not_started     Assert the equation in the run manifest and 
+  GATE_CONTROL_TOTAL                     block  not_started     Implement reconciliation and prove it on a g
+  GATE_QUARANTINE_NO_SILENT_DROP         block  not_started     Add the quarantine table and a test that dro
+  GATE_HISTORY_IDEMPOTENT                block  not_started     Add the mandatory rerun tests from Part 15
+  GATE_HISTORY_CORRECTIONS               block  not_started     Add day/week sequence, correction, duplicate
+  GATE_TRANSACTION_SAFETY                block  not_started     Add the failure-injection suite under tests/
+  GATE_GOLDEN_METRICS                    block  not_started     Build the golden dataset with known answers 
+  GATE_NO_BROWSER_ARITHMETIC             block  not_started     Add the static check over web/ plus a dashbo
+  GATE_INSIGHT_EVIDENCE                  block  not_started     Build evidence objects first, then sentence 
+  GATE_DASHBOARD_CONTRACT                block  not_started     Validate against contracts/dashboard.schema.
+  GATE_ONE_PAGE_DESIGN                   block  not_started     Build the one-page shell to the Part 26.11 g
+  GATE_FILTER_RECONCILIATION             block  not_started     Implement the typed filter-state object and 
+  GATE_BROWSER_OFFLINE                   block  not_started     Wire the headless browser verification into 
+  GATE_ACCESSIBILITY                     major  not_started     Add accessibility assertions to the browser 
+  GATE_BILINGUAL_RTL                     major  not_started     Build i18n dictionaries and test the RTL lay
+  GATE_STANDARD_USER_STARTUP             block  not_started     Verify on a real Windows standard-user accou
+  GATE_LOOPBACK_TRANSPORT                block  not_started     Implement app/local_transport.py and prove t
+  GATE_LOOPBACK_SECURITY                 block  not_started     Add the negative probe suite; confirm no wil
+  GATE_NO_MACHINE_MUTATION               block  not_started     Verify before/after machine state on the cle
+  GATE_SECRET_HANDLING                   block  not_started     Run architecture verify --source-scan; defau
+  GATE_FAIL_CLOSED                       block  not_started     Run architecture verify --simulate-missing f
+  GATE_NO_BUILD_MACHINE_LEAKAGE          block  not_started     Run architecture verify --simulate-clean-pc 
+  GATE_ARCHIVE_REBUILD                   block  not_started     Implement rebuild_database and prove it end 
+  GATE_SQL_SERVER_SYNC                   block  not_applicable  
+  GATE_PERFORMANCE_MEASURED              major  not_started     Fill the Part 14.1 benchmark table from real
+  GATE_INTERACTION_BUDGETS               major  not_started     Measure p50/p95 on the approved target PC
+  GATE_TWO_STABLE_RUNS                   block  not_started     Execute after the vertical slice is complete
+  GATE_CLEAN_OFFLINE_MACHINE             block  not_started     Run the full Part 30.4 sequence on a represe
+  GATE_RELEASE_COMPLETENESS              block  not_started     Run BUILD_RELEASE then architecture verify -
+  GATE_MAP_FRESHNESS                     block  not_started     Run PROJECT_TOOL map verify and keep it gree
+  GATE_SKILL_ONBOARDING                  block  not_started     Run the first-session test with a fresh agen
+  GATE_MEMORY_VALIDATION                 major  not_started     Run PROJECT_TOOL memory validate and keep it
+  GATE_CONSTITUTION_CONSISTENCY          block  not_started     Run PROJECT_TOOL constitution audit and reco
+  GATE_OPERATOR_HANDOFF                  major  not_started     Schedule the handoff session and record what
+
+  release blockers outstanding: 36
+  RELEASE IS BLOCKED (Part 38.2 rule 4). Outstanding:
+    - GATE_PHASE_MINUS2_INSTANTIATION: not_started
+    - GATE_ARCHITECTURE_BASELINE: not_started
+    - GATE_NO_RUNTIME_DOWNLOADS: not_started
+    - GATE_BUSINESS_DEFINITION_APPROVED: not_started
+    - GATE_SECURITY_STORAGE_APPROVAL: not_started
+    - GATE_PROTECTED_FILE_PROOF: not_started
+    - GATE_SOURCE_IMMUTABILITY: not_started
+    - GATE_NO_CELL_BY_CELL: not_started
+    - GATE_EXTRACTION_COMPLETENESS: not_started
+    - GATE_POPULATION_EQUATION: not_started
+    - GATE_CONTROL_TOTAL: not_started
+    - GATE_QUARANTINE_NO_SILENT_DROP: not_started
+    ... and 24 more
+
+=== gates status ===
+
+gates status: PASS (0 warning(s))
+
+=== report validate (mode=prototype) ===
+  .  no reports configured yet — expected before Phase 0 (run 'PROJECT_TOOL report new --id <id>')
+
+report validate (mode=prototype): PASS (0 warning(s))
+
+########################################################################
+# SUMMARY
+########################################################################
+  PASS     map doctor
+  PASS     map verify
+  PASS     constitution audit
+  PASS     architecture --baseline
+  PASS     architecture --source-scan
+  PASS     memory validate
+  PASS     gates status
+  PASS     report validate
+
+doctor: PASS — the project is in a verifiable state.

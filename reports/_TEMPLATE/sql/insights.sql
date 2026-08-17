@@ -1,0 +1,15 @@
+-- insights.sql — verified evidence objects (Constitution Parts 10.3, 26.6)
+--
+-- Produces EVIDENCE, not sentences. The evidence object exists before any text
+-- is generated, and the text is a deterministic template over it.
+--
+-- Rank by: business impact x magnitude x persistence x affected population
+--          x confidence.  Show at most five (Part 10.3).
+--
+-- Emit the Part 26.6 shape: type, metric_id, current_period, current,
+-- comparison_period, comparison, change_absolute, change_percent, drivers,
+-- confidence, evidence_refs.
+--
+-- Language discipline (Part 26.12): a category correlated with defects is a
+-- CONTRIBUTOR or an investigation priority. It is not a "root cause" until a
+-- governed investigation confirms causality.

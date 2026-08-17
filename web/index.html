@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!--
+  One-page application shell (Constitution Parts 22.2, 26.3, 26.11).
+
+  This is the STRUCTURE, not a mockup. Every region below answers one user
+  question. Regions with no available data disappear cleanly and the grid
+  reflows — do not leave empty cards (Part 26.11).
+
+  Hard rules for anything added to this page:
+    * No remote URL. No CDN, font, icon, map or telemetry (Part 23.6).
+    * No trusted arithmetic. Numbers arrive pre-calculated and pre-rounded
+      from the local API (rule 6).
+    * No direct access to Excel COM, DuckDB or the filesystem. Everything goes
+      through the loopback API (Part 0.9).
+    * Meaning never depends on colour alone (Part 11.4).
+-->
+<html lang="en" dir="ltr" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Excel Intelligence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#first-viewport">Skip to results</a>
+
+  <!-- COMMAND HEADER — what report, period, data state and quality am I viewing? -->
+  <header class="command-header" role="banner">
+    <div class="identity">
+      <h1 id="report-title">—</h1>
+      <p class="period" id="report-period">—</p>
+    </div>
+    <div class="state-strip">
+      <!-- Quality and freshness must never be hidden (Part 26.11). -->
+      <span class="badge" id="quality-badge" data-status="unknown">
+        <span class="badge-icon" aria-hidden="true">•</span>
+        <span id="quality-text">No data</span>
+      </span>
+      <span class="freshness" id="freshness">—</span>
+      <!-- Watermarks: never let demo or unapproved output look production-ready. -->
+      <span class="watermark" id="demo-watermark" hidden>DEMO DATA</span>
+      <span class="watermark" id="unapproved-watermark" hidden>UNAPPROVED DEFINITION</span>
+    </div>
+    <div class="header-controls">
+      <button type="button" id="lang-toggle" aria-label="Switch language">العربية</button>
+      <button type="button" id="theme-toggle" aria-label="Switch theme">Theme</button>
+      <button type="button" id="help-toggle" aria-label="Help">?</button>
+    </div>
+  </header>
+
+  <!-- FILTER RIBBON — which slice and comparison do I want? -->
+  <nav class="filter-ribbon" aria-label="Filters">
+    <div class="filter-controls" id="filter-controls"></div>
+    <div class="comparison-control">
+      <label for="compare-mode">Compare to</label>
+      <select id="compare-mode">
+        <option value="previous">Previous period</option>
+        <option value="target">Target</option>
+        <option value="none">No comparison</option>
+      </select>
+    </div>
+    <!-- Cross-filter chips are visible and removable (Part 22.6). -->
+    <ul class="active-chips" id="active-chips" aria-label="Active filters"></ul>
+    <button type="button" id="reset-filters">Reset</button>
+  </nav>
+
+  <main>
+    <!-- EXECUTIVE FIRST VIEWPORT — what happened, and should I act now?
+         This must answer the management question WITHOUT scrolling. -->
+    <section id="first-viewport" class="region kpi-region" aria-labelledby="kpi-heading">
+      <h2 id="kpi-heading" class="visually-hidden">Key results</h2>
+      <div class="kpi-strip" id="kpi-strip"></div>
+      <p class="partial-warning" id="partial-warning" hidden>
+        This period is incomplete and is excluded from automatic comparison.
+      </p>
+    </section>
+
+    <!-- PERFORMANCE STORY — what changed, and what explains it? -->
+    <section class="region story-region" aria-labelledby="story-heading">
+      <h2 id="story-heading" class="visually-hidden">Performance story</h2>
+      <div class="grid">
+        <figure class="panel span-8" id="hero-trend">
+          <figcaption class="panel-title" id="hero-trend-title">—</figcaption>
+          <div class="chart" id="hero-trend-chart" role="img" aria-describedby="hero-trend-summary"></div>
+          <p class="chart-summary visually-hidden" id="hero-trend-summary"></p>
+        </figure>
+        <aside class="panel span-4" id="insight-focus">
+          <h3 class="panel-title">What this means</h3>
+          <div id="insight-focus-body"></div>
+        </aside>
+        <figure class="panel span-7" id="pareto">
+          <figcaption class="panel-title" id="pareto-title">—</figcaption>
+          <div class="chart" id="pareto-chart" role="img" aria-describedby="pareto-summary"></div>
+          <p class="chart-summary visually-hidden" id="pareto-summary"></p>
+        </figure>
+        <figure class="panel span-5" id="bridge">
+          <figcaption class="panel-title" id="bridge-title">—</figcaption>
+          <div class="chart" id="bridge-chart" role="img" aria-describedby="bridge-summary"></div>
+          <p class="chart-summary visually-hidden" id="bridge-summary"></p>
+        </figure>
+        <!-- Exactly ONE most-useful diagnostic default (Part 26.11). -->
+        <figure class="panel span-12" id="diagnostic">
+          <figcaption class="panel-title" id="diagnostic-title">—</figcaption>
+          <div class="chart" id="diagnostic-chart" role="img" aria-describedby="diagnostic-summary"></div>
+          <p class="chart-summary visually-hidden" id="diagnostic-summary"></p>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ACTION ZONE — what should we investigate or do next? -->
+    <section class="region action-region" aria-labelledby="action-heading">
+      <h2 id="action-heading">Where to act</h2>
+      <table class="action-table" id="action-table">
+        <caption class="visually-hidden">Ranked contributors with evidence</caption>
+        <thead>
+          <tr><th scope="col">What</th><th scope="col">Why now</th>
+              <th scope="col">Evidence</th><th scope="col">Owner</th>
+              <th scope="col">Urgency</th></tr>
+        </thead>
+        <tbody id="action-table-body"></tbody>
+      </table>
+    </section>
+
+    <!-- DATA AND RUN ZONE — how do I add the next approved source? -->
+    <section class="region operate-region" aria-labelledby="operate-heading">
+      <h2 id="operate-heading">Add data</h2>
+      <div class="dropzone" id="dropzone" tabindex="0" role="button"
+           aria-label="Add files: click, or drag files here">
+        <p>Drag files here, or click to choose</p>
+        <input type="file" id="file-input" multiple hidden>
+      </div>
+      <ul class="file-list" id="file-list"></ul>
+      <button type="button" id="process-button" disabled>Process</button>
+      <!-- Progress is driven by durable events, never by animation (Part 22.4). -->
+      <div class="progress" id="progress" hidden>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <p class="progress-message" id="progress-message" role="status" aria-live="polite"></p>
+      </div>
+      <div class="user-action" id="user-action" hidden role="alertdialog"
+           aria-labelledby="user-action-text">
+        <p id="user-action-text"></p>
+        <button type="button" id="user-action-retry">Retry</button>
+      </div>
+    </section>
+
+    <!-- HISTORY AND QUALITY ZONE — can I trust it, and what changed? -->
+    <section class="region trust-region" aria-labelledby="trust-heading">
+      <h2 id="trust-heading">Trust and history</h2>
+      <div id="quality-detail"></div>
+      <table class="history-table" id="history-table">
+        <caption class="visually-hidden">Weekly run history</caption>
+        <thead>
+          <tr><th scope="col">Week</th><th scope="col">Data date</th>
+              <th scope="col">Rows</th><th scope="col">Inserted</th>
+              <th scope="col">Updated</th><th scope="col">Rejected</th>
+              <th scope="col">Quality</th><th scope="col">Dashboard</th></tr>
+        </thead>
+        <tbody id="history-table-body"></tbody>
+      </table>
+      <div class="lineage" id="lineage"></div>
+    </section>
+
+    <!-- SUPPORT AND EXPORTS — how do I recover, or take the result with me? -->
+    <section class="region support-region" aria-labelledby="support-heading">
+      <h2 id="support-heading">Exports and support</h2>
+      <div id="downloads"></div>
+      <details>
+        <summary>Support details</summary>
+        <div id="support-details"></div>
+      </details>
+    </section>
+  </main>
+
+  <!-- INSIGHT STORY — a manual slide deck over verified insight objects.
+       No autoplay by default; pause on blur; keyboard and touch required. -->
+  <dialog class="story" id="story-dialog" aria-labelledby="story-slide-title">
+    <h2 id="story-slide-title"></h2>
+    <div id="story-slide-body"></div>
+    <footer>
+      <button type="button" id="story-prev">Previous</button>
+      <span id="story-position" aria-live="polite"></span>
+      <button type="button" id="story-next">Next</button>
+      <button type="button" id="story-close">Close</button>
+    </footer>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

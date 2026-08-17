@@ -1,0 +1,482 @@
+# acceptance/gates.yaml — the machine-readable acceptance ledger (Constitution Part 38)
+#
+# Edit through `PROJECT_TOOL gates set`, not by hand, so evidence is validated
+# at the moment a gate changes state.
+#
+#   status: not_started | in_progress | pass | fail | conditional | not_applicable
+#   severity: block (no release without it) | major | minor
+#
+# A gate moves to `pass` only in the same change set as the evidence it cites.
+
+- id: GATE_PHASE_MINUS2_INSTANTIATION
+  part: 39.2
+  title: Template instantiated and every verifier runs green on the skeleton
+  severity: block
+  status: pass
+  evidence: acceptance/evidence/doctor-2026-08-17.txt
+  verified_at: "2026-08-17T16:21:12Z"
+  verified_by: template author
+  conditional_reason: ""
+  next_action: Run PROJECT_TOOL doctor and save its output under acceptance/evidence/
+
+- id: GATE_ARCHITECTURE_BASELINE
+  part: 0.8 / 23.9 / 31.1
+  title: Locked baseline exists, is machine-verified, and matches the source tree
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Pin versions in IMPLEMENTATION_BASELINE.lock.json, then run architecture verify --baseline
+
+- id: GATE_NO_RUNTIME_DOWNLOADS
+  part: 23.6 / 23.10
+  title: No CDN, package download, font, icon or telemetry call in runtime code
+  severity: block
+  status: pass
+  evidence: acceptance/evidence/source-scan-2026-08-17.txt
+  verified_at: "2026-08-17T16:21:12Z"
+  verified_by: template author
+  conditional_reason: ""
+  next_action: Run architecture verify --source-scan and save the output
+
+- id: GATE_BUSINESS_DEFINITION_APPROVED
+  part: 4 / 41.3
+  title: Report definition approved by a named owner; no PENDING_APPROVAL remains
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Fill report_definition.md with the business owner, then report validate --mode production
+
+- id: GATE_SECURITY_STORAGE_APPROVAL
+  part: 13.5 / 28.1 Phase 0
+  title: IT has approved storage location, access, retention and exposure in writing
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Get written answers to the five questions in Part 13.5 and file them in docs/SECURITY.md
+
+- id: GATE_PROTECTED_FILE_PROOF
+  part: 14 Phase 0 / 28.1 Phase 1 / 44.3
+  title: A real protected workbook is read twice with the source hash unchanged
+  severity: block
+  status: conditional
+  evidence: ""
+  verified_at: "2026-08-17T16:21:13Z"
+  verified_by: template author
+  conditional_reason: "No Windows host, no Microsoft Excel, and no DRM-protected files in this workspace. Part 44.3 rule 3: the fixture adapter can never advance this gate."
+  next_action: On a Windows PC with Excel and the real protected files, run the COM adapter twice and confirm the source hash is unchanged.
+
+- id: GATE_SOURCE_IMMUTABILITY
+  part: 31.1
+  title: Source file hash before equals hash after, on every run
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Assert hash equality in the extraction integration test
+
+- id: GATE_NO_CELL_BY_CELL
+  part: 1.4 rule 2 / 16.2
+  title: Extraction reads rectangular Value2 blocks; no per-cell COM loop exists
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add the static check and a benchmark comparing block vs per-cell timing
+
+- id: GATE_EXTRACTION_COMPLETENESS
+  part: 31.1
+  title: Sheet, range, chunk count, row count and control total all reconcile
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Prove in the vertical-slice integration test
+
+- id: GATE_POPULATION_EQUATION
+  part: 25.3 / 31.1
+  title: source_rows = accepted + rejected + intentionally_filtered, on every run
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Assert the equation in the run manifest and fail the run when it does not balance
+
+- id: GATE_CONTROL_TOTAL
+  part: 9.4 / 31.1
+  title: Control-total difference is exactly zero at the defined precision
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Implement reconciliation and prove it on a golden fixture
+
+- id: GATE_QUARANTINE_NO_SILENT_DROP
+  part: 9.5 / 31.1
+  title: Every rejected row is retained, counted, classified and visible
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add the quarantine table and a test that drops nothing silently
+
+- id: GATE_HISTORY_IDEMPOTENT
+  part: 1.4 rule 5 / 15 / 31.1
+  title: Rerunning identical input produces zero duplicates and identical totals
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add the mandatory rerun tests from Part 15
+
+- id: GATE_HISTORY_CORRECTIONS
+  part: 8.3 / 8.4 / 31.1
+  title: Lookback corrections, deletion rule and replace-period all behave as configured
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add day/week sequence, correction, duplicate and replace-period tests
+
+- id: GATE_TRANSACTION_SAFETY
+  part: 8.5 / 9 / 31.1
+  title: A failure at any point leaves trusted history and the last dashboard intact
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add the failure-injection suite under tests/failure/
+
+- id: GATE_GOLDEN_METRICS
+  part: 10.2 / 15 / 31.1
+  title: Trusted arithmetic lives in versioned SQL and passes golden tests
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Build the golden dataset with known answers and wire it into RUN_TESTS
+
+- id: GATE_NO_BROWSER_ARITHMETIC
+  part: 1.4 rule 6 / 26.10
+  title: No trusted KPI is calculated only in browser JavaScript
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add the static check over web/ plus a dashboard-vs-SQL equality test
+
+- id: GATE_INSIGHT_EVIDENCE
+  part: 10.3 / 26.6 / 31.1
+  title: Every insight links to a verified evidence object and invents no cause
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Build evidence objects first, then sentence templates over them
+
+- id: GATE_DASHBOARD_CONTRACT
+  part: 11.1 / 31.1
+  title: Dashboard JSON validates against its schema and matches the run manifest
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Validate against contracts/dashboard.schema.json in the build step
+
+- id: GATE_ONE_PAGE_DESIGN
+  part: 22.2 / 26.11 / 31.1
+  title: First viewport answers status and action; evidence, action and trust regions present
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Build the one-page shell to the Part 26.11 grid and review against Part 26.3
+
+- id: GATE_FILTER_RECONCILIATION
+  part: 22.6 / 26.14 / 31.1
+  title: One shared filter state; cross-filter, drill-through and reset all reconcile
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Implement the typed filter-state object and the Part 26.14 checks
+
+- id: GATE_BROWSER_OFFLINE
+  part: 11.5 / 26.10 / 31.1
+  title: Zero network requests, zero JS errors, charts/filters/theme/RTL/print all work
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Wire the headless browser verification into the publish step
+
+- id: GATE_ACCESSIBILITY
+  part: 22.9 / 31.1
+  title: Keyboard, focus, labels, WCAG 2.2 AA contrast and reduced motion all pass
+  severity: major
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add accessibility assertions to the browser suite
+
+- id: GATE_BILINGUAL_RTL
+  part: 22.9
+  title: Arabic renders as correct right-to-left layout, not only translated words
+  severity: major
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Build i18n dictionaries and test the RTL layout
+
+- id: GATE_STANDARD_USER_STARTUP
+  part: 31.1 / 33
+  title: asInvoker startup under a standard non-admin account, with no UAC prompt
+  severity: block
+  status: conditional
+  evidence: ""
+  verified_at: "2026-08-17T16:21:13Z"
+  verified_by: template author
+  conditional_reason: Requires a Windows standard non-admin account to observe asInvoker startup with no UAC prompt.
+  next_action: Start the built release under a standard user and capture LOCAL_TRANSPORT_EVIDENCE.json.
+
+- id: GATE_LOOPBACK_TRANSPORT
+  part: 0.9 / 31.1
+  title: Bundled API retained, bound only to 127.0.0.1; port conflict and lifecycle pass
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Implement app/local_transport.py and prove the bound socket address
+
+- id: GATE_LOOPBACK_SECURITY
+  part: 22.10 / 31.1
+  title: Wrong Origin, Host, launch secret and non-loopback probes are all rejected
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Add the negative probe suite; confirm no wildcard CORS
+
+- id: GATE_NO_MACHINE_MUTATION
+  part: 31.1 / 33
+  title: No service, IIS, URL reservation, firewall change or machine-wide write
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Verify before/after machine state on the clean-PC gate
+
+- id: GATE_SECRET_HANDLING
+  part: 43
+  title: No credential-shaped literal in source, config, launcher or release
+  severity: block
+  status: pass
+  evidence: acceptance/evidence/source-scan-2026-08-17.txt
+  verified_at: "2026-08-17T16:21:12Z"
+  verified_by: template author
+  conditional_reason: ""
+  next_action: Run architecture verify --source-scan; default SQL auth to Integrated
+
+- id: GATE_FAIL_CLOSED
+  part: 23.11 / 31.1
+  title: Removing any required component fails closed with no reduced fallback
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Run architecture verify --simulate-missing for each component id
+
+- id: GATE_NO_BUILD_MACHINE_LEAKAGE
+  part: 30.4 / 31.1
+  title: Passes with system Python, Node, pip, npm, Git and editors masked from PATH
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Run architecture verify --simulate-clean-pc on a representative machine
+
+- id: GATE_ARCHIVE_REBUILD
+  part: 14 Phase 5 / 28.1 Phase 6
+  title: An empty database rebuilds from the Parquet archive and reconciles
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Implement rebuild_database and prove it end to end
+
+- id: GATE_SQL_SERVER_SYNC
+  part: 14 Phase 6 / 28.1 Phase 7
+  title: Central sync reconciles; outage queues instead of re-extracting Excel
+  severity: block
+  status: not_applicable
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: "SQL Server is disabled in IMPLEMENTATION_BASELINE.lock.json. Part 13.4: skip it until someone outside the team needs the data. Set to not_started when enabled."
+  next_action: ""
+
+- id: GATE_PERFORMANCE_MEASURED
+  part: 14.1 / 31.3
+  title: Representative benchmarks recorded; targets set from measurement, not guesses
+  severity: major
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Fill the Part 14.1 benchmark table from real files
+
+- id: GATE_INTERACTION_BUDGETS
+  part: 26.16
+  title: Shell, filter and story-slide timings meet the p95 budgets on the target PC
+  severity: major
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Measure p50/p95 on the approved target PC
+
+- id: GATE_TWO_STABLE_RUNS
+  part: 31.2
+  title: Two consecutive production-like runs with no change between them
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Execute after the vertical slice is complete
+
+- id: GATE_CLEAN_OFFLINE_MACHINE
+  part: 30.4 / 31.1
+  title: Extract, start, process, restart, repair and rollback on a clean offline PC
+  severity: block
+  status: conditional
+  evidence: ""
+  verified_at: "2026-08-17T16:21:13Z"
+  verified_by: template author
+  conditional_reason: Requires a representative offline Windows PC with no system Python, Node, package manager, editor or compiler.
+  next_action: Run the full Part 30.4 sequence on that machine and save the transcript as evidence.
+
+- id: GATE_RELEASE_COMPLETENESS
+  part: 30.2 / 31.1
+  title: One-folder app, update kit, wheelhouse, assets, SBOM, licenses and hashes present
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Run BUILD_RELEASE then architecture verify --release
+
+- id: GATE_MAP_FRESHNESS
+  part: 20.5 / 31.1
+  title: Map verify passes; task routes, tests and contracts are current
+  severity: block
+  status: pass
+  evidence: acceptance/evidence/doctor-2026-08-17.txt
+  verified_at: "2026-08-17T16:21:13Z"
+  verified_by: template author
+  conditional_reason: ""
+  next_action: Run PROJECT_TOOL map verify and keep it green in CI
+
+- id: GATE_SKILL_ONBOARDING
+  part: 20.7 / 24.2 rule 5 / 31.1
+  title: An independent agent routes a realistic task without a repository-wide scan
+  severity: block
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Run the first-session test with a fresh agent and record the result
+
+- id: GATE_MEMORY_VALIDATION
+  part: 21.6 / 31.1
+  title: Memory admission passes; suggestions are sourced and deduplicated
+  severity: major
+  status: pass
+  evidence: acceptance/evidence/doctor-2026-08-17.txt
+  verified_at: "2026-08-17T16:21:13Z"
+  verified_by: template author
+  conditional_reason: ""
+  next_action: Run PROJECT_TOOL memory validate and keep it green in CI
+
+- id: GATE_CONSTITUTION_CONSISTENCY
+  part: 34.3 / 31.1
+  title: Machine and semantic constitution audits both pass
+  severity: block
+  status: pass
+  evidence: acceptance/evidence/doctor-2026-08-17.txt
+  verified_at: "2026-08-17T16:21:13Z"
+  verified_by: template author
+  conditional_reason: ""
+  next_action: Run PROJECT_TOOL constitution audit and record the semantic review
+
+- id: GATE_OPERATOR_HANDOFF
+  part: 28.1 Phase 10 / 31.1
+  title: A non-technical operator completes two runs and one recovery unaided
+  severity: major
+  status: not_started
+  evidence: ""
+  verified_at: ""
+  verified_by: ""
+  conditional_reason: ""
+  next_action: Schedule the handoff session and record what the operator could not do alone

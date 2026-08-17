@@ -1,0 +1,43 @@
+# Project metadata (Constitution Part 13.1).
+#
+# Note the deliberate asymmetry: this file declares the APPLICATION's runtime
+# dependencies, which are bundled into the release. The tool tier under tools/
+# has NO dependencies at all and must never acquire one (Part 37.2 rule 1).
+
+[project]
+name = "excel-intelligence"
+version = "0.0.0"
+description = "Offline Excel intelligence: protected Excel to a trusted local dashboard"
+requires-python = ">=3.11"
+
+# Exact versions are pinned during Phase -1 after compatibility and security
+# testing, and recorded with hashes in requirements-lock.txt and
+# IMPLEMENTATION_BASELINE.lock.json. Pinning a version is ordinary work;
+# REMOVING a component is an architecture deviation (Part 0.7).
+dependencies = [
+    # "fastapi",       # typed loopback API
+    # "uvicorn",       # ASGI server, 127.0.0.1 only
+    # "pydantic",      # request/response validation
+    # "python-multipart",  # validated uploads
+    # "duckdb",        # trusted local history and analytical SQL
+    # "pywin32",       # Excel COM (Windows only)
+    # "openpyxl",      # unprotected workbook inspection, discovery/tests only
+    # "jsonschema",    # contract validation
+]
+
+[project.optional-dependencies]
+# QA and update kit only — never part of the employee runtime (Part 23.12).
+qa = [
+    # "playwright",    # browser verification with its pinned local browser
+    # "pytest",        # optional; the suite also runs under stdlib unittest
+]
+
+[tool.unittest]
+start-dir = "tests"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
