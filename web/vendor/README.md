@@ -1,25 +1,14 @@
-# web/vendor — pinned local assets
+# Vendored browser dependencies
 
-Constitution Parts 23.6, 23.8.
+Production release expects a **local pinned** Apache ECharts asset here:
 
-This folder holds **locally bundled** third-party front-end assets. It is empty
-in the template because assets are pinned and hash-recorded at build time.
+```text
+web/vendor/echarts.min.js
+web/vendor/echarts.version
+```
 
-## What belongs here
+Pinned target for this branch: **Apache ECharts 6.1.0** (released May 19, 2026).
 
-| Asset | Purpose | Version | SHA-256 | License |
-|---|---|---|---|---|
-| `echarts.min.js` | interactive charts | `PIN_AT_BUILD` | `POPULATE_FROM_RELEASE` | Apache-2.0 |
+The upstream project is Apache ECharts, Apache-2.0 licensed. Obtain the release from the official Apache/GitHub release, verify the release/checksum according to the Apache download instructions, then record the exact SHA-256 in the release dependency manifest.
 
-## Rules
-
-1. **No CDN reference, ever.** Not in HTML, CSS, JS, or a generated report.
-   `PROJECT_TOOL architecture verify --source-scan` fails on one.
-2. **No remote font or icon.** Use the local system font stack and inline SVG.
-3. Record every asset's version, SHA-256 and license in
-   `IMPLEMENTATION_BASELINE.lock.json`, `sbom.spdx.json` and
-   `THIRD_PARTY_NOTICES.md`.
-4. Front-end assets are built **before** release. Node.js and package managers
-   are never runtime requirements.
-5. Never hand-edit a vendored file. Re-pin the upstream version instead, and
-   record the upgrade per Part 23.7 — one layer at a time.
+Development may render an accessible table fallback when the asset is missing. **Release/standalone HTML must fail closed** if `echarts.min.js` is absent. Never replace this with a CDN reference. Offline means bundled dependencies, not wishful networking.
