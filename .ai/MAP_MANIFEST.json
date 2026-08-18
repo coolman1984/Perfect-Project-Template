@@ -1162,9 +1162,9 @@
       "sha256": "af8f4b3cd9b4c36849971543b87eb185e2a05c05dd2f5a110851c1d757767e4f"
     },
     "web/index.html": {
-      "bytes": 3448,
+      "bytes": 3929,
       "scope": "universal_core",
-      "sha256": "f52700ca616239a23966a3160224a2fc4c527171f6dc4de35ef779196e672ddc"
+      "sha256": "031cc9d9bf8779f739f79a25dad15c32997df27504b7a03d9ab3cf9b412d31f2"
     },
     "web/motion.js": {
       "bytes": 1081,
@@ -1182,6 +1182,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:51:02Z",
+  "generated_at": "2026-08-18T07:51:42Z",
   "schema_version": 2
 }
