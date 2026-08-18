@@ -58,29 +58,6 @@ LEFT JOIN inventory i ON i.item_id = m.item_id
 WHERE m.is_active = TRUE
 ORDER BY shortage_qty DESC, m.item_name;
 
--- name: shortage_qty
-WITH demand AS (
-    SELECT item_id, SUM(ordered_qty - fulfilled_qty) AS open_demand_qty
-    FROM analytics.history_reference_supply_chain_orders
-    WHERE is_active = TRUE
-    GROUP BY item_id
-), latest AS (
-    SELECT max(snapshot_date) AS snapshot_date
-    FROM analytics.history_reference_supply_chain_inventory
-    WHERE is_active = TRUE
-), inventory AS (
-    SELECT i.item_id, SUM(i.on_hand_qty) AS on_hand_qty
-    FROM analytics.history_reference_supply_chain_inventory i
-    JOIN latest l ON i.snapshot_date = l.snapshot_date
-    WHERE i.is_active = TRUE
-    GROUP BY i.item_id
-)
-SELECT COALESCE(SUM(GREATEST(COALESCE(d.open_demand_qty, 0) - COALESCE(i.on_hand_qty, 0), 0)), 0)
-FROM analytics.history_reference_supply_chain_item_master m
-LEFT JOIN demand d ON d.item_id = m.item_id
-LEFT JOIN inventory i ON i.item_id = m.item_id
-WHERE m.is_active = TRUE;
-
 -- name: inventory_by_warehouse
 WITH latest AS (
     SELECT max(snapshot_date) AS snapshot_date

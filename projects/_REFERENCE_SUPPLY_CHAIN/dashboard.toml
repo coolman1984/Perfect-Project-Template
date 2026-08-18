@@ -30,13 +30,6 @@ query = "on_hand_qty"
 format = "integer"
 unit = "units"
 
-[[kpis]]
-id = "shortage_qty"
-label = "Current shortage quantity"
-query = "shortage_qty"
-format = "integer"
-unit = "units"
-
 [[charts]]
 id = "shortage_by_item"
 type = "bar"
