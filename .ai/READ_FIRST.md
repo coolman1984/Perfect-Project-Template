@@ -1,24 +1,19 @@
-# READ FIRST — Low-token operating rules
+# READ FIRST — Universal Excel Automation Engine
 
-The project already contains the application. A new Excel automation is normally an adaptation, not a new architecture.
+This repository is already the application. Normal work adapts a **project pack**, not a blank report scaffold.
 
-## Startup
+Start:
 
-1. `PROJECT_SKILL.md`
-2. `UNIVERSAL_ENGINE_SKILL.md`
-3. `PROJECT_TOOL doctor`
-4. `PROJECT_TOOL map context --task "..." --budget 4000`
-5. `.ai/CURRENT_STATE.md` + generated context pack
-6. Only routed files plus direct tests/contracts
+```text
+PROJECT_TOOL doctor
+PROJECT_TOOL map verify
+PROJECT_TOOL map context --task "<exact task>" --budget 4000
+```
 
-Do not inspect the whole repository “to understand it.” Repeatedly feeding the same codebase to agents is expensive theatre.
+Then read `.ai/CURRENT_STATE.md`, `.ai/CONTEXT_PACK.md`, and only the routed project/core files.
 
-For a new Excel process use:
+For an employee copy, `PROJECT_TOOL template-baseline verify` must pass against a **sealed** `TEMPLATE_BASELINE.json`. In master-core development an unsealed baseline is expected until release, but employee distribution is blocked.
 
-`business explanation -> compact source profile -> mapping -> configuration -> small report SQL -> focused tests -> full gates`
+Use `projects/<project_id>/` as the adaptation unit. Check `capabilities/registry.json` before opening Universal Core. Multi-source roles and relationships are first-class. Security policy is IT-owned. Profiling is metadata-only by default.
 
-Never put a huge workbook into model context. Prefer column/type/null/distinct profiles and minimal approved samples.
-
-Stop only for genuinely human-owned business facts such as row meaning, record identity, correction behavior, trusted totals, KPI meaning or storage approval. Do not ask the employee to choose database/API/framework/runtime design.
-
-If a normal adaptation requires shared engine changes, prove why configuration or an extension point cannot express it. A genuine common capability gets one reusable implementation plus regression tests across both references.
+Do not claim full universality until `projects/_REFERENCE_SUPPLY_CHAIN/` executes end to end as a three-source golden reference. Current detailed status is in `docs/V8_1_AUDIT_REMEDIATION.md`.

@@ -2,28 +2,39 @@
 
 ## Product identity
 
-This repository is evolving into a **Universal Excel Automation Engine + Adaptation Template**.
+**Universal Excel Automation Engine + Adaptation Template, under V8.1 deep-audit remediation.**
 
-**The application already exists. New department projects adapt configuration and business logic; they do not rebuild the application.**
+The ready application is the product. Employee agents should adapt project configuration and isolated business logic rather than rebuild technical foundations.
 
-## Proven reusable foundation in this branch
+## Proven reusable foundation
 
-- Golden Reference executes extract → stage → quality → clean → history → archive → SQL analytics → evidence insights → dashboard JSON against synthetic fixtures.
-- A genuinely different Maintenance downtime report executes through the same Universal Core with different columns, keys, KPIs, charts, quality rules and fixtures.
-- History supports append/upsert/snapshot/replace-period and idempotent reruns.
-- Shared analytics and dashboard meaning are configuration-driven through each report's `dashboard.toml` and versioned SQL.
-- Compact source profiling omits raw samples by default; adaptation manifests/core-change guards keep future agents focused on variation points.
-- A reusable FastAPI/Uvicorn loopback runtime now provides verified `127.0.0.1` startup/shutdown, launch-secret + Host/Origin controls, durable run events, report locks, local hashed intake, run start/status/events, dashboard/history/quality endpoints and the shared web shell.
-- Windows CI exercises BAT launchers, portable tests, application tests and a workspace path containing spaces plus Arabic characters.
-- The standalone HTML builder is self-contained and fails closed when the pinned local ECharts asset is missing; static verification never pretends to be a browser proof.
+- Single-source Golden Production Quality pipeline executes through extraction-port fixture → staging → quality/reconciliation → clean → universal history → DuckDB/Parquet → SQL analytics → evidence insights → dashboard JSON.
+- A genuinely different single-source Maintenance downtime project executes through the same Universal Core.
+- Reusable FastAPI/Uvicorn loopback runtime, launch-secret/Host/Origin controls, durable events, locks, local intake, last-good dashboard publication and standalone HTML builder have Linux/Windows CI proof.
+- Compact source profiling omits raw sample values by default.
 
-## Explicit remaining gaps
+## V8.1 remediation now present
 
-- `app/excel/com_adapter.py` production COM extraction is still an implementation/proof gap; real protected Excel/DRM proof can only close on the authorized corporate Windows environment.
-- Employee run orchestration currently accepts one source file. Multiple workbooks with different business roles still need an explicit multi-source composition contract; the engine intentionally does not concatenate unrelated schemas.
-- The actual pinned `web/vendor/echarts.min.js` binary is not stored in this repository yet. Target version is recorded as 6.1.0; release packaging must include and hash-verify it.
-- Full headless-browser proof (zero network requests/JS errors plus theme/RTL/print/filter checks) is not yet wired to release publication.
-- Final offline executable/runtime/wheelhouse packaging is not complete.
-- GitHub server settings such as default branch `main` and branch protection must be enabled in GitHub Settings; repository files cannot truthfully claim those settings were changed.
+- Project-centric `projects/<project_id>/` contract.
+- Explicit multi-source source registry, per-source keys/history/quality and relationship contract.
+- Git-independent `TEMPLATE_BASELINE.json` with machine path ownership and seal/verify tooling.
+- Capability registry and dashboard component catalog.
+- IT-owned security policy with metadata-only AI profiling default.
+- Machine schemas for baseline/project/sources/relationships/adaptation/reuse/source-profile/capability contracts.
+- Supply Chain reference contract for orders + inventory + item master with different history modes.
+- Canonical quality semantics are PASS/WARNING/BLOCK; run state remains FAILED on a block.
+- Normal history behavior is Universal Core, not per-report `history.sql`.
 
-Environment-bound gates remain conditional even when Linux and Windows CI are green.
+## Explicit blockers before employee distribution
+
+1. The Supply Chain three-source reference is **CONTRACT PROVEN, EXECUTION NOT YET PROVEN**. Multi-source orchestration and its golden test are the top engineering blocker.
+2. Project generation/UI still has legacy report-centric compatibility paths that must be migrated.
+3. `TEMPLATE_BASELINE.json` is intentionally development-unsealed until master-core work stabilizes.
+4. Template upgrade/migration/rollback is defined as a contract but not yet executed/proven.
+5. Real protected Excel COM/DRM proof requires the authorized corporate Windows + Excel environment.
+6. Actual pinned ECharts binary, full browser/offline/accessibility/RTL proof and final sealed offline package remain open.
+7. The legacy 225k-line constitution still needs a mechanical reconciliation with the V8.1 authority addendum.
+
+**Current approval verdict: NOT READY FOR EMPLOYEE DISTRIBUTION.**
+
+Detailed finding-by-finding status: `docs/V8_1_AUDIT_REMEDIATION.md`.

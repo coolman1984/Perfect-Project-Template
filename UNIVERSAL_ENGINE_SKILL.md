@@ -1,55 +1,59 @@
 # Universal Excel Automation Engine — Adaptation Skill
 
-**The application is already built. Adapt the differences. Do not rebuild the application.**
+**The ready template is the product. The employee AI agent adapts it; it does not rebuild it.**
 
-The target is that a normal new Excel automation reuses roughly 70–80% or more of the proven system. Never game a percentage; the real measures are fewer core files changed, less new code, less context, fewer architecture decisions and fewer defects.
+## Mental model
 
-## What the employee supplies
+```text
+SEALED UNIVERSAL CORE
++ EMPLOYEE PROJECT PACK
+= UNIQUE WORKING AUTOMATION
+```
 
-The employee supplies Excel files and business knowledge: what one row means, relationships, calculations, KPIs, trusted totals, correction behavior and ownership. Do not ask the employee to choose DuckDB, FastAPI, COM, Parquet, ports, services or packaging technology. Those are already governed.
+The project, not a report, is the adaptation unit. One project may contain orders, inventory, master data, targets, corrections and multiple outputs.
 
-## Required work order
+Normal project-owned files live under `projects/<project_id>/`: source roles, mappings, relationships, quality controls, metric bindings, presentation configuration and isolated project-specific business rules.
 
-`UNDERSTAND -> PROFILE -> MAP -> CONFIGURE -> SMALL BUSINESS LOGIC -> TEST -> DELIVER`
+## Work order
 
-1. Understand the business request.
-2. Profile Excel structure compactly. Do not pour a giant workbook into model context.
-3. Run the project-map router for the exact task.
-4. Classify needs as reuse-as-is, configuration, report business logic, or genuinely missing reusable capability.
-5. Configure the existing engine first.
-6. Put unique business formulas in report SQL/configuration.
-7. Change Universal Core only for a genuinely reusable missing capability.
-8. Test idempotency, corrections, reconciliation, quality failure and dashboard results.
-9. Record adaptation/map/state evidence.
+```text
+UNDERSTAND → PROFILE → CAPABILITY MAP → CONFIGURE → PROJECT-SPECIFIC LOGIC → TEST → DELIVER
+```
 
-## Universal Core, normally unchanged
+Classify every requirement as `REUSE_AS_IS`, `CONFIGURE`, `PROJECT_SPECIFIC_BUSINESS_LOGIC`, or `NEW_REUSABLE_CAPABILITY_CANDIDATE`.
 
-Authorized desktop Excel COM/Value2 extraction; chunked staging/lineage; DuckDB; Parquet archive; history/idempotency; quality/quarantine/reconciliation; configured SQL analytics; reusable insight patterns; configured dashboard JSON; shared UI; FastAPI/Uvicorn loopback on 127.0.0.1; offline packaging; project map; approvals and gates.
+Search `capabilities/registry.json` before reading core source. The registry names supported patterns, configuration entry points, extension points, tests and limitations.
 
-## Normal variation points
+## Multi-source is mandatory
 
-Prefer `reports/<id>/` plus its additive migration and focused tests: `report.toml`, `pipeline.toml`, `dashboard.toml`, `sql/clean.sql`, `sql/checks.sql`, `sql/metrics.sql`, `sql/insights.sql`, fixtures and expected values.
+Each source has an independent role, file pattern, sheet/table discovery, grain, business key, date/period, load/update strategy and quality controls. Relationships are explicit and approved. Never concatenate unrelated workbooks merely to claim multi-source support.
 
-Business formulas stay in versioned SQL. JavaScript renders; it does not become a second calculation engine.
+`projects/_REFERENCE_SUPPLY_CHAIN/` is the required three-role reference: orders, inventory and item master. Until its golden execution is implemented, it remains contract-proven only and the template is not fully universal.
 
-## Never hardcode one department into Universal Core
+## Core guard without Git
 
-Shared Python must not contain concepts such as defect rate, sales revenue, headcount, inventory shortage, budget variance, model code or downtime minutes. Those belong to report configuration/SQL.
+`TEMPLATE_BASELINE.json` owns path scopes and sealed SHA-256 hashes. Git may add evidence, but copied employee folders must remain verifiable with no Git history.
 
-## Low-token source understanding
+Employee projects may propose reusable-capability candidates. Promotion happens only in the authoritative master template, which creates a new template version and upgrade path.
 
-Use structural profiles: sheet identity, row/column counts, column names, probable types, null/distinct counts, candidate keys, date-like fields and schema drift. `factory/source_profile.py` omits raw samples by default. Never place hundreds of thousands of rows into AI context.
+## Calculations, history, quality
+
+Prefer deterministic SQL. Use isolated tested Python only where SQL is materially unsafe or unclear; never duplicate a trusted formula. JavaScript is not the trusted calculation layer.
+
+History semantics are Universal Core and selected per source. Normal project packs do not implement `history.sql`.
+
+Quality verdicts are `PASS`, `WARNING`, `BLOCK`. A BLOCK causes run state `FAILED` and leaves trusted history/last-good output untouched.
 
 ## Human boundary
 
-AI may infer and suggest. It may not silently approve uncertain business meaning. Humans approve record identity, correction behavior, trusted totals, KPI meaning and storage policy. Technical architecture is already governed.
+The employee supplies business meaning and approvals. IT/Security owns storage, retention and external-AI policy. Source profiling is metadata-only by default; raw/protected values require explicit policy permission.
 
-## Two executable references
+## Low-token proof
 
-`reports/_REFERENCE/` proves the first full pipeline. `reports/line_downtime/` proves a different Maintenance-style data shape and KPI set through the same Universal Core. Copy patterns, not business columns.
+The first context is `PROJECT_SKILL.md` + current state + generated context pack. The map carries machine path scope. Context reporting uses portable proxies: estimated tokens, files selected, bytes selected and expansion count. Actual model tokens are reported only when the tool exposes them.
 
-## Core-change rule
+## Packaging
 
-Before changing shared engine code ask: can configuration express this, does an extension point exist, is this truly common, and can it be added once without department meaning? A justified core improvement needs regression evidence across both references.
+No core/runtime change means reuse the sealed runtime and package/validate the project pack. Core/runtime change means master-core rebuild, new sealed baseline/version, compatibility migration, verification and rollback.
 
-A good new project feels like: **the agent taught the existing application what this department's Excel process means.**
+The important reuse proof is not a flattering percentage. It is few/no core files changed, reused capabilities/tests, limited project-specific code, no new architecture decision, and a small routed context.

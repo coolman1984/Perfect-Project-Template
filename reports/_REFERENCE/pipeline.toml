@@ -12,7 +12,6 @@ category = "category"
 clean = "clean.sql"
 checks = "checks.sql"
 metrics = "metrics.sql"
-history = "history.sql"
 insights = "insights.sql"
 
 [dashboard]

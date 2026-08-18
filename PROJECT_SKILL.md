@@ -1,291 +1,202 @@
 ---
-name: excel-intelligence-project-operator
-description: Build, run, diagnose, verify, and evolve this exact offline Excel intelligence project using its verified task-ranked project map. Use whenever an AI agent enters this repository or changes extraction, data, analytics, dashboard, packaging, tests, or project memory.
+name: universal-excel-automation-adapter
+description: Adapt this already-built offline Excel automation engine into an employee-specific multi-source project with minimal core change and minimal repository reading.
 ---
 
-# PROJECT SKILL — the mandatory first read
+# PROJECT SKILL — mandatory first read
 
-> **Template status.** This file ships as a template. Phase −2 instantiation
-> (Part 39) replaces `<project_slug>`, `<REPORT_ID>` and the CURRENT TRUTH
-> section with real values. Sections marked *generated* are owned by
-> `PROJECT_TOOL map refresh`; everything else is written by humans and agents
-> and preserved across refreshes (Part 24.2 rule 1).
+## 1. What this repository is
 
----
+This repository is the **Universal Excel Automation Engine + Adaptation Template**. It is not a blank scaffold and a normal employee agent is not an application architect.
 
-## 1. READ THIS FIRST
+The employee supplies Excel files and business meaning. The repository supplies extraction, staging, quality, history, database, analytics, local API, dashboard framework, offline runtime, security controls, tests, map and packaging foundations.
+
+Canonical work order:
+
+```text
+UNDERSTAND BUSINESS
+→ PROFILE SOURCES
+→ MAP TO EXISTING CAPABILITIES
+→ REUSE AS-IS
+→ CONFIGURE DIFFERENCES
+→ ADD ISOLATED PROJECT-SPECIFIC BUSINESS LOGIC ONLY WHEN NEEDED
+→ TEST / RECONCILE
+→ DELIVER PROJECT PACK WITH THE SEALED RUNTIME
+```
+
+## 2. 90-second start
 
 ```text
 PROJECT_TOOL doctor
-PROJECT_TOOL map context --task "<your task>" --budget 4000
+PROJECT_TOOL map verify
+PROJECT_TOOL map context --task "<exact task>" --budget 4000
 ```
 
-Then read `.ai/CURRENT_STATE.md` and `.ai/CONTEXT_PACK.md`. Open only the files
-the router names. **Do not scan the repository** (Part 0.1).
+Then read `.ai/CURRENT_STATE.md`, `.ai/CONTEXT_PACK.md`, the relevant `projects/<id>/` contracts, and only the routed implementation/tests. Do not broad-scan the repository.
 
-Windows: `PROJECT_TOOL.bat`. Linux/macOS: `./project_tool.sh`. Same tool (Part 37.2).
-
-**Stop conditions — stop and ask, do not guess:**
-
-| Condition | Why |
-|---|---|
-| A business rule is unknown (grain, key, formula, threshold, deletion, currency, timezone) | Part 3.1 reserves these to a named human. A guessed rule is the most expensive bug in this system. |
-| A locked component seems incompatible or hard to package | Part 0.7 deviation request, explicit approval required. Difficulty is not permission to delete a component. |
-| You want a "simpler" architecture or a new external prerequisite | Same. Describing a downgrade as "more portable" or "native" is itself evidence of non-compliance (Part 34.4). |
-| `doctor` reports BLOCKED | Something was **not verified**. Never report it as a pass (Part 37.4). |
-| The map contradicts the code | Code and executable evidence win temporarily; repair the map in the same task (Part 27.8). |
-
-Stopping is correct behaviour, not failure.
-
----
-
-## 2. PRODUCT
-
-| | |
-|---|---|
-| **User** | A non-technical employee. No editor, terminal, database tool or file-system inspection. |
-| **Decision supported** | `PENDING_APPROVAL` — name the one decision this dashboard drives (Part 26.1). |
-| **Sources** | Protected Excel workbooks, opened through the employee's own authorized Excel session. Never DRM bypass. |
-| **Outputs** | One-page local web app (the operating product) + a standalone portable HTML report (the export). |
-| **Security boundary** | Loopback only, `127.0.0.1`, standard user, `asInvoker`, no elevation, no service, no firewall change. |
-| **Flow** | `Open app → add data → process → see quality → use dashboard → act/export` |
-
-⚠️ Extracted DuckDB, Parquet, JSON, HTML, exports, logs and backups contain the
-same data as the protected Excel files **without** the DRM wrapper. That is a
-real change in security posture and needs written IT approval (Part 13.5).
-
----
-
-## 3. CURRENT TRUTH
-
-<!-- HUMAN:BEGIN current-truth — preserved across map refresh -->
-
-| | |
-|---|---|
-| **Phase** | −2 (template, not yet instantiated) |
-| **Application version** | 0.0.0 |
-| **Proven features** | None. This is a scaffold. |
-| **Conditional gates** | Every Windows/Excel gate — see `acceptance/gates.yaml` |
-| **Known limits** | No report configured; no business meaning approved; no release built |
-
-Authoritative live status is `acceptance/gates.yaml` (`PROJECT_TOOL gates status`),
-not this paragraph. Update both in the same change set.
-
-<!-- HUMAN:END current-truth -->
-
----
-
-## 4. ARCHITECTURE
+For an **employee adaptation**, also run:
 
 ```text
-DRM-PROTECTED EXCEL  →  Excel desktop (authorized session)
-   → ExtractionPort (COM adapter, Value2 blocks)
-   → RAW STAGING  →  QUALITY GATE  →  CLEAN
-   → HISTORY ENGINE ── DuckDB (brain) · Parquet (archive) · SQL Server (optional)
-   → ANALYTICS (versioned SQL)  →  INSIGHTS (evidence objects)
-   → DASHBOARD JSON  →  one-page local web app + standalone HTML  →  VERIFY
+PROJECT_TOOL template-baseline verify
+PROJECT_TOOL adaptation core-guard --project <project_id>
 ```
 
-Dependency direction (Part 24.1) — circular dependencies are forbidden:
+If the template baseline is missing/unsealed/changed, stop employee release work. A copied employee agent verifies foundational tooling; it does not recreate the Universal Core on the PC.
+
+For **master-core development**, an unsealed development baseline is expected until the core is ready to release. Only master-core release work may seal a new baseline.
+
+## 3. Project, not report
+
+The adaptation unit is `projects/<project_id>/`.
 
 ```text
-web → local API → orchestrator → components
-configuration and contracts point inward; business logic never leaks into UI
-tests may depend on all layers; production layers never depend on tests
+project.toml          identity + template lineage + business purpose
+sources.toml          every independent workbook/sheet/source role
+relationships.toml    explicit joins/cardinality/approval state
+dashboard.toml        presentation composition
+quality.toml          project/cross-source controls when needed
+metrics.toml          reusable metric bindings when needed
+business_rules/       isolated genuinely project-specific SQL/Python
+reports/              optional report/export definitions inside the project
 ```
 
-**Golden sentence:** *Excel is the authorized door to the data — Excel is not
-the calculation engine.*
+Legacy `reports/` exists only while older executable reference tests are migrated. Never use that legacy location as proof that the architecture is report-centric.
 
----
+Each source independently owns its file pattern, discovery rule, grain, business key, event date, load/update strategy, deletion behavior and quality controls. Orders may upsert while inventory snapshots and a master file upserts. Do not force one project-wide load mode onto unrelated sources.
 
-## 5. COMPACT PROJECT MAP
+## 4. Requirement classification
 
-| Path | Purpose | Owner | Risk |
-|---|---|---|---|
-| `constitution/` | The law. Read once; afterwards route by Part number. | platform | critical |
-| `app/excel/` | Session, discovery, extraction, conversion, identity | platform | critical |
-| `app/data/` | DuckDB, staging, history, archive, migrations, optional SQL sync | data | critical |
-| `app/quality/` | Checks, reconciliation, drift, quarantine | data/report | critical |
-| `app/analytics/` | Metric registry, SQL runner, insights, calendar | business/data | critical |
-| `app/dashboard/` | JSON builder, HTML builder, verifier | product | high |
-| `app/server.py`, `app/local_transport.py` | Loopback API and its security boundary | platform | critical |
-| `web/` | One-page shell, filters, charts, story, i18n, vendor assets | UI | high |
-| `reports/<id>/` | Business meaning, config, mappings, metrics, quality, SQL | business | critical |
-| `contracts/` | Config, dashboard, event, manifest schemas; error codes; run states | platform | critical |
-| `acceptance/gates.yaml` | What is actually proven (Part 38) | platform | high |
-| `tools/` | Map, memory, verifiers, gate ledger — dev only, never imported by `app/` | platform | medium |
-| `.ai/` | Map, state, contracts, lessons, opportunities, memory | platform | medium |
-
-Exhaustive catalog: `.ai/PROJECT_MAP.md` (generated). Do not load it whole —
-search it by section.
-
----
-
-## 6. TASK ROUTER
-
-| Task | Read first | Usually edit | Must test | Must update |
-|---|---|---|---|---|
-| Excel will not open | `app/excel/session.py`, source config, last failure event | Excel adapter/config only | protected-file fixture + cleanup | map if behaviour changed |
-| New or renamed column | report definition, `mappings.toml`, schema contract | mapping/config/migration | drift + reconciliation + golden | contracts, state, map |
-| New KPI | `metrics.toml`, source fields, calendar rule | `sql/metrics.sql` + registry + JSON builder | unit + golden + dashboard | contract if public shape changes |
-| New chart | `contracts/dashboard.schema.json`, Part 26.2 selection map | chart spec/template | browser + accessibility + print | map / UI contract |
-| History duplicates | load-mode config, key rules, `sql/history.sql` | `app/data/history.py` + migration | same-input rerun + correction | decision record + lessons |
-| SQL Server outage | `sys.sync_queue`, retry policy | connector only if a defect exists | disconnect/retry/reconcile | state if the limitation changed |
-| Slow large file | profile, projection, chunk logic | extractor/config | representative benchmark | performance evidence + map |
-| Text/UI change | `web/i18n/*.json`, component, accessibility rules | UI assets | keyboard + responsive + RTL + print | map only if structure changed |
-| New report | Part 4, `reports/_TEMPLATE/` | `PROJECT_TOOL report new --id <id>` | report validate | gates, state, map |
-| Gate evidence | `acceptance/gates.yaml` | `PROJECT_TOOL gates set` | the gate's own proof | state |
-
-Route not listed? Add it here in the same change set (Part 20.4).
-
----
-
-## 7. BUSINESS INVARIANTS
-
-<!-- HUMAN:BEGIN invariants — never generated; a named human owns every line -->
-
-| Invariant | Value | Approved by |
-|---|---|---|
-| Grain (what ONE ROW means) | `PENDING_APPROVAL` | — |
-| Business key | `PENDING_APPROVAL` | — |
-| Load mode | `PENDING_APPROVAL` | — |
-| Lookback window | `PENDING_APPROVAL` | — |
-| Deletion behaviour | `PENDING_APPROVAL` | — |
-| Control total column | `PENDING_APPROVAL` | — |
-| Currency / units | `PENDING_APPROVAL` | — |
-| Timezone / fiscal calendar | `PENDING_APPROVAL` | — |
-| Approved storage locations | `PENDING_APPROVAL` | — |
-| AI narrative permitted? | `PENDING_APPROVAL` | — |
-
-**An agent may create these sentinels. An agent may never resolve one.**
-Resolution needs a named person, a UTC timestamp and an evidence reference
-(Part 41.2).
-
-<!-- HUMAN:END invariants -->
-
-Permanent invariants that need no approval because the constitution fixes them:
-
-- Running the same input twice changes nothing (idempotent, rule 5).
-- A failure never corrupts trusted history (rule 9).
-- Every row traces to source file, sheet and row number (rule 8).
-- Control-total difference is exactly zero, not approximately (Part 9.4).
-- Rejected rows are quarantined, never silently dropped (Part 9.5).
-
----
-
-## 8. OPERATING RUNBOOK
-
-| Action | Employee does | Behind the scenes |
-|---|---|---|
-| Start | `START_APP.bat` | integrity check → single-instance lock → bind `127.0.0.1` → health check → open renderer |
-| Add data | drag files onto the page | stability check, role detection, hash, intake copy; source never modified |
-| Process | press Process | the 26-step run cycle (Part 12.1); durable events drive the progress UI |
-| Protected file prompt | open it in Excel, leave it open, press Retry | run sits in `WAITING_FOR_USER` with its checkpoint intact |
-| Review | read PASS / WARNING / FAIL | FAIL leaves trusted history and the last dashboard untouched |
-| Recover | follow the on-screen instruction | four-part error screen from `contracts/error_codes.json` |
-| Back up | `BACKUP.bat` | copies database, archive, config, output and evidence to the approved destination |
-
-**Golden operating rule:** if a run fails, the dashboard keeps showing the last
-good data — and says so on screen. Never broken numbers. Never a blank page
-(Part 12.6).
-
----
-
-## 9. CHANGE PROTOCOL
+Every requirement is exactly one of:
 
 ```text
-verify map + architecture baseline
-→ classify the work mode and rewrite the eight-question task contract (Part 19.3)
-→ resolve only true business/security/deviation blockers
-→ reproduce current behaviour or the defect
-→ write the failing test first
-→ make the smallest clean change inside one layer
-→ run focused, then integration/golden/failure/browser/architecture tests
-→ update contracts, state, decisions, lessons, memory, gates
-→ refresh and verify the map
-→ report what changed and what was proven
+REUSE_AS_IS
+CONFIGURE
+PROJECT_SPECIFIC_BUSINESS_LOGIC
+NEW_REUSABLE_CAPABILITY_CANDIDATE
 ```
 
-A material code change with no map update must fail the suite. A map update
-with no matching code evidence must fail review (Part 21.5).
+The fourth is exceptional. Employee copies may create a candidate package; they do not promote themselves into a new master core. Central master-template work reviews/promotes a candidate and issues a new template version.
 
----
+Use `capabilities/registry.json` before opening implementation files. It tells you what already exists, how to configure it, the extension point, tests and limitations.
 
-## 10. RELEASE PROTOCOL
+## 5. Core ownership
+
+`TEMPLATE_BASELINE.json` is the machine authority for path scope and, when sealed, core hashes. The baseline works even when the employee received a ZIP and Git is unavailable.
+
+Normal employee changes belong to project configuration, presentation or project business rules. A Universal Core edit requires evidence that configuration/extension points cannot express the need, regression proof across references, and master-core review.
+
+Do not use a reuse percentage as the main proof. Report instead:
 
 ```text
-BUILD_RELEASE      build the one-folder app from pinned local inputs only
-                   PROJECT_TOOL architecture verify --release release/current
-VERIFY_OFFLINE     block the network, start, health-check, process a fixture, restart
-clean-PC gate      Part 30.4 on a real offline Windows PC, standard non-admin account
-rollback           keep the previous approved version until migration and health checks pass
+core files changed
+project config files changed
+business-rule files changed / size
+reused capabilities
+reused tests
+new architecture decisions
+context files/bytes/estimated tokens
+provider token count only when actually available
 ```
 
-No release while any `severity: block` gate is unproven (Part 38.2 rule 4).
-Generate the Part 34.4 completion declaration **from the ledger**, never from
-memory.
+## 6. Human and security boundary
 
----
+Ask the employee business questions only:
 
-## 11. MEMORY + IMPROVEMENT
+- What does each source/file mean?
+- What does one row mean in each source?
+- Which values identify the same business record?
+- Can old records change later?
+- Which trusted totals prove correctness?
+- Which source wins when business sources disagree?
+- What KPI/decision/exception matters?
+- Who owns and approves the business meaning?
 
-Store only what changes a future decision or prevents repeated work.
+Do **not** ask a non-technical employee to choose database, API, folder architecture, ports, packaging, security model, retention policy or external-AI disclosure policy. Corporate security policy is preloaded in `policy/security_policy.toml`; unresolved policy goes to IT/Security.
+
+Source profiling is metadata-only by default. Protected/raw sample values do not enter AI context unless the policy explicitly permits them.
+
+## 7. Trusted calculations and quality
+
+Trusted calculations live once. Prefer deterministic versioned SQL. Isolated tested Python is allowed only when SQL would be unsafe or materially less clear. Never duplicate a trusted formula in SQL/Python/browser. JavaScript renders results and interactions; it is not the trusted business-calculation engine.
+
+Canonical quality verdicts:
 
 ```text
-.ai/MEMORY.jsonl        sourced, dated, owned records with stable IDs
-.ai/LESSONS.md          concise accepted lessons by topic
-.ai/OPPORTUNITIES.md    improvement register with disposition
-docs/decisions/         architecture and business decision records
+PASS     trusted checks passed
+WARNING  non-blocking anomaly; visible to user
+BLOCK    trusted data must not be published/committed
 ```
 
-Never store secrets, raw sensitive rows, chat history, temporary guesses, or
-facts already obvious from code. Conflicts are marked and superseded
-explicitly, never overwritten (Part 21.6).
+A `BLOCK` quality verdict makes the execution run state `FAILED`. Do not create a second quality vocabulary called FAIL.
 
-End every meaningful task with:
+## 8. Universal history
+
+`app/data/history.py` implements append/upsert/snapshot/replace-period and correction/deletion semantics. A project selects those behaviors per source/entity. Normal adaptations must not carry `sql/history.sql` implementations.
+
+If a new business case needs history semantics the engine truly cannot express, classify it as a reusable-capability candidate and handle it through master-core evolution.
+
+## 9. Dashboard and web app
+
+The employee's work surface remains one offline local web application:
 
 ```text
-PROJECT_TOOL memory suggest --task "<completed task>" --max 3
+Add all required source files
+→ see detected roles/readiness
+→ process with durable progress
+→ review quality/reconciliation
+→ use interactive dashboard/history
+→ export approved standalone report
 ```
 
-Maximum three suggestions; zero is valid. Finish the requested work first, and
-never implement an optional suggestion without approval (Part 21.7).
+Presentation comes from project configuration and the reusable component catalog. Do not copy or rewrite frontend architecture for each department.
 
----
+## 10. Offline/runtime rules that remain locked
 
-## 12. COMMAND INDEX
+- Windows + authorized desktop Excel are the approved external prerequisites.
+- The complete private runtime/dependencies/assets are bundled. Offline never means dependency-free.
+- FastAPI/Uvicorn loopback remains bound only to `127.0.0.1` as a standard-user process.
+- No service, IIS, URL reservation, firewall rule, elevation, LAN bind, CDN, telemetry or runtime download.
+- Excel is the authorized door to protected data, not the database or calculation engine.
+- DuckDB is local truth; Parquet is approved recovery/history archive; SQL Server is optional when enabled/approved.
+- A failure preserves trusted history and last-good output.
 
-Safe, exact, non-destructive:
+## 11. Packaging and upgrades
+
+A normal project adaptation does **not** rebuild/freeze the entire runtime when Universal Core is unchanged. It reuses the sealed approved runtime and validates/packages the employee project pack.
+
+A core/runtime change is master-template release work: rebuild the full release, seal a new baseline/version, migrate compatible project packs, verify, and preserve rollback.
+
+Core-owned paths may be replaced/migrated by a template upgrade. Project-owned paths must be preserved unless an explicit project migration says otherwise.
+
+## 12. References and current honesty
+
+- Legacy single-source Golden Reference: `reports/_REFERENCE/`.
+- Legacy second-domain single-source proof: `reports/line_downtime/`.
+- Required multi-source project reference: `projects/_REFERENCE_SUPPLY_CHAIN/`.
+
+The Supply Chain reference currently proves the **contract** for orders + inventory + item master with independent history modes and relationships. It does **not yet prove execution**. Until the three-source golden execution test passes, the template cannot claim Reference B or universal multi-source execution is complete.
+
+Detailed finding/status ledger: `docs/V8_1_AUDIT_REMEDIATION.md`.
+Controlling adaptation addendum: `constitution/V8_1_ADAPTATION_AUTHORITY.md`.
+
+## 13. Completion declaration
+
+Every adaptation/evolution report ends with:
 
 ```text
-PROJECT_TOOL doctor
-PROJECT_TOOL map verify | refresh --review | context --task "..." --budget 4000
-PROJECT_TOOL map explain --path app/data/history.py | changed --base <ref>
-PROJECT_TOOL memory validate | suggest --task "..." --max 3
-PROJECT_TOOL architecture verify --baseline | --source-scan | --release <folder>
-PROJECT_TOOL constitution audit | cross-references | architecture-terms | commands
-PROJECT_TOOL gates status | set --id <GATE> --status <s> --evidence <path>
-PROJECT_TOOL report new --id <id> | validate --id <id> --mode production
+mode: EMPLOYEE_ADAPTATION / MASTER_CORE
+project: <id>
+template baseline: SEALED+PASS / DEVELOPMENT_UNSEALED / BLOCKED
+sources + roles: <count/list>
+relationships confirmed/pending: <count>
+requirements: reuse/config/project-logic/candidate counts
+core files changed: NONE / justified list
+security policy: PASS / IT ACTION REQUIRED
+quality vocabulary: PASS/WARNING/BLOCK
+reference A: PASS / BLOCKED
+reference B multi-source: CONTRACT_ONLY / EXECUTION_PASS / BLOCKED
+offline/browser/COM gates: exact evidence or CONDITIONAL
+map/context metrics: files + bytes + estimated tokens (+ actual tokens only if exposed)
 ```
 
-Destructive commands are deliberately absent from this index (Part 24.2).
-Database rebuild and archive restore live in `docs/OPERATIONS.md` behind an
-explicit operator procedure.
-
----
-
-## 13. POINTERS
-
-| Need | Go to |
-|---|---|
-| The law | `constitution/EXCEL_AUTOMATION_CONSTITUTION.md` |
-| What changed in the law and why | `docs/CONSTITUTION_IMPROVEMENTS.md`, `docs/CONSTITUTION_CHANGELOG.md` |
-| Exhaustive file catalog | `.ai/PROJECT_MAP.md` |
-| Proven status | `acceptance/gates.yaml` |
-| Public contracts | `.ai/CONTRACTS.md`, `contracts/` |
-| Decisions | `docs/decisions/` |
-| Lessons | `.ai/LESSONS.md` |
-| Acceptance evidence | `docs/ACCEPTANCE.md`, `acceptance/evidence/` |
-| Operations and recovery | `docs/OPERATIONS.md` |
-| Security posture | `docs/SECURITY.md` |
+Do not claim employee-ready while a critical V8.1 audit item or release/environment gate remains open.
