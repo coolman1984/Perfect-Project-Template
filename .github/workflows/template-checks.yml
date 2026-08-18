@@ -23,9 +23,12 @@ jobs:
       - run: python3 -m unittest discover -s tests -t . --verbose
       - name: Install application-tier CI dependencies
         run: pip install --quiet duckdb fastapi uvicorn httpx
-      - run: python3 -m unittest tests.golden.test_reference_pipeline --verbose
-      - run: python3 -m unittest tests.golden.test_second_report_pipeline --verbose
-      - run: python3 -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine --verbose
+      - name: Golden single-source + multi-source project proofs
+        run: |
+          python3 -m unittest tests.golden.test_reference_pipeline --verbose
+          python3 -m unittest tests.golden.test_second_report_pipeline --verbose
+          python3 -m unittest tests.golden.test_multisource_supply_chain --verbose
+      - run: python3 -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine tests.factory.test_v81_audit_contracts tests.factory.test_v81_adaptation_commands --verbose
       - name: Local runtime, real socket and standalone export
         run: python3 -m unittest tests.unit.test_runtime_core tests.unit.test_loopback_listener tests.unit.test_standalone_html --verbose
       - run: python3 -m unittest tests.adversarial.test_approval_bypass --verbose
@@ -67,11 +70,15 @@ jobs:
       - name: Install application-tier CI dependencies
         shell: cmd
         run: python -m pip install --quiet duckdb fastapi uvicorn httpx
-      - name: Golden + second-domain pipelines
+      - name: Golden single-source + multi-source project proofs
         shell: cmd
         run: |
           python -m unittest tests.golden.test_reference_pipeline --verbose
           python -m unittest tests.golden.test_second_report_pipeline --verbose
+          python -m unittest tests.golden.test_multisource_supply_chain --verbose
+      - name: V8.1 factory/adaptation proofs
+        shell: cmd
+        run: python -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine tests.factory.test_v81_audit_contracts tests.factory.test_v81_adaptation_commands --verbose
       - name: Local runtime, real socket and standalone export
         shell: cmd
         run: python -m unittest tests.unit.test_runtime_core tests.unit.test_loopback_listener tests.unit.test_standalone_html --verbose
