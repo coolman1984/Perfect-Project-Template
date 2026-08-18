@@ -1,5 +1,5 @@
 {
-  "file_count": 241,
+  "file_count": 242,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -616,6 +616,11 @@
       "scope": "universal_core",
       "sha256": "89e1138c1840f64a0e0653969054c9179c7f577fd63c8502c52f9e38f05306ca"
     },
+    "factory/project_build_brief.py": {
+      "bytes": 7589,
+      "scope": "universal_core",
+      "sha256": "c3850f2a2a5e570da82c13cd6aa7d0eb00995b22bd3dc127b23d6a33b6db8a00"
+    },
     "factory/project_contract.py": {
       "bytes": 11305,
       "scope": "universal_core",
@@ -1207,6 +1212,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T07:58:06Z",
+  "generated_at": "2026-08-18T07:58:42Z",
   "schema_version": 2
 }
