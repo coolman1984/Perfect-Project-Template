@@ -212,9 +212,9 @@
       "sha256": "4ee00ae65e4f2db15ddc0b64d3ac99ceb80fb4d7005b8405d0bb29d0218d76d7"
     },
     "app/analytics/patterns.py": {
-      "bytes": 5685,
+      "bytes": 2368,
       "scope": "universal_core",
-      "sha256": "dba0b59c11844ceafdd2002a473d793b941cb7a0fabcb459a7ad87a5958da591"
+      "sha256": "3b911470def77d866180c3c68476eadca4861725ae9fc146b5cb14d2108772d4"
     },
     "app/analytics/registry.py": {
       "bytes": 702,
@@ -407,9 +407,9 @@
       "sha256": "14dc8116894fa723789ba2481e63a8d4a6b7ff0b391a8bc34e7d1eb542866ce0"
     },
     "app/quality/reconciliation.py": {
-      "bytes": 4049,
+      "bytes": 2190,
       "scope": "universal_core",
-      "sha256": "87f4da80f304ac364f77da3768e0f2ecfcf053267f0b7ba1cf4ba45f4af0eeb5"
+      "sha256": "7794d44ad10f4a05953bbf905984f62dfb3643736c93b94ed2a1b94925ff5228"
     },
     "app/server.py": {
       "bytes": 15754,
@@ -617,9 +617,9 @@
       "sha256": "67078af04c39960a9430e7cbc490b25c872cfe2f6eaf9ba11a48bffe649f38d6"
     },
     "factory/project_questionnaire.py": {
-      "bytes": 2900,
+      "bytes": 2998,
       "scope": "universal_core",
-      "sha256": "507b1c236f476998d7699ea05d98f38de9e2bfb68de01d47f96b848d316a838b"
+      "sha256": "74ba8ff9f863b05862adbdb0e6289e62302e8df40efef3b2b1f0abc9d1dd9eae"
     },
     "factory/questionnaire.py": {
       "bytes": 12549,
@@ -672,14 +672,14 @@
       "sha256": "a062c86eaa02d9f93c3bea846a92df70d411a994ef0337e64449c6e5183a74f7"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/business_rules/metrics.sql": {
-      "bytes": 3523,
+      "bytes": 2637,
       "scope": "business_logic",
-      "sha256": "92841ddc936d261b16cbbc351b17a75e6d0d6e1bf07790c60187a27ff8bcf3c9"
+      "sha256": "5941c4aefc4e657a84a1dfc669fb7bd5d48ea1989f8cd468b34189660958ee79"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/dashboard.toml": {
-      "bytes": 1250,
+      "bytes": 1127,
       "scope": "presentation",
-      "sha256": "eb1824c63c5be851204adad8eb53d28f8ed8fcaf5024350df24d561b3164d938"
+      "sha256": "d7226f8fc43db18090c502b8e56ff20131bae6391e3bfb7559abccb6e30320d9"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/project.toml": {
       "bytes": 491,
@@ -947,9 +947,9 @@
       "sha256": "25a278097efe29e4ce388ccb9014d64707a3ab9f2e772cb833202dc13370368d"
     },
     "tests/golden/test_multisource_supply_chain.py": {
-      "bytes": 8321,
+      "bytes": 6973,
       "scope": "test",
-      "sha256": "e1720d4f9f621d9bcb3169aef2170ca93908a7fe2a52c2a65aada2fb4457d92e"
+      "sha256": "67b47473b2261aae0a03ca1a301a920d79f67cf238031b0665bc968441ceb7e7"
     },
     "tests/golden/test_reference_pipeline.py": {
       "bytes": 17292,
@@ -1177,6 +1177,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:34:56Z",
+  "generated_at": "2026-08-18T07:38:04Z",
   "schema_version": 2
 }
