@@ -1,5 +1,5 @@
 {
-  "file_count": 236,
+  "file_count": 237,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -1021,6 +1021,11 @@
       "scope": "test",
       "sha256": "8bc407bea4099c5783b7bca32c5ed885d3028949037fd1d5157a3d7873e9b89b"
     },
+    "tests/unit/test_project_runtime_api.py": {
+      "bytes": 6965,
+      "scope": "test",
+      "sha256": "4eda2690696c2f144f0403a661f8a227066e6c4979215fe22eb1213e131b9d7e"
+    },
     "tests/unit/test_regression_fixes.py": {
       "bytes": 7979,
       "scope": "test",
@@ -1182,6 +1187,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T07:53:34Z",
+  "generated_at": "2026-08-18T07:54:11Z",
   "schema_version": 2
 }
