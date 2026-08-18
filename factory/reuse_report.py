@@ -3,13 +3,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any
-from factory.project_contract import load_project
+from factory.project_contract import find_project_directory,load_project
 from tools._common import REPO_ROOT
 from tools.path_scope import classify_scope
 
 
 def build_reuse_report(project_id: str, *, projects_root: Path) -> dict[str,Any]:
-    project=load_project(projects_root/project_id); files=[p for p in project.directory.rglob("*") if p.is_file()]
+    project=load_project(find_project_directory(projects_root,project_id)); files=[p for p in project.directory.rglob("*") if p.is_file()]
     buckets={"project_config":[],"business_logic":[],"presentation":[],"project_test":[],"universal_core":[]}
     for path in files:
         relative=path.relative_to(REPO_ROOT) if REPO_ROOT in path.parents else path.relative_to(projects_root.parent)

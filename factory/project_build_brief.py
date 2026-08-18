@@ -102,6 +102,9 @@ def build_project_brief(
         "",
         "## Reusable capabilities to check before opening core source",
         "",
+        "Machine source: `capabilities/registry.json`. The entries below are a "
+        "routed summary; the registry stays authoritative for full definitions.",
+        "",
     ]
     for capability in registry.get("capabilities", []):
         entry_points = capability.get("config_entry_points", [])

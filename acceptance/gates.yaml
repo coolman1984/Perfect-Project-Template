@@ -354,9 +354,9 @@
   title: An empty database rebuilds from the Parquet archive and reconciles
   severity: block
   status: pass
-  evidence: acceptance/evidence/golden-and-factory-2026-08-18.txt
-  verified_at: "2026-08-18T05:56:21Z"
-  verified_by: tests/golden/test_reference_pipeline.py (24 tests)
+  evidence: acceptance/evidence/multisource-archive-rebuild-2026-08-18.txt
+  verified_at: "2026-08-18T14:57:36Z"
+  verified_by: tests/golden/test_reference_pipeline.py (single-source) + tests/golden/test_multisource_supply_chain.py (three-source, per-source event date)
   conditional_reason: ""
   next_action: ""
 

@@ -31,11 +31,14 @@ class AdaptationManifest:
     project_id:str; template:dict[str,Any]; sources:list[str]=field(default_factory=list); relationships:list[str]=field(default_factory=list); requirements:list[RequirementClassification]=field(default_factory=list); core_changes:list[str]=field(default_factory=list); verification:dict[str,Any]=field(default_factory=dict); context_metrics:dict[str,Any]=field(default_factory=dict); schema_version:int=1
     def as_dict(self): return asdict(self)
 def manifest_from_project(project_id:str,*,projects_root:Path)->AdaptationManifest:
-    from factory.project_contract import load_project
-    project=load_project(projects_root/project_id); baseline=load_baseline()
+    from factory.project_contract import find_project_directory,load_project
+    # A project directory name is not required to equal its project_id
+    # (projects/_REFERENCE_SUPPLY_CHAIN declares reference_supply_chain).
+    project=load_project(find_project_directory(projects_root,project_id)); baseline=load_baseline()
     return AdaptationManifest(project.project_id,{"template_id":project.template_id,"template_version":project.template_version,"sealed":bool(baseline.get("sealed"))},[s.source_id for s in project.sources],[r.relationship_id for r in project.relationships])
 def write_project_manifest(project_id:str,*,projects_root:Path)->AdaptationManifest:
-    manifest=manifest_from_project(project_id,projects_root=projects_root); (projects_root/project_id/"adaptation_manifest.json").write_text(json.dumps(manifest.as_dict(),indent=2,ensure_ascii=False)+"\n",encoding="utf-8"); return manifest
+    from factory.project_contract import find_project_directory
+    manifest=manifest_from_project(project_id,projects_root=projects_root); (find_project_directory(projects_root,project_id)/"adaptation_manifest.json").write_text(json.dumps(manifest.as_dict(),indent=2,ensure_ascii=False)+"\n",encoding="utf-8"); return manifest
 DEFAULT_REUSED_CAPABILITIES=("excel.authorized_com","data.staging_lineage","history.standard_modes","quality.reconciliation","analytics.sql_metrics","dashboard.configured","runtime.loopback","ai.map_context")
 @dataclass
 class LegacyReportManifest:

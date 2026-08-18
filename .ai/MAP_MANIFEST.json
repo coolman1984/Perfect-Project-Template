@@ -12,9 +12,9 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 2730,
+      "bytes": 3480,
       "scope": "unknown",
-      "sha256": "d72855889fc73ce4a77866040fa1ec943ed8dad6911ae79553a5086b5368894c"
+      "sha256": "b7ab44b0b8634fbc609d52d3424df60086ca6af26747a902d0fd158ecfd769f1"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -107,9 +107,9 @@
       "sha256": "aae776c599667445bb23670d363305d2e210b26a859be81b746460137af24722"
     },
     "PROJECT_SKILL.md": {
-      "bytes": 9403,
+      "bytes": 9779,
       "scope": "unknown",
-      "sha256": "3b248f27e3992d60357075cf9aa1a3c5bd72af0e3638ad75f7ad9eb6fafe3545"
+      "sha256": "26796644c4d559708eb8cb8864481427a87cfd5e1e646a5c01210c7f823c3949"
     },
     "PROJECT_TOOL.bat": {
       "bytes": 1127,
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 15909,
+      "bytes": 16009,
       "scope": "unknown",
-      "sha256": "97e2b079add6f09d72809b905a0df2b8f055b070d37b845578abcae8eb6aa652"
+      "sha256": "5d0d9919eae45548bb38acacc62c64a0a08707f29d2204d639dbc412ebb14ed8"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -602,9 +602,9 @@
       "sha256": "31533bce9f2ef7a0e74adb081901ac8b069de4c6b57773323ab68b583dab76a4"
     },
     "factory/adaptation.py": {
-      "bytes": 5269,
+      "bytes": 5549,
       "scope": "universal_core",
-      "sha256": "13e08b785ad101ad2ab8c40556a4a9695301e8a5cc2b2d89b660bb199fda01ca"
+      "sha256": "9e4e81c50ae13fa8322512474ad7064ccf3e0efcfe3be0c0d14a994d692f152d"
     },
     "factory/approvals.py": {
       "bytes": 13735,
@@ -612,9 +612,9 @@
       "sha256": "bcf24f9f66469710af2c7247e1a77d27baa0306c115aa52c9109b5bdf9378bba"
     },
     "factory/build_brief.py": {
-      "bytes": 5169,
+      "bytes": 5461,
       "scope": "universal_core",
-      "sha256": "eb3d2b8ab65869224c7851722721fa7a2d141bf632874a7f79df7c02b06c5649"
+      "sha256": "055cbd35c29c0ae88ddcbec478c1d5ad39c1963f7ac1ed5cadd1b50a4333b947"
     },
     "factory/generator.py": {
       "bytes": 5313,
@@ -632,9 +632,9 @@
       "sha256": "89e1138c1840f64a0e0653969054c9179c7f577fd63c8502c52f9e38f05306ca"
     },
     "factory/project_build_brief.py": {
-      "bytes": 7589,
+      "bytes": 7764,
       "scope": "universal_core",
-      "sha256": "c3850f2a2a5e570da82c13cd6aa7d0eb00995b22bd3dc127b23d6a33b6db8a00"
+      "sha256": "8209461a8e784c8e90bba1b93523c644811a2ed102fb75d5dd3f2741d3bbe1e1"
     },
     "factory/project_contract.py": {
       "bytes": 11305,
@@ -657,9 +657,9 @@
       "sha256": "dfadabcdb800573472b91128e58b6d771e4d0c2941e2f2a41e7ef3e143e57790"
     },
     "factory/reuse_report.py": {
-      "bytes": 2220,
+      "bytes": 2267,
       "scope": "universal_core",
-      "sha256": "50964fdaeae652de54fe3c1ea74c30525aead785116a01c20c25ee3eee8b7742"
+      "sha256": "811a666489ea24fd263af94c73fb1ec7c6910dfe80a090c8fe1150fbefce57bf"
     },
     "factory/source_profile.py": {
       "bytes": 5120,
@@ -922,9 +922,9 @@
       "sha256": "8cb6cb9305a33850cd1a13e126f1814e56c1810ed9f5e0692deabc84bf239b4a"
     },
     "tests/factory/test_factory_flow.py": {
-      "bytes": 11724,
+      "bytes": 12474,
       "scope": "test",
-      "sha256": "8a0e416830d93f61c3cef47ef2057e11a570f153e9e7aa834c57b375d7b87fbe"
+      "sha256": "440674fe5a259d6146d64786c296c7f98d655c5f74ce8d34e3ce41f361267c32"
     },
     "tests/factory/test_project_build_brief.py": {
       "bytes": 983,
@@ -987,9 +987,9 @@
       "sha256": "25a278097efe29e4ce388ccb9014d64707a3ab9f2e772cb833202dc13370368d"
     },
     "tests/golden/test_multisource_supply_chain.py": {
-      "bytes": 11504,
+      "bytes": 15123,
       "scope": "test",
-      "sha256": "8b096c0826afdcf46b000b65a41686eb449a2f25c23207f38c1a08c286c338f9"
+      "sha256": "c3563010b78900430ed7e75e015b4796f5e902f5e320c336ded71474851ec6be"
     },
     "tests/golden/test_reference_pipeline.py": {
       "bytes": 17292,
@@ -1232,6 +1232,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T14:40:10Z",
+  "generated_at": "2026-08-18T15:03:26Z",
   "schema_version": 2
 }

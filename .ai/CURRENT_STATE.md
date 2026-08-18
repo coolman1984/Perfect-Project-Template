@@ -12,6 +12,12 @@ The ready application is the product. Employee agents should adapt project confi
 - A genuinely different single-source Maintenance downtime project executes through the same Universal Core.
 - Reusable FastAPI/Uvicorn loopback runtime, launch-secret/Host/Origin controls, durable events, locks, local intake, last-good dashboard publication and standalone HTML builder have Linux/Windows CI proof.
 - Compact source profiling omits raw sample values by default.
+- The three-source Supply Chain project (orders + inventory + item master)
+  executes end to end through the same Universal Core: independent per-source
+  history modes, validated relationships, cross-source trusted SQL, idempotent
+  rerun, whole-project rollback on downstream failure, and Parquet archive
+  rebuild of every source. Proof: `tests/golden/test_multisource_supply_chain.py`
+  and `acceptance/evidence/multisource-archive-rebuild-2026-08-18.txt`.
 
 ## V8.1 remediation now present
 
@@ -27,13 +33,18 @@ The ready application is the product. Employee agents should adapt project confi
 
 ## Explicit blockers before employee distribution
 
-1. The Supply Chain three-source reference is **CONTRACT PROVEN, EXECUTION NOT YET PROVEN**. Multi-source orchestration and its golden test are the top engineering blocker.
+1. No independent adaptation proof yet. V10 Phase I4 requires a Finance Purchase
+   Price Variance project built through the normal employee workflow to show
+   low-change reuse. Until it exists, reuse is asserted rather than measured.
 2. Project generation/UI still has legacy report-centric compatibility paths that must be migrated.
 3. `TEMPLATE_BASELINE.json` is intentionally development-unsealed until master-core work stabilizes.
 4. Template upgrade/migration/rollback is defined as a contract but not yet executed/proven.
 5. Real protected Excel COM/DRM proof requires the authorized corporate Windows + Excel environment.
 6. Actual pinned ECharts binary, full browser/offline/accessibility/RTL proof and final sealed offline package remain open.
-7. The legacy 225k-line constitution still needs a mechanical reconciliation with the V8.1 authority addendum.
+7. `requirements-lock.txt` is still an unpopulated template, so the offline
+   wheelhouse and GATE_ARCHITECTURE_BASELINE cannot be satisfied. DuckDB,
+   FastAPI, Uvicorn and httpx are installed ad hoc in CI instead of pinned.
+8. The legacy 225k-line constitution still needs a mechanical reconciliation with the V8.1 authority addendum.
 
 **Current approval verdict: NOT READY FOR EMPLOYEE DISTRIBUTION.**
 

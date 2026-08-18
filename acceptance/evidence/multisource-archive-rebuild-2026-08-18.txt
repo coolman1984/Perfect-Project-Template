@@ -1,0 +1,24 @@
+# Multi-source archive rebuild + factory project-id resolution proof
+# Generated 2026-08-18T14:57:36Z on Linux CI-equivalent (duckdb/fastapi/uvicorn/httpx installed)
+
+## Full portable suite (0 skipped)
+----------------------------------------------------------------------
+Ran 244 tests in 14.178s
+
+OK
+
+## Golden multi-source Supply Chain (Reference C)
+test_analytics_failure_rolls_back_every_source_history_together (tests.golden.test_multisource_supply_chain.TestMultiSourceSupplyChainReference.test_analytics_failure_rolls_back_every_source_history_together) ... ok
+test_archive_rebuild_restores_every_source_history_from_parquet (tests.golden.test_multisource_supply_chain.TestMultiSourceSupplyChainReference.test_archive_rebuild_restores_every_source_history_from_parquet)
+GATE_ARCHIVE_REBUILD for a multi-source project. ... ok
+test_idempotent_rerun_preserves_truth_and_advances_audit_observation (tests.golden.test_multisource_supply_chain.TestMultiSourceSupplyChainReference.test_idempotent_rerun_preserves_truth_and_advances_audit_observation) ... ok
+test_two_periods_prove_independent_history_quality_and_cross_source_metrics (tests.golden.test_multisource_supply_chain.TestMultiSourceSupplyChainReference.test_two_periods_prove_independent_history_quality_and_cross_source_metrics) ... ok
+test_unmatched_required_relationship_blocks_before_history (tests.golden.test_multisource_supply_chain.TestMultiSourceSupplyChainReference.test_unmatched_required_relationship_blocks_before_history) ... ok
+Ran 5 tests in 3.289s
+OK
+
+## Golden single-source references
+----------------------------------------------------------------------
+Ran 29 tests in 9.602s
+
+OK

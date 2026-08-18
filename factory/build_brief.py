@@ -30,7 +30,14 @@ FACTORY_CORE = (
 )
 
 
-def generate(report_id: str, *, root: Path | None = None) -> str:
+def generate(
+    report_id: str, *, root: Path | None = None, write: bool = True
+) -> str:
+    """Build the brief text, and by default publish it to `.ai/BUILD_BRIEF.md`.
+
+    Callers that only need the text pass `write=False`; generating a brief must
+    not leave a tracked artifact dirty and fail the next `map verify`.
+    """
     base = root or REPO_ROOT
     directory = base / "reports" / report_id
     config = tomllib.loads((directory / "report.toml").read_text("utf-8"))
@@ -94,9 +101,10 @@ def generate(report_id: str, *, root: Path | None = None) -> str:
         "",
     ]
     text = "\n".join(lines)
-    target = base / ".ai" / "BUILD_BRIEF.md"
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(text, encoding="utf-8")
+    if write:
+        target = base / ".ai" / "BUILD_BRIEF.md"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(text, encoding="utf-8")
     return text
 
 

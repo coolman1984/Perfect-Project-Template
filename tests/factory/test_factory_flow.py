@@ -214,7 +214,7 @@ class TestBuildBrief(unittest.TestCase):
 
     def setUp(self) -> None:
         from factory import build_brief
-        self.brief = build_brief.generate("line_downtime") \
+        self.brief = build_brief.generate("line_downtime", write=False) \
             if (REPO_ROOT / "reports" / "line_downtime" / "report.toml").exists() else None
 
     def test_brief_names_the_core_boundary(self):
@@ -242,6 +242,22 @@ class TestBuildBrief(unittest.TestCase):
         # Part 30.5: structure and approved meaning only.
         for fixture_value in ("ORD-1001", "MDL-A", "1200,12"):
             self.assertNotIn(fixture_value, self.brief)
+
+    def test_reading_a_brief_leaves_the_tracked_artifact_untouched(self):
+        """Part 20.5: generating a brief must not dirty `.ai/BUILD_BRIEF.md`.
+
+        A read-only caller that rewrites the published brief makes the next
+        `map verify` fail for reasons no one changed on purpose.
+        """
+        from factory import build_brief
+
+        if self.brief is None:
+            self.skipTest("no employee report configured")
+        published = REPO_ROOT / ".ai" / "BUILD_BRIEF.md"
+        before = published.read_bytes() if published.exists() else None
+        build_brief.generate("line_downtime", write=False)
+        after = published.read_bytes() if published.exists() else None
+        self.assertEqual(before, after)
 
 
 class TestProjectHealthDerivesFromEvidence(unittest.TestCase):

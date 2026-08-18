@@ -275,6 +275,88 @@ class TestMultiSourceSupplyChainReference(unittest.TestCase):
             "audit metadata",
         )
 
+    def _active_history_snapshot(self):
+        """Capture only what the archive is contracted to preserve.
+
+        `archive_history` stores active trusted rows, so recovery is judged on
+        active business state rather than on superseded audit rows.
+        """
+        result = {}
+        for source in self.contract.sources:
+            business = ", ".join(source.business_columns)
+            result[source.source_id] = self.database.query(
+                f"SELECT {business}, business_key_hash, row_content_hash "
+                f"FROM {self.pipeline.history_table(source)} "
+                "WHERE is_active ORDER BY business_key_hash")
+        return result
+
+    def _shortage_by_item(self):
+        """Evaluate the project's own three-source trusted SQL.
+
+        Re-running the shipped statement keeps the formula in one place; a copy
+        of the join here would be exactly the duplication Part 14.4 forbids.
+        """
+        from app.analytics.runner import SqlRunner
+
+        runner = SqlRunner(
+            self.database, self.contract.directory / "business_rules")
+        return runner.run_named("metrics.sql", "shortage_by_item")
+
+    def test_archive_rebuild_restores_every_source_history_from_parquet(self):
+        """GATE_ARCHIVE_REBUILD for a multi-source project.
+
+        Losing the database must stay a minutes-long recovery, not a
+        re-extraction: every source rebuilds from Parquet alone, each on its own
+        event date, and the cross-source metric still reconciles afterwards.
+        """
+        from app.data.archive import archive_history, rebuild_history_from_archive
+
+        self.pipeline.run("SC-B1", self._ports(1, "SC-B1"))
+        self.pipeline.run("SC-B2", self._ports(2, "SC-B2"))
+
+        before = self._active_history_snapshot()
+        shortage_before = self._shortage_by_item()
+        self.assertTrue(
+            any(row[1] for row in shortage_before),
+            "the reconciliation target must carry a non-zero shortage")
+
+        archive_root = Path(self.temp.name) / "archive"
+        archived = {}
+        for source in self.contract.sources:
+            archived[source.source_id] = archive_history(
+                self.database,
+                history_table=self.pipeline.history_table(source),
+                report_id=f"{self.contract.project_id}_{source.source_id}",
+                archive_root=archive_root,
+                event_date_column=source.event_date,
+            ).rows
+        self.assertTrue(all(rows > 0 for rows in archived.values()), archived)
+
+        # Lose every trusted table exactly as a disk failure would.
+        for source in self.contract.sources:
+            table = self.pipeline.history_table(source)
+            self.database.execute(f"DELETE FROM {table}")
+            self.assertEqual(
+                self._scalar(f"SELECT count(*) FROM {table}"), 0)
+
+        for source in self.contract.sources:
+            restored = rebuild_history_from_archive(
+                self.database,
+                history_table=self.pipeline.history_table(source),
+                archive_root=archive_root,
+                report_id=f"{self.contract.project_id}_{source.source_id}",
+            )
+            self.assertEqual(restored, archived[source.source_id], source.source_id)
+
+        self.assertEqual(
+            before,
+            self._active_history_snapshot(),
+            "archive recovery must restore every source's trusted history")
+        self.assertEqual(
+            shortage_before,
+            self._shortage_by_item(),
+            "cross-source metrics must reconcile against rebuilt history")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -174,7 +174,18 @@ Core-owned paths may be replaced/migrated by a template upgrade. Project-owned p
 - Legacy second-domain single-source proof: `reports/line_downtime/`.
 - Required multi-source project reference: `projects/_REFERENCE_SUPPLY_CHAIN/`.
 
-The Supply Chain reference currently proves the **contract** for orders + inventory + item master with independent history modes and relationships. It does **not yet prove execution**. Until the three-source golden execution test passes, the template cannot claim Reference B or universal multi-source execution is complete.
+The Supply Chain reference proves both the **contract and the execution** for
+orders + inventory + item master: independent history modes, validated
+relationships, cross-source trusted SQL, idempotent rerun, whole-project rollback
+and per-source Parquet archive rebuild all pass in
+`tests/golden/test_multisource_supply_chain.py`.
+
+That proof runs through the fixture extraction port. It is REFERENCE_PROVEN, not
+ENVIRONMENT_PROVEN — real protected Excel/COM on the authorized corporate PC
+remains a separate open gate, and fixture execution is never evidence for it.
+
+The outstanding universality question is now **independent adaptation** (V10
+Reference D / Phase I4), not multi-source execution.
 
 Detailed finding/status ledger: `docs/V8_1_AUDIT_REMEDIATION.md`.
 Controlling adaptation addendum: `constitution/V8_1_ADAPTATION_AUTHORITY.md`.
