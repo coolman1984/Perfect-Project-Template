@@ -92,6 +92,43 @@ def _validate_identifier(value: str, *, label: str) -> str:
     return value
 
 
+def discover_project_directories(projects_root: str | Path) -> dict[str, Path]:
+    """Return canonical project_id -> directory without trusting folder names.
+
+    Reference folders may deliberately start with an underscore while their
+    project_id remains a normal stable identifier. The API and AI work with the
+    project_id from `project.toml`, never a guessed folder name.
+    """
+    root = Path(projects_root)
+    result: dict[str, Path] = {}
+    if not root.exists():
+        return result
+    for directory in sorted(root.iterdir()):
+        config = directory / "project.toml"
+        if not directory.is_dir() or not config.is_file():
+            continue
+        try:
+            document = tomllib.loads(config.read_text("utf-8"))
+            project_id = _validate_identifier(
+                str(document.get("project_id", "")).strip(), label="project_id")
+        except (OSError, tomllib.TOMLDecodeError, ProjectContractError):
+            continue
+        if project_id in result:
+            raise ProjectContractError(
+                f"duplicate project_id {project_id!r} in "
+                f"{result[project_id]} and {directory}")
+        result[project_id] = directory
+    return result
+
+
+def find_project_directory(projects_root: str | Path, project_id: str) -> Path:
+    project_id = _validate_identifier(project_id, label="project_id")
+    discovered = discover_project_directories(projects_root)
+    if project_id not in discovered:
+        raise ProjectContractError(f"unknown project_id={project_id}")
+    return discovered[project_id]
+
+
 def load_project(directory: str | Path) -> ProjectContract:
     root = Path(directory)
     project = _load(root / "project.toml")
