@@ -12,7 +12,7 @@ _HAS_STACK = all(importlib.util.find_spec(name) for name in ("fastapi", "httpx",
 class TestRealLoopbackListener(unittest.TestCase):
     def test_real_socket_is_loopback_high_port_and_stops_cleanly(self):
         import httpx
-        from app.local_transport import LOOPBACK_HOST, shutdown, start_listener
+        from app.local_transport import LOOPBACK_HOST, generate_launch_secret, shutdown, start_listener
         from app.server import ServerContext, create_app
 
         with tempfile.TemporaryDirectory() as temp:
@@ -24,7 +24,7 @@ class TestRealLoopbackListener(unittest.TestCase):
             )
             (root / "web" / "app.js").write_text("", encoding="utf-8")
             (root / "reports").mkdir()
-            context = ServerContext(repo_root=root, launch_secret="listener-secret")
+            context = ServerContext(repo_root=root, launch_secret=generate_launch_secret())
             app = create_app(context)
             listener = start_listener(app, secret=context.launch_secret)
             context.listener = listener
