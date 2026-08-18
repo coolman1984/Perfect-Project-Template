@@ -212,9 +212,9 @@
       "sha256": "4ee00ae65e4f2db15ddc0b64d3ac99ceb80fb4d7005b8405d0bb29d0218d76d7"
     },
     "app/analytics/patterns.py": {
-      "bytes": 2368,
+      "bytes": 5991,
       "scope": "universal_core",
-      "sha256": "3b911470def77d866180c3c68476eadca4861725ae9fc146b5cb14d2108772d4"
+      "sha256": "f25f79576693b5047fb551ab4793074d21f56720dfc80bb161a58e2e41ff1392"
     },
     "app/analytics/registry.py": {
       "bytes": 702,
@@ -1177,6 +1177,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:39:41Z",
+  "generated_at": "2026-08-18T07:41:16Z",
   "schema_version": 2
 }
