@@ -1,19 +1,14 @@
-"""The history engine: connected history without duplicates (Part 8).
+"""Universal history engine: one implementation, configured per source/entity.
 
-Layer 6, and the layer where a mistake is most expensive — this is the single
-truth every dashboard number comes from.
+The engine owns append, upsert, snapshot and replace-period semantics. Employee
+projects select those modes in source configuration; they do not ship their own
+history implementation.
 
-Four load modes, each report declaring exactly one:
-
-    append          every file contains only new permanent transactions
-    upsert          old records may be corrected
-    snapshot        each file is the full state at a point in time
-    replace_period  one file fully replaces one approved period
-
-The whole update runs inside one transaction. On any failure it rolls back and
-trusted history is exactly as it was (Part 8.5, rule 9).
+`apply()` owns a transaction for the normal single-source caller.
+`apply_in_transaction()` performs the exact same semantics inside an existing
+project transaction so a multi-source project can commit all source histories
+atomically or roll them all back together.
 """
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -24,15 +19,12 @@ from app.data.database import Database
 
 APPEND, UPSERT, SNAPSHOT, REPLACE_PERIOD = "append", "upsert", "snapshot", "replace_period"
 LOAD_MODES = (APPEND, UPSERT, SNAPSHOT, REPLACE_PERIOD)
-
-# Deletion rules (Part 8.4). What a disappearing row MEANS is a human decision;
-# the engine only executes the approved rule and never infers one.
 IGNORE, MARK_INACTIVE, SOFT_DELETE, CLOSE_VERSION, PHYSICAL = (
     "ignore", "mark_inactive", "soft_delete", "close_version", "physical")
 
 
 class HistoryError(RuntimeError):
-    """The requested load cannot be performed safely."""
+    """The requested history change cannot be performed safely."""
 
 
 @dataclass
@@ -48,11 +40,7 @@ class HistoryResult:
 
 
 class HistoryEngine:
-    """Applies a validated clean batch to trusted history.
-
-    Report-agnostic: the table and column names come from configuration, so a
-    new report needs no new engine code. That is the Factory Core boundary.
-    """
+    """Apply one validated clean source batch to one trusted history table."""
 
     def __init__(
         self,
@@ -71,8 +59,6 @@ class HistoryEngine:
         self.key_columns = key_columns
         self.event_date_column = event_date_column
 
-    # -- entry point -------------------------------------------------------
-
     def apply(
         self,
         run_id: str,
@@ -82,67 +68,82 @@ class HistoryEngine:
         deletion_rule: str = IGNORE,
         requested_period: str | None = None,
     ) -> HistoryResult:
+        """Normal single-source entry point with an all-or-nothing transaction."""
+        with self.database.transaction():
+            return self.apply_in_transaction(
+                run_id,
+                load_mode=load_mode,
+                lookback_days=lookback_days,
+                deletion_rule=deletion_rule,
+                requested_period=requested_period,
+            )
+
+    def apply_in_transaction(
+        self,
+        run_id: str,
+        *,
+        load_mode: str,
+        lookback_days: int = 0,
+        deletion_rule: str = IGNORE,
+        requested_period: str | None = None,
+    ) -> HistoryResult:
+        """Apply history semantics while the caller owns the transaction.
+
+        This is the multi-source project boundary. It deliberately does not
+        BEGIN/COMMIT. The caller must already be inside `Database.transaction()`.
+        """
         if load_mode not in LOAD_MODES:
             raise HistoryError(
-                f"unknown load mode {load_mode!r}. A human approves this "
-                f"(Part 3.1); the engine never guesses.")
+                f"unknown load mode {load_mode!r}. Business meaning must be "
+                "approved; the engine never guesses history semantics.")
 
-        with self.database.transaction():
-            if load_mode == REPLACE_PERIOD:
-                result = self._replace_period(run_id, requested_period)
-            elif load_mode == APPEND:
-                result = self._append(run_id)
-            else:
-                # snapshot and upsert share the same compare-and-merge core;
-                # they differ only in how disappearance is treated.
-                result = self._upsert(run_id)
-                if load_mode == SNAPSHOT or deletion_rule != IGNORE:
-                    result.deactivated = self._apply_deletion_rule(
-                        run_id, deletion_rule, lookback_days, load_mode)
-            return result
+        if load_mode == REPLACE_PERIOD:
+            return self._replace_period(run_id, requested_period)
+        if load_mode == APPEND:
+            return self._append(run_id)
 
-    # -- modes -------------------------------------------------------------
+        result = self._upsert(run_id)
+        if load_mode == SNAPSHOT or deletion_rule != IGNORE:
+            result.deactivated = self._apply_deletion_rule(
+                run_id, deletion_rule, lookback_days, load_mode)
+        return result
 
     def _append(self, run_id: str) -> HistoryResult:
-        """Insert every clean row. Existing keys are still protected: an
-        append report that receives the same key twice is a contradiction the
-        quality gate has already rejected."""
         columns = ", ".join(self.business_columns)
         inserted = self.database.scalar(f"""
             SELECT count(*) FROM {self.clean_table} c
             WHERE c._run_id = ?
-              AND NOT EXISTS (SELECT 1 FROM {self.history_table} h
-                              WHERE h.business_key_hash = c.business_key_hash)
+              AND NOT EXISTS (
+                    SELECT 1 FROM {self.history_table} h
+                    WHERE h.business_key_hash = c.business_key_hash)
         """, [run_id]) or 0
 
         self.database.execute(f"""
             INSERT INTO {self.history_table}
                 ({columns}, business_key_hash, row_content_hash, is_active,
-                 first_seen_run_id, last_seen_run_id, _source_file, _source_row_number)
+                 first_seen_run_id, last_seen_run_id, _source_file,
+                 _source_row_number)
             SELECT {columns}, c.business_key_hash, c.row_content_hash, TRUE,
                    c._run_id, c._run_id, c._source_file, c._source_row_number
             FROM {self.clean_table} c
             WHERE c._run_id = ?
-              AND NOT EXISTS (SELECT 1 FROM {self.history_table} h
-                              WHERE h.business_key_hash = c.business_key_hash)
+              AND NOT EXISTS (
+                    SELECT 1 FROM {self.history_table} h
+                    WHERE h.business_key_hash = c.business_key_hash)
         """, [run_id])
         return HistoryResult(inserted=int(inserted))
 
     def _upsert(self, run_id: str) -> HistoryResult:
-        """Same key + changed values -> update. New key -> insert.
-
-        The two hashes give insert/update/unchanged in one pass (Part 8.2), so
-        rerunning identical input changes nothing at all (rule 5).
-        """
         changed = self.database.scalar(f"""
             SELECT count(*) FROM {self.clean_table} c
-            JOIN {self.history_table} h ON h.business_key_hash = c.business_key_hash
+            JOIN {self.history_table} h
+              ON h.business_key_hash = c.business_key_hash
             WHERE c._run_id = ? AND h.row_content_hash <> c.row_content_hash
         """, [run_id]) or 0
-
         unchanged = self.database.scalar(f"""
             SELECT count(*) FROM {self.clean_table} c
-            JOIN {self.history_table} h ON h.business_key_hash = c.business_key_hash
+            JOIN {self.history_table} h
+              ON h.business_key_hash = c.business_key_hash
             WHERE c._run_id = ? AND h.row_content_hash = c.row_content_hash
         """, [run_id]) or 0
 
@@ -161,9 +162,6 @@ class HistoryEngine:
               AND c._run_id = ?
               AND h.row_content_hash <> c.row_content_hash
         """, [run_id])
-
-        # Touch unchanged rows so "last seen" stays truthful without counting
-        # them as an update.
         self.database.execute(f"""
             UPDATE {self.history_table} AS h
             SET last_seen_run_id = c._run_id
@@ -172,23 +170,17 @@ class HistoryEngine:
               AND c._run_id = ?
               AND h.row_content_hash = c.row_content_hash
         """, [run_id])
-
         inserted = self._append(run_id).inserted
-        return HistoryResult(inserted=inserted, updated=int(changed),
-                             unchanged=int(unchanged))
+        return HistoryResult(
+            inserted=inserted, updated=int(changed), unchanged=int(unchanged))
 
-    def _replace_period(self, run_id: str, requested_period: str | None) -> HistoryResult:
-        """Delete ONE approved period and insert the new one.
-
-        Never all history. The requested period is validated against the
-        source's actual date range first, because replacing the wrong period is
-        unrecoverable without the archive (Part 27.4).
-        """
+    def _replace_period(
+        self, run_id: str, requested_period: str | None
+    ) -> HistoryResult:
         if not requested_period:
             raise HistoryError(
-                "replace_period requires an explicit approved period — refusing "
-                "to guess which period to delete (Part 27.4)")
-
+                "replace_period requires an explicit approved period; refusing "
+                "to guess which trusted period to replace")
         bounds = self.database.query(
             f"SELECT min({self.event_date_column}), max({self.event_date_column}) "
             f"FROM {self.clean_table} WHERE _run_id = ?", [run_id])
@@ -198,30 +190,21 @@ class HistoryEngine:
         if not (str(low).startswith(requested_period)
                 and str(high).startswith(requested_period)):
             raise HistoryError(
-                f"source data spans {low}..{high}, which is outside the requested "
-                f"period {requested_period}. Refusing to replace the wrong period.")
-
+                f"source data spans {low}..{high}, outside approved period "
+                f"{requested_period}; refusing to replace the wrong period")
         self.database.execute(
             f"DELETE FROM {self.history_table} "
             f"WHERE strftime({self.event_date_column}, '%Y-%m-%d') LIKE ?",
             [f"{requested_period}%"])
         return self._append(run_id)
 
-    # -- deletions ---------------------------------------------------------
-
     def _apply_deletion_rule(
         self, run_id: str, rule: str, lookback_days: int, load_mode: str
     ) -> int:
-        """Handle records that exist in history but not in this batch.
-
-        Only within the approved lookback window: anything older is assumed
-        final unless a full rebuild is requested (Part 8.3). Inferring deletion
-        from absence outside that window is exactly the guess Part 8.4 forbids.
-        """
         if rule == IGNORE:
             return 0
         if rule not in (MARK_INACTIVE, SOFT_DELETE, CLOSE_VERSION, PHYSICAL):
-            raise HistoryError(f"unknown deletion rule {rule!r} (Part 8.4)")
+            raise HistoryError(f"unknown deletion rule {rule!r}")
 
         window_clause, parameters = "", [run_id]
         if load_mode != SNAPSHOT and lookback_days > 0:
@@ -231,22 +214,19 @@ class HistoryEngine:
             window_clause = f"AND h.{self.event_date_column} >= ?"
             parameters.append(cutoff - timedelta(days=lookback_days))
 
-        # Resolve the affected keys once, then act on that explicit list. This
-        # is longer than a correlated UPDATE but it is readable, and the list
-        # itself becomes the evidence for what the deletion rule touched.
         rows = self.database.query(f"""
             SELECT h.business_key_hash
             FROM {self.history_table} h
             WHERE h.is_active = TRUE
-              AND NOT EXISTS (SELECT 1 FROM {self.clean_table} c
-                              WHERE c._run_id = ?
-                                AND c.business_key_hash = h.business_key_hash)
+              AND NOT EXISTS (
+                    SELECT 1 FROM {self.clean_table} c
+                    WHERE c._run_id = ?
+                      AND c.business_key_hash = h.business_key_hash)
               {window_clause}
         """, parameters)
         keys = [row[0] for row in rows]
         if not keys:
             return 0
-
         placeholders = ", ".join("?" for _ in keys)
         if rule == PHYSICAL:
             self.database.execute(
@@ -259,18 +239,16 @@ class HistoryEngine:
         return len(keys)
 
     def _batch_max_date(self, run_id: str) -> date | None:
-        value = self.database.scalar(
+        return self.database.scalar(
             f"SELECT max({self.event_date_column}) FROM {self.clean_table} "
             f"WHERE _run_id = ?", [run_id])
-        return value
-
-    # -- reporting ---------------------------------------------------------
 
     def active_row_count(self) -> int:
         return int(self.database.scalar(
-            f"SELECT count(*) FROM {self.history_table} WHERE is_active = TRUE") or 0)
+            f"SELECT count(*) FROM {self.history_table} "
+            "WHERE is_active = TRUE") or 0)
 
     def total(self, column: str) -> Any:
         return self.database.scalar(
             f"SELECT COALESCE(SUM({column}), 0) FROM {self.history_table} "
-            f"WHERE is_active = TRUE")
+            "WHERE is_active = TRUE")

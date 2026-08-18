@@ -6,12 +6,13 @@
   "required": ["sources"],
   "properties": {
     "sources": {
-      "type": "array", "minItems": 1,
+      "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["source_id", "role", "required", "match", "discovery", "grain", "business_key", "history", "quality"],
+        "required": ["source_id", "role", "required", "match", "discovery", "grain", "business_key", "history", "quality", "column_types"],
         "properties": {
-          "source_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$"},
+          "source_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
           "role": {"enum": ["transaction", "snapshot", "master", "target", "correction", "reference", "other"]},
           "required": {"type": "boolean"},
           "match": {"type": "object", "required": ["file_patterns"], "properties": {"file_patterns": {"type": "array", "minItems": 1, "items": {"type": "string"}}}},
@@ -19,6 +20,7 @@
           "grain": {"type": "string", "minLength": 1},
           "business_key": {"type": "array", "minItems": 1, "items": {"type": "string"}},
           "event_date": {"type": ["string", "null"]},
+          "column_types": {"type": "object", "minProperties": 1, "additionalProperties": {"enum": ["VARCHAR", "DATE", "INTEGER", "BIGINT", "BOOLEAN", "DECIMAL(18,4)", "DECIMAL(18,2)"]}},
           "history": {"type": "object", "required": ["mode", "deletion_rule"], "properties": {"mode": {"enum": ["append", "upsert", "snapshot", "replace_period"]}, "lookback_days": {"type": "integer", "minimum": 0}, "deletion_rule": {"enum": ["ignore", "mark_inactive", "soft_delete"]}}},
           "quality": {"type": "object", "required": ["required_columns", "control_totals"], "properties": {"required_columns": {"type": "array", "items": {"type": "string"}}, "control_totals": {"type": "array", "items": {"type": "string"}}, "non_negative_columns": {"type": "array", "items": {"type": "string"}}}}
         }
