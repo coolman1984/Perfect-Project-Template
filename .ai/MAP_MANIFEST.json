@@ -1,10 +1,10 @@
 {
-  "file_count": 243,
+  "file_count": 246,
   "files": {
     ".ai/BUILD_BRIEF.md": {
-      "bytes": 4323,
+      "bytes": 2995,
       "scope": "unknown",
-      "sha256": "83a3f093763a1b097deddb44a1d56c8395aba201f37c29e16241e882b44e3483"
+      "sha256": "eaef5c2c3e53bcde8b8ebfb26e37c8d1d8cbdc19e306c5b3169f3d8a054fb308"
     },
     ".ai/CONTRACTS.md": {
       "bytes": 4047,
@@ -155,6 +155,11 @@
       "bytes": 1286,
       "scope": "unknown",
       "sha256": "8fa0c009c6aff600732300519cf5540f44591251554be705249785ba70395e65"
+    },
+    "ULTIMATE_EXCEL_AUTOMATION_V10_UNIFIED_APPROVED_MASTER_PLAN.md": {
+      "bytes": 48975,
+      "scope": "unknown",
+      "sha256": "ea93947b3d48f26d14283fcb45b26a31b1f4a85d0f6079b30a03e979a796d233"
     },
     "UNIVERSAL_ENGINE_SKILL.md": {
       "bytes": 3428,
@@ -565,6 +570,16 @@
       "bytes": 3775,
       "scope": "documentation",
       "sha256": "fdc31a30ae6ff6a3db52c4f9ddacc100e57945fe1eb84b20d9a2556b36c095f3"
+    },
+    "docs/V10_BUILD_PROGRAM.md": {
+      "bytes": 14005,
+      "scope": "documentation",
+      "sha256": "627f72ec79d02c92793da5798c85cfe65703f6a5686aec3a2b6d3b22784c918b"
+    },
+    "docs/V10_CODING_PLAN.md": {
+      "bytes": 17072,
+      "scope": "documentation",
+      "sha256": "603cbdc0b9233ff27d8834209e2386ea2cb89ca535b8657fcf68c5c5c08bbf95"
     },
     "docs/V8_1_AUDIT_REMEDIATION.md": {
       "bytes": 4602,
@@ -1217,6 +1232,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T08:05:45Z",
+  "generated_at": "2026-08-18T13:58:11Z",
   "schema_version": 2
 }
