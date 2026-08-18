@@ -1,5 +1,5 @@
 {
-  "file_count": 202,
+  "file_count": 203,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -54,8 +54,8 @@
       "sha256": "79edb780885aea75c97f4843eb9a68087bdab2e95d7a52ded5c59f9b289d797a"
     },
     ".github/workflows/template-checks.yml": {
-      "bytes": 3146,
-      "sha256": "df00033d2c990cac10a200b098b989905519cb11c23223d07806f2b361285c63"
+      "bytes": 3456,
+      "sha256": "eabdde079941e07a54b4c2d809f376520b1a4c63bea5e83d44ff976d343e3f7d"
     },
     ".gitignore": {
       "bytes": 1078,
@@ -226,8 +226,8 @@
       "sha256": "459109b9b8da8b4327598ad29a588430542b0fa1aa8406db93cdcc874d9f6dd9"
     },
     "app/events.py": {
-      "bytes": 1048,
-      "sha256": "d39d62444f0da6d5a6044a414c4b81126693082041ec6ec63ee6335d46eac8f2"
+      "bytes": 2543,
+      "sha256": "7a5f84aabd38dec49a68afacaf198f887e05cced0869ecf3158fd82037fd1877"
     },
     "app/excel/__init__.py": {
       "bytes": 242,
@@ -266,12 +266,12 @@
       "sha256": "00bd595580b487979b75d8c69337f2ffd9cd5a202b00e312b7ac3dcf0f4e18b9"
     },
     "app/local_transport.py": {
-      "bytes": 5520,
-      "sha256": "bdca1bf73f27af8e3e3d3a90c9aa499c0c94e4fb0c9fdf79c3127eb1283fbd6f"
+      "bytes": 5001,
+      "sha256": "f3409ac076f46e3735afe8482284556f2f0632cf27e4570394a1856a32a21824"
     },
     "app/locks.py": {
-      "bytes": 711,
-      "sha256": "3a4d637d4720d2e82cf1772d8a4272f6053d28bc1660247c3dba965b447c01ae"
+      "bytes": 2854,
+      "sha256": "3bd47fedd392c6ff7734814e793dc0dd3d2d7b689f1183f26c12a3b4e0c597db"
     },
     "app/observability/__init__.py": {
       "bytes": 185,
@@ -290,8 +290,8 @@
       "sha256": "c97920c117d0ee1455696c6377758bf10df07217ff4dc5989d12c89efe54ad82"
     },
     "app/orchestrator.py": {
-      "bytes": 709,
-      "sha256": "b9add0f04904ec8652c79f650ea1e2db39469a0055acf8ca83850e94cea0a921"
+      "bytes": 3395,
+      "sha256": "8529b544ea8b092a1f7986d23a1b543d54bffa6e37200e148b4fd9eb38e52bbc"
     },
     "app/pipeline.py": {
       "bytes": 11022,
@@ -318,8 +318,8 @@
       "sha256": "87f4da80f304ac364f77da3768e0f2ecfcf053267f0b7ba1cf4ba45f4af0eeb5"
     },
     "app/server.py": {
-      "bytes": 3647,
-      "sha256": "b0d91923186902285f1beed7126b8b6ba2a53880f901a197bc32884dc85be47e"
+      "bytes": 6729,
+      "sha256": "5fdb93f28b7ddcb057d0c1b146f525c16d8412cbfa4d13adbbab19672e9e5edd"
     },
     "app/settings.py": {
       "bytes": 851,
@@ -705,6 +705,10 @@
       "bytes": 7979,
       "sha256": "4d5c5bbc2f6774b40c12469c94ed1016987769acd0db9488f24a69f18e4bacc4"
     },
+    "tests/unit/test_runtime_core.py": {
+      "bytes": 4629,
+      "sha256": "34c01944e3b86476de207500a65721594d0c45fb55a997a17d82852d3ae20f42"
+    },
     "tests/unit/test_state_machine.py": {
       "bytes": 4273,
       "sha256": "d3c409207139ca43df89052343acc3af2764020bf7a342e5872b48bb67016243"
@@ -810,6 +814,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T06:29:58Z",
+  "generated_at": "2026-08-18T06:36:45Z",
   "schema_version": 1
 }
