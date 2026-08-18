@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 12315,
+      "bytes": 12475,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -67,9 +67,9 @@
       "sha256": "d7772d22ffeab4e1b30319d84ba8da48b491498d4f21ee8a919b248d8d4f2f00"
     },
     ".github/workflows/template-checks.yml": {
-      "bytes": 3681,
+      "bytes": 4276,
       "scope": "unknown",
-      "sha256": "6c3bc9158b27024ba9b902606912825a411b8c72c91720a38c72be4f86529ff0"
+      "sha256": "3d8d9f1da7f3a5f86ad4978d53901cbb7eeee210a08f5a74693de9c518e9e222"
     },
     ".gitignore": {
       "bytes": 1078,
@@ -1177,6 +1177,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:33:44Z",
+  "generated_at": "2026-08-18T07:34:56Z",
   "schema_version": 2
 }
