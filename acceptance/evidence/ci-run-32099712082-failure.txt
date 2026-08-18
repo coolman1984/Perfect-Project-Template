@@ -1,0 +1,27 @@
+CI run 32099712082 — branch main — conclusion: failure
+https://github.com/coolman1984/Perfect-Project-Template/actions/runs/32099712082
+
+Step "Map freshness (Part 20.5)" failed on a fresh checkout:
+
+  X  FAIL  manifest lists a file that no longer exists: app/data/__init__.py
+  X  FAIL  manifest lists a file that no longer exists: app/data/archive.py
+  X  FAIL  manifest lists a file that no longer exists: app/data/database.py
+  X  FAIL  manifest lists a file that no longer exists: app/data/history.py
+  X  FAIL  manifest lists a file that no longer exists: app/data/migrations.py
+  X  FAIL  manifest lists a file that no longer exists: app/data/sql_server.py
+  X  FAIL  manifest lists a file that no longer exists: app/data/staging.py
+
+  map verify: FAIL (7 failure(s), 7 warning(s))
+
+ROOT CAUSE
+  .gitignore line 15 was `data/` — unanchored, so git matched a directory of
+  that name at ANY depth, including app/data/. `git add -A` silently skipped
+  the entire history-engine layer. The files existed locally, so every local
+  check passed; the first fresh checkout had never received them.
+
+FIX
+  - Root-anchored every generated/data ignore pattern (/data/, /logs/, ...).
+  - map verify now FAILS when a mapped file is git-ignored, so the gap between
+    "on disk" and "in the repository" is caught locally.
+  - Regression tests in tests/unit/test_tooling_boundaries.py pin both
+    directions: source layers committable, data folders still excluded.

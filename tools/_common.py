@@ -128,6 +128,34 @@ def git_changed_files(base: str, root: Path | None = None) -> list[str]:
         return []
 
 
+def git_ignored(paths: list[str], root: Path | None = None) -> set[str]:
+    """Which of `paths` git would refuse to track.
+
+    This is the check that catches a silent repository hole: the map scans a
+    file, the tools verify it, the tests import it — and `.gitignore` quietly
+    excludes it, so it never reaches the repository at all. Git reports success
+    because, from its point of view, nothing was asked of it.
+
+    Returns an empty set when git is unavailable; callers treat that as
+    "unknown", never as "clean".
+    """
+    root = root or REPO_ROOT
+    if not paths:
+        return set()
+    try:
+        result = subprocess.run(
+            ["git", "check-ignore", "--stdin"],
+            cwd=root, input="\n".join(paths), capture_output=True,
+            text=True, timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return set()
+    # Exit 0 = some paths ignored, 1 = none ignored, other = real error.
+    if result.returncode not in (0, 1):
+        return set()
+    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+
+
 @dataclass
 class Report:
     """Collects findings so a command reports every problem, not just the first."""

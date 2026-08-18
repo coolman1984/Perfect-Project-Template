@@ -94,3 +94,19 @@ boundary in BOTH directions — what must be excluded and what must never be. A
 scanner that silently skips a layer is worse than no scanner, because its green
 output is believed.
 Date: 2026-08-17 · Owner: platform
+
+### L-008 — The same unanchored-path bug existed in a second tool, and only CI found it
+
+Evidence: after fixing L-007 in the scanner, `.gitignore` still carried an
+unanchored `data/`, which matches at any depth. `git add -A` silently skipped
+`app/data/` — seven files, the entire history engine. Every local check passed
+because the files were present on disk; the first fresh checkout (CI) failed
+immediately on `map verify`. Evidence:
+`acceptance/evidence/ci-run-32099712082-failure.txt`.
+Lesson: When a root-cause class is found in one tool, grep for it in EVERY tool
+that does path matching — `.gitignore`, Docker ignore files, packaging manifests,
+test discovery. Fixing one instance proves the class exists, not that it is gone.
+Second lesson: local green does not mean committed. `map verify` now fails when
+a mapped file is git-ignored, so the gap between "on disk" and "in the
+repository" is checked where the work happens, not one push later.
+Date: 2026-08-18 · Owner: platform

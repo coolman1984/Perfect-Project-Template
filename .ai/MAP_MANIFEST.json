@@ -10,8 +10,8 @@
       "sha256": "ec2323f3c574b92eadcd0ecd1ea58f52645cb52051be74175a62e9833f892c2f"
     },
     ".ai/LESSONS.md": {
-      "bytes": 4533,
-      "sha256": "3824fca01b08ce5ee15d4ba21db9d1acc5b73624f5247d1f1bc89628442153ad"
+      "bytes": 5529,
+      "sha256": "f3937edbaf765886e51d616f0ca640a7de9712f7b822b8df3911266cf1d01c4e"
     },
     ".ai/OPPORTUNITIES.md": {
       "bytes": 1201,
@@ -42,8 +42,8 @@
       "sha256": "4e62ce6266c8b7ba6e2d71ae52c052cd435880d430375e6ddcadb66b3b0f1479"
     },
     ".gitignore": {
-      "bytes": 701,
-      "sha256": "20f875220403639b18231f863f17574287b714dde6277997db2200c2720e6843"
+      "bytes": 1078,
+      "sha256": "39623ec399e9c087b4365854cbd4e69f21a0d962b2f2ec151d3e1a60b1885ba7"
     },
     "AGENTS.md": {
       "bytes": 2614,
@@ -506,12 +506,12 @@
       "sha256": "d3c409207139ca43df89052343acc3af2764020bf7a342e5872b48bb67016243"
     },
     "tests/unit/test_tooling_boundaries.py": {
-      "bytes": 3655,
-      "sha256": "60d5039a5f5a44dc88613e09c304444e725dd7c3f20d186c90b000d7f359515f"
+      "bytes": 5555,
+      "sha256": "d6da04e0068d6f1ac1fbaa5eeec176baab4c09110a55d9b42cfe20f755f92a84"
     },
     "tools/_common.py": {
-      "bytes": 6584,
-      "sha256": "ea21903c73642de3ec96dd8f9b6f922d5336d5dd02e8e6d96e828aaa98292764"
+      "bytes": 7680,
+      "sha256": "7e75c0f264d3a9fa124c72e99b1c4bd54193cd25e8a29dac29597acc95ca8175"
     },
     "tools/_miniyaml.py": {
       "bytes": 3188,
@@ -538,8 +538,8 @@
       "sha256": "5206de43ab77f05a91154a9473b3423ecf5f2b8c15858d781baadf5d392452f7"
     },
     "tools/project_map.py": {
-      "bytes": 16147,
-      "sha256": "edc282cd2f6c4aca71c930b4baf9a8ec1735154b57e23e0c5406b8f641a63434"
+      "bytes": 17403,
+      "sha256": "ab90c457982f42bc3167eb99de28c8d30be602024cf336c2ab984d80c3f88e24"
     },
     "tools/project_memory.py": {
       "bytes": 8710,
@@ -598,6 +598,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-17T16:21:13Z",
+  "generated_at": "2026-08-18T04:39:08Z",
   "schema_version": 1
 }

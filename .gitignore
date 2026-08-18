@@ -2,21 +2,27 @@
 #
 # Anything below may contain extracted business data that no longer carries the
 # original DRM protection (Part 13.5). It must never reach version control.
+#
+# EVERY pattern here is ROOT-ANCHORED with a leading slash, on purpose. An
+# unanchored `data/` matches a directory of that name at ANY depth, which
+# silently excluded `app/data/` — the entire history-engine source layer — from
+# the repository. Git reported success; the layer simply was not there.
+# Same lesson as .ai/LESSONS.md L-007, in a second tool.
 
-runtime/
-offline_packages/
-repair_payload/
-release/
-dist/
-build/
+/runtime/
+/offline_packages/
+/repair_payload/
+/release/
+/dist/
+/build/
 
-inbox/
-workspace/
-data/
-archive/
-output/
-runs/
-logs/
+/inbox/
+/workspace/
+/data/
+/archive/
+/output/
+/runs/
+/logs/
 
 *.duckdb
 *.duckdb.wal

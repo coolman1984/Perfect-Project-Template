@@ -74,5 +74,50 @@ class TestScannerCoverage(unittest.TestCase):
                          f"files the architecture scan cannot see: {sorted(missing)}")
 
 
+
+class TestMappedFilesAreCommittable(unittest.TestCase):
+    """Regression: the map tracked files `.gitignore` silently discarded.
+
+    `.gitignore` had an unanchored `data/`, which matches at any depth, so
+    `app/data/` — the whole history-engine layer — was never committed. Every
+    local check passed; only a fresh CI checkout revealed the hole. Same root
+    cause as the scanner exclusion bug, in a second tool.
+    """
+
+    def test_no_mapped_file_is_excluded_by_gitignore(self):
+        from tools._common import git_available, git_ignored
+
+        if not git_available():
+            self.skipTest("git unavailable")
+
+        mapped = [str(path).replace("\\", "/") for path in iter_source_files()]
+        ignored = git_ignored(mapped)
+        self.assertEqual(
+            ignored, set(),
+            "these files are in the map but .gitignore excludes them, so they "
+            f"will never reach the repository: {sorted(ignored)}")
+
+    def test_source_layers_are_committable(self):
+        from tools._common import git_available, git_ignored
+
+        if not git_available():
+            self.skipTest("git unavailable")
+
+        # The layer that was actually lost, plus its siblings.
+        probes = [f"app/{layer}/__init__.py" for layer in
+                  ("excel", "data", "quality", "analytics", "dashboard", "observability")]
+        self.assertEqual(git_ignored(probes), set())
+
+    def test_data_folders_are_still_excluded_from_git(self):
+        from tools._common import git_available, git_ignored
+
+        if not git_available():
+            self.skipTest("git unavailable")
+
+        # The fix must not swing the other way: real data must stay out.
+        probes = ["data/warehouse.duckdb", "logs/run.log", "runs/RUN-1/manifest.json",
+                  "output/dashboard.html", "archive/part-0.parquet"]
+        self.assertEqual(git_ignored(probes), set(probes))
+
 if __name__ == "__main__":
     unittest.main()

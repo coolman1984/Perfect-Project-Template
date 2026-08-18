@@ -17,7 +17,7 @@ from pathlib import Path
 
 from tools._common import (
     EXIT_FAIL, EXIT_PASS, REPO_ROOT, Report, git_available, git_changed_files,
-    iter_source_files, read_text, sha256_file, utc_now,
+    git_ignored, iter_source_files, read_text, sha256_file, utc_now,
 )
 from tools.project_intelligence import graph as pi_graph
 from tools.project_intelligence import rank as pi_rank
@@ -163,6 +163,8 @@ def cmd_verify() -> int:
             if not candidate.exists() and referenced not in ("PROJECT_SKILL.md",):
                 report.warn(f"map references a path that does not exist: {referenced}")
 
+    _check_tracked_by_git(new, report)
+
     if STATE_PATH.exists() and "PENDING_APPROVAL" in read_text(STATE_PATH):
         report.note("CURRENT_STATE.md still carries PENDING_APPROVAL items (expected pre-Phase 0)")
 
@@ -170,6 +172,33 @@ def cmd_verify() -> int:
         report.note(f"manifest matches the working tree ({new['file_count']} files)")
 
     return report.emit()
+
+
+def _check_tracked_by_git(manifest: dict, report: Report) -> None:
+    """Every mapped file must be able to reach the repository (Part 20.5).
+
+    The map, the verifiers and the tests can all agree a file exists while
+    `.gitignore` silently excludes it, so it never gets committed and every
+    fresh clone is missing it. Git reports success throughout — it was never
+    asked to track the file. Only a checkout somewhere else reveals the hole.
+
+    An ignored mapped file is therefore a FAILURE. Merely untracked (new, not
+    yet added) is a warning, because that is the normal state mid-change.
+    """
+    if not git_available():
+        report.note("git unavailable — cannot check that mapped files are committable")
+        return
+
+    mapped = sorted(manifest.get("files", {}))
+    ignored = git_ignored(mapped)
+    for path in sorted(ignored):
+        report.fail(
+            f"{path} is in the map but .gitignore EXCLUDES it — it will never "
+            f"reach the repository, and every fresh clone will be missing it. "
+            f"Anchor the ignore pattern to the root (Part 20.5)")
+
+    if not ignored:
+        report.note(f"all {len(mapped)} mapped files are committable")
 
 
 def cmd_refresh(review: bool) -> int:
