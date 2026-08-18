@@ -1,5 +1,5 @@
 {
-  "file_count": 203,
+  "file_count": 205,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -10,8 +10,8 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 2058,
-      "sha256": "0b348fe5e008a93ddc6c91143fac3ab88c506cff1528b2e1b54bf20533fa41a6"
+      "bytes": 2712,
+      "sha256": "607dac44a9b37c0e37c528aa3af0d7c40c429ade4ceafffbf70015b48e7acf1a"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -182,16 +182,16 @@
       "sha256": "92c676bb2cab7f65b74fb489642b73110c57e71d6879ca9ae1b3923f89ea615a"
     },
     "app/dashboard/html_builder.py": {
-      "bytes": 680,
-      "sha256": "46f4e10d572c7f1e9989214398d1df57fb6603befb259743256c31c9a59f228b"
+      "bytes": 6315,
+      "sha256": "803b42552dfaea54ede76939ec546e8c75a828f9043d21b6bbe9f70a88a456a6"
     },
     "app/dashboard/json_builder.py": {
       "bytes": 4549,
       "sha256": "bbb96fdb71b30b9336007cb9a499e7cfb41258f5fc633eb2c153c4d6632e2736"
     },
     "app/dashboard/verifier.py": {
-      "bytes": 798,
-      "sha256": "e2811ee247c41d97e4d470a00650b1d5b0ddb083237ac0b0d251d8cead827ef7"
+      "bytes": 3999,
+      "sha256": "6919889085c8f8ca154ebd48c2f66726e5401a97b3c2c104362ef28a907ebfa7"
     },
     "app/data/__init__.py": {
       "bytes": 203,
@@ -701,6 +701,10 @@
       "bytes": 2339,
       "sha256": "66badf51fd81c7fd01998a6c2302b4a1a443ce7eaf8869ccbeaac7b83c3d09ef"
     },
+    "tests/unit/test_loopback_listener.py": {
+      "bytes": 2540,
+      "sha256": "e00b72c44c0babb8d090c4e5d0e621a615e391832a2a5221391af3d1ca9badd8"
+    },
     "tests/unit/test_regression_fixes.py": {
       "bytes": 7979,
       "sha256": "4d5c5bbc2f6774b40c12469c94ed1016987769acd0db9488f24a69f18e4bacc4"
@@ -708,6 +712,10 @@
     "tests/unit/test_runtime_core.py": {
       "bytes": 5298,
       "sha256": "d7ea2e35e6e06860eee771c2723a27eb5649da7863065f07e055fb1302f6940b"
+    },
+    "tests/unit/test_standalone_html.py": {
+      "bytes": 3503,
+      "sha256": "46af94f9ef0579b88e20dbecc4c71fb1a54f3031f79232a2af0f14890f0eca84"
     },
     "tests/unit/test_state_machine.py": {
       "bytes": 4273,
@@ -814,6 +822,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T06:46:35Z",
+  "generated_at": "2026-08-18T06:50:10Z",
   "schema_version": 1
 }
