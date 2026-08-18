@@ -1177,11 +1177,11 @@
       "sha256": "7d1fdc83168a1ff39346c0ba6137c46f68ef9a8ecf820b12ce29620ef11319aa"
     },
     "web/styles.css": {
-      "bytes": 9429,
+      "bytes": 9166,
       "scope": "universal_core",
-      "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
+      "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T07:53:03Z",
+  "generated_at": "2026-08-18T07:53:34Z",
   "schema_version": 2
 }
