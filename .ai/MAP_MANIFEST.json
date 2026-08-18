@@ -1,5 +1,5 @@
 {
-  "file_count": 235,
+  "file_count": 236,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -380,6 +380,11 @@
       "bytes": 10795,
       "scope": "universal_core",
       "sha256": "b0fc859d8a5fec1d0cda06ed82cd1b7e6feb8bed586fff9f93ef2fbe83ee0984"
+    },
+    "app/project_orchestrator.py": {
+      "bytes": 6173,
+      "scope": "universal_core",
+      "sha256": "f736a4b0441ae8c1b2efe03a21b363f201f018829023f67fecc23bb569475410"
     },
     "app/project_pipeline.py": {
       "bytes": 31401,
@@ -1177,6 +1182,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:49:09Z",
+  "generated_at": "2026-08-18T07:49:39Z",
   "schema_version": 2
 }
