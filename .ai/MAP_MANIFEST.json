@@ -290,8 +290,8 @@
       "sha256": "c97920c117d0ee1455696c6377758bf10df07217ff4dc5989d12c89efe54ad82"
     },
     "app/orchestrator.py": {
-      "bytes": 3395,
-      "sha256": "8529b544ea8b092a1f7986d23a1b543d54bffa6e37200e148b4fd9eb38e52bbc"
+      "bytes": 3695,
+      "sha256": "a603a832f1eaa4505db6a027111e9e650c74b28ca275991b443bd14dd48c05f2"
     },
     "app/pipeline.py": {
       "bytes": 11022,
@@ -318,8 +318,8 @@
       "sha256": "87f4da80f304ac364f77da3768e0f2ecfcf053267f0b7ba1cf4ba45f4af0eeb5"
     },
     "app/server.py": {
-      "bytes": 6729,
-      "sha256": "5fdb93f28b7ddcb057d0c1b146f525c16d8412cbfa4d13adbbab19672e9e5edd"
+      "bytes": 15789,
+      "sha256": "00c4f48d18312a81434f0dff22b7695ed2d0281f1a57778a515fcbaf4bc0bda8"
     },
     "app/settings.py": {
       "bytes": 851,
@@ -706,8 +706,8 @@
       "sha256": "4d5c5bbc2f6774b40c12469c94ed1016987769acd0db9488f24a69f18e4bacc4"
     },
     "tests/unit/test_runtime_core.py": {
-      "bytes": 4629,
-      "sha256": "34c01944e3b86476de207500a65721594d0c45fb55a997a17d82852d3ae20f42"
+      "bytes": 5298,
+      "sha256": "d7ea2e35e6e06860eee771c2723a27eb5649da7863065f07e055fb1302f6940b"
     },
     "tests/unit/test_state_machine.py": {
       "bytes": 4273,
@@ -778,12 +778,12 @@
       "sha256": "a1654c6359914262dfa81e0087a9112ce66c24f3790eba9aac21785e96dfca09"
     },
     "web/app.js": {
-      "bytes": 7565,
-      "sha256": "6a4b3db6f724423fca621887ea1296acb60a382c2bb96cbb46c9852109a2ca5f"
+      "bytes": 9971,
+      "sha256": "e231ba4b4a8e22b2de5fce4877126093398fc7baf86f255bb98d849237ae7199"
     },
     "web/dashboard.js": {
-      "bytes": 1268,
-      "sha256": "89f21b2fe7260945c80d7a9b1c1bfff983e0e8c8e8aeb4bae02ddc7905c2cc72"
+      "bytes": 2941,
+      "sha256": "51518e67940644a49f2cae1fda0dd1c996b0d5d889178070b0833be1906ff287"
     },
     "web/filters.js": {
       "bytes": 3724,
@@ -798,8 +798,8 @@
       "sha256": "af8f4b3cd9b4c36849971543b87eb185e2a05c05dd2f5a110851c1d757767e4f"
     },
     "web/index.html": {
-      "bytes": 8940,
-      "sha256": "3537101c8b9bae63322f945ae2c18ccf5810bf64d837461faec7cbe8949055fa"
+      "bytes": 3448,
+      "sha256": "f52700ca616239a23966a3160224a2fc4c527171f6dc4de35ef779196e672ddc"
     },
     "web/motion.js": {
       "bytes": 1081,
@@ -814,6 +814,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T06:37:30Z",
+  "generated_at": "2026-08-18T06:42:42Z",
   "schema_version": 1
 }
