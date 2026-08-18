@@ -1,5 +1,5 @@
 {
-  "file_count": 242,
+  "file_count": 243,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 12697,
+      "bytes": 12732,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -911,6 +911,11 @@
       "scope": "test",
       "sha256": "8a0e416830d93f61c3cef47ef2057e11a570f153e9e7aa834c57b375d7b87fbe"
     },
+    "tests/factory/test_project_build_brief.py": {
+      "bytes": 983,
+      "scope": "test",
+      "sha256": "4baee9c222724a64f9a39c8d126e48ba852c4145e08f72c0a7e1e1ad4240c589"
+    },
     "tests/factory/test_project_generator.py": {
       "bytes": 2628,
       "scope": "test",
@@ -1212,6 +1217,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T07:58:42Z",
+  "generated_at": "2026-08-18T08:05:18Z",
   "schema_version": 2
 }
