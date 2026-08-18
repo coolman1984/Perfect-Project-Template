@@ -1137,9 +1137,9 @@
       "sha256": "a1654c6359914262dfa81e0087a9112ce66c24f3790eba9aac21785e96dfca09"
     },
     "web/app.js": {
-      "bytes": 9971,
+      "bytes": 16655,
       "scope": "universal_core",
-      "sha256": "e231ba4b4a8e22b2de5fce4877126093398fc7baf86f255bb98d849237ae7199"
+      "sha256": "0d929017a80915ed7123a77c3c75d116c87689938ec38a1267ec773ee4b99e6b"
     },
     "web/dashboard.js": {
       "bytes": 2941,
@@ -1182,6 +1182,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:51:42Z",
+  "generated_at": "2026-08-18T07:52:40Z",
   "schema_version": 2
 }
