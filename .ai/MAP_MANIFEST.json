@@ -687,9 +687,9 @@
       "sha256": "d7226f8fc43db18090c502b8e56ff20131bae6391e3bfb7559abccb6e30320d9"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/project.toml": {
-      "bytes": 491,
+      "bytes": 527,
       "scope": "project_config",
-      "sha256": "259fb451b0a3c07aca9a2946a724fab9b03430afe15ea768af1c6c59797f372d"
+      "sha256": "2e42037ee58aa8dd66b1cf38e729d8ee1ac5634a169e8762b68ca484fa41f989"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/relationships.toml": {
       "bytes": 509,
@@ -1182,6 +1182,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:52:40Z",
+  "generated_at": "2026-08-18T07:53:03Z",
   "schema_version": 2
 }
