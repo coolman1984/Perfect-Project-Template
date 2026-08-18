@@ -7,6 +7,7 @@ right_keys = ["item_id"]
 cardinality = "many_to_one"
 join_type = "left"
 approval_state = "CONFIRMED"
+require_match = true
 
 [[relationships]]
 relationship_id = "inventory_to_item"
@@ -17,3 +18,4 @@ right_keys = ["item_id"]
 cardinality = "many_to_one"
 join_type = "left"
 approval_state = "CONFIRMED"
+require_match = true

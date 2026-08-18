@@ -1,0 +1,4 @@
+snapshot_date,warehouse_id,item_id,on_hand_qty
+2026-08-01,W1,I1,40
+2026-08-01,W1,I2,80
+2026-08-01,W2,I1,10

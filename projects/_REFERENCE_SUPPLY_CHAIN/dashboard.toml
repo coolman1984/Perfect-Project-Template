@@ -1,29 +1,67 @@
+[meta]
 title = "Supply Chain Risk Reference"
+period_query = "latest_order_date"
 
 [[kpis]]
 id = "ordered_qty"
 label = "Ordered quantity"
-metric = "ordered_qty"
+query = "ordered_qty"
+format = "integer"
+unit = "units"
+
+[[kpis]]
+id = "fulfilled_qty"
+label = "Fulfilled quantity"
+query = "fulfilled_qty"
+format = "integer"
+unit = "units"
 
 [[kpis]]
 id = "fulfillment_rate"
 label = "Fulfillment rate"
-metric = "fulfillment_rate"
+query = "fulfillment_rate"
+format = "percent"
+unit = "%"
 
 [[kpis]]
 id = "on_hand_qty"
-label = "On-hand quantity"
-metric = "on_hand_qty"
+label = "Latest on-hand quantity"
+query = "on_hand_qty"
+format = "integer"
+unit = "units"
+
+[[kpis]]
+id = "shortage_qty"
+label = "Current shortage quantity"
+query = "shortage_qty"
+format = "integer"
+unit = "units"
 
 [[charts]]
 id = "shortage_by_item"
 type = "bar"
 title = "Shortage risk by item"
-dimension = "item_id"
-measure = "shortage_qty"
+query = "shortage_by_item"
+dimension = "item"
+series_name = "Shortage"
+x_index = 0
+y_index = 1
+unit = "units"
+summary_format = "{x}: {y} units shortage"
 
 [[charts]]
-id = "coverage_by_warehouse"
-type = "table"
-title = "Coverage by warehouse"
-columns = ["warehouse_id", "item_id", "on_hand_qty", "open_demand_qty", "coverage_days"]
+id = "inventory_by_warehouse"
+type = "bar"
+title = "Latest inventory by warehouse"
+query = "inventory_by_warehouse"
+dimension = "warehouse"
+series_name = "On hand"
+x_index = 0
+y_index = 1
+unit = "units"
+summary_format = "{x}: {y} units on hand"
+
+[lineage]
+rows_query = "orders_lineage_rows"
+mapping_version = "1"
+metric_version = "1"

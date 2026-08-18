@@ -1,0 +1,34 @@
+{
+  "period_1": {
+    "orders_active": 3,
+    "orders_ordered_qty": "190.0000",
+    "orders_fulfilled_qty": "170.0000",
+    "inventory_history_rows": 3,
+    "item_master_active": 2,
+    "quality_status": "PASS"
+  },
+  "period_2": {
+    "orders_active": 4,
+    "orders_ordered_qty": "220.0000",
+    "orders_fulfilled_qty": "190.0000",
+    "inventory_history_rows": 7,
+    "latest_inventory_qty": "133.0000",
+    "item_master_active": 3,
+    "fulfillment_rate": 86.3636363636,
+    "shortage_qty": "15.0000",
+    "top_shortage_item": "Item C",
+    "quality_status": "WARNING",
+    "orders_inserted": 1,
+    "orders_updated": 1,
+    "orders_unchanged": 2,
+    "orders_rejected": 1,
+    "orders_filtered": 1
+  },
+  "idempotent_rerun": {
+    "orders_inserted": 0,
+    "orders_updated": 0,
+    "orders_unchanged": 4,
+    "inventory_unchanged": 4,
+    "item_master_unchanged": 3
+  }
+}

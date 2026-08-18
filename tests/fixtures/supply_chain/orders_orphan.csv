@@ -1,0 +1,6 @@
+order_id,order_line,order_date,item_id,warehouse_id,ordered_qty,fulfilled_qty
+O1,1,2026-08-01,I1,W1,100,90
+O2,1,2026-08-01,I2,W1,50,50
+O3,1,2026-08-02,I1,W2,40,40
+O4,1,2026-08-03,I3,W1,30,10
+O6,1,2026-08-04,I9,W1,12,0

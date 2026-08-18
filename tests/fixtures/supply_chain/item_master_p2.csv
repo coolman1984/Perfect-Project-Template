@@ -1,0 +1,4 @@
+item_id,item_name,category,lead_time_days,master_updated_at
+I1,Item A,Core,6,2026-08-02
+I2,Item B,Core,3,2026-07-01
+I3,Item C,New,10,2026-08-02

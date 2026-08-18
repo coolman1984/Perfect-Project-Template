@@ -1,6 +1,7 @@
-project_id = "_reference_supply_chain"
+project_id = "reference_supply_chain"
 project_version = 1
 mode = "prototype"
+outputs = ["dashboard", "standalone_html"]
 
 [template]
 template_id = "universal-excel-automation-engine"
@@ -14,5 +15,3 @@ decision = "Which items and warehouses are at risk of shortage or poor fulfillme
 
 [security]
 policy = "policy/security_policy.toml"
-
-outputs = ["dashboard", "standalone_html"]

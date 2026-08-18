@@ -1,13 +1,17 @@
 # Supply Chain multi-source reference
 
-This is the **project-contract reference** required by the V8.1 deep audit. It proves the project model can describe three independent source roles with different grains, keys, quality controls and history strategies, plus approved relationships and presentation configuration.
+This is the V8.1 **Reference B** for project-centric reuse. It has three independent source roles with different grains, keys, controls and history strategies:
 
-It is intentionally labelled **CONTRACT PROVEN, EXECUTION NOT YET PROVEN**. The next master-core slice must execute these three fixtures through the shared source/history/quality engine and then run cross-source SQL. Until that golden test exists, Part 36 must not call Reference B executable.
+- `orders` — transaction / upsert with corrections
+- `inventory` — dated snapshot history
+- `item_master` — master / upsert
 
-Sources:
+Relationships are explicit and human-confirmed in `relationships.toml`. Cross-source calculations live once in `business_rules/metrics.sql`.
 
-- `orders` — transaction/upsert
-- `inventory` — snapshot
-- `item_master` — master/upsert
+## Evidence status
 
-This reference exists to prevent the engine from drifting back to a single-workbook/single-history-mode design.
+**EXECUTION IMPLEMENTED — CI PROOF PENDING.**
+
+`tests/golden/test_multisource_supply_chain.py` now exercises two periods, corrections, exact-duplicate filtering, negative-row quarantine, independent source history modes, cross-source metrics, idempotent reruns, relationship blocking and an analytics failure after history mutation begins to prove the outer multi-source transaction rolls every source back together.
+
+Do not upgrade this wording to `REFERENCE_PROVEN` until that test passes from a fresh Linux and Windows CI checkout.
