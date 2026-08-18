@@ -947,9 +947,9 @@
       "sha256": "25a278097efe29e4ce388ccb9014d64707a3ab9f2e772cb833202dc13370368d"
     },
     "tests/golden/test_multisource_supply_chain.py": {
-      "bytes": 6973,
+      "bytes": 11504,
       "scope": "test",
-      "sha256": "67b47473b2261aae0a03ca1a301a920d79f67cf238031b0665bc968441ceb7e7"
+      "sha256": "8b096c0826afdcf46b000b65a41686eb449a2f25c23207f38c1a08c286c338f9"
     },
     "tests/golden/test_reference_pipeline.py": {
       "bytes": 17292,
@@ -1177,6 +1177,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:44:02Z",
+  "generated_at": "2026-08-18T07:47:19Z",
   "schema_version": 2
 }
