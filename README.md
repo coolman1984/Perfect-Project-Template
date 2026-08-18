@@ -47,7 +47,7 @@ All of it is **standard-library Python**, so it runs in a bare workspace, in CI,
 on Windows, Linux or macOS, with nothing installed.
 
 ```text
-108 tests · 0 failures · runs anywhere with Python 3.11+
+193 tests · 0 failures · runs anywhere with Python 3.11+
 ```
 
 ---
@@ -117,16 +117,19 @@ agents to overstate too.
 | Complete and working | Left for the agent to build |
 |---|---|
 | The whole portable toolchain and every verifier | Excel COM extraction (needs Windows + Excel + real files) |
-| Constitution v7.2 with machine-checked consistency | DuckDB staging, history engine, archive |
-| Contracts: config, dashboard, event, manifest, errors, states | Quality engine and reconciliation |
-| Run state machine, error registry, value conversion, chunk sizing | Metric SQL, insights, JSON and HTML builders |
-| Fixture extraction adapter + synthetic data | The loopback API implementation |
-| Gate ledger seeded with every Part 14/28/31/33 gate | Chart rendering, story mode, motion |
-| Web shell structure, design tokens, filter state, i18n | PyInstaller release, wheelhouse, clean-PC gate |
-| 108 passing tests | Everything downstream of a real report definition |
+| **A working Golden Reference: extraction to dashboard JSON, end to end** | The loopback API and dashboard HTML/ECharts rendering |
+| **The Factory: plain-language interview, approval provenance, generator** | A web setup wizard (today it is a CLI: `PROJECT_TOOL factory`) |
+| **Second-report reuse, machine-proven (config only, zero Core edits)** | A third, fourth, fifth real business report |
+| Constitution v7.2 with machine-checked consistency | PyInstaller release, wheelhouse, clean-PC gate |
+| Contracts: config, dashboard, event, manifest, errors, states | Windows CI job (portable Ubuntu CI exists and is green) |
+| Run state machine, error registry, value conversion, chunk sizing | `docs/GITHUB_GOVERNANCE.md` |
+| Quality engine, reconciliation, quarantine, history engine, archive | Chart rendering, story mode, motion |
+| 193 tests: 143 portable-tier + 50 application-tier (needs DuckDB) | |
 
 Every unbuilt piece raises `NotImplementedError` with its task contract and the
-Part that governs it. Nothing pretends to work.
+Part that governs it. Nothing pretends to work. See
+[`docs/FACTORY.md`](docs/FACTORY.md) for the Golden Reference and Factory in
+detail.
 
 ---
 

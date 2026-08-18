@@ -238,7 +238,11 @@ def check_portable_tool_tier(report: Report) -> None:
     }
     for relative in _scan_targets():
         key = str(relative).replace("\\", "/")
-        if not key.startswith("tools/") or relative.suffix != ".py":
+        # factory/ is a second portable-tier package (Constitution factory
+        # docstring): business setup that must also run in a bare workspace
+        # with nothing installed, so the same stdlib-only rule applies to it.
+        if not (key.startswith("tools/") or key.startswith("factory/")) \
+                or relative.suffix != ".py":
             continue
         text = read_text(REPO_ROOT / relative)
         # Parse imports rather than pattern-matching lines: prose such as
@@ -275,7 +279,8 @@ def check_portable_tool_tier(report: Report) -> None:
 
             for module in modules:
                 root_module = module.split(".")[0]
-                if not root_module or root_module in stdlib_ok or root_module == "tools":
+                if not root_module or root_module in stdlib_ok \
+                        or root_module in ("tools", "factory"):
                     continue
                 report.fail(f"{key}:{node.lineno} third-party import "
                             f"'{root_module}' in the portable tool tier "

@@ -1,0 +1,64 @@
+# GOLDEN REFERENCE — machine contract (Constitution Part 5).
+#
+# This is a WORKING, EXECUTED example. Every value here is exercised end-to-end
+# by tests/golden/test_reference_pipeline.py against synthetic fixtures.
+#
+# Adapt this file for a new report. Do NOT copy the engine.
+# Variation points are marked [VARY]; everything else is Factory Core behaviour.
+
+report_id      = "_reference"
+report_version = 1
+mode           = "prototype"          # fixture data can never be production
+load_mode      = "upsert"             # [VARY] records may be corrected later
+timezone       = "Africa/Cairo"       # [VARY]
+currency       = "EGP"                # [VARY]
+
+[excel]
+sheet              = "Raw Data"                # [VARY]
+header_row         = 1                         # [VARY]
+data_start_row     = 2                         # [VARY]
+open_mode          = "dedicated_then_attach"
+calculation_policy = "as_saved"
+data_area          = "table:tblProduction"     # [VARY]
+include_hidden_rows = true
+# The reference runs on the fixture adapter. A release containing this adapter
+# fails architecture verification (Part 44.3 rule 1).
+adapter            = "fixture"
+
+[extraction]
+target_cells_per_chunk = 250000
+min_rows_per_chunk     = 2
+max_rows_per_chunk     = 10000
+projected_columns      = ["production_date", "line", "order_number", "model_code",
+                          "produced_qty", "defect_qty", "category"]   # [VARY]
+
+[history]
+business_key   = ["production_date", "line", "order_number", "model_code"]  # [VARY]
+event_date     = "production_date"     # [VARY]
+lookback_days  = 7                     # [VARY]
+deletion_rule  = "ignore"              # [VARY]
+
+[quality]
+required_columns_block   = true
+max_duplicate_key_rate   = 0.0
+max_required_null_rate   = 0.0
+max_row_count_change_pct = 60.0        # [VARY]
+control_total_column     = "produced_qty"   # [VARY]
+approved_categories      = ["standard", "rework"]   # [VARY]
+
+[output]
+audience             = "Production management"        # [VARY]
+storage_allowed      = ["tests/expected/reference"]
+retention_days       = 365
+ai_narrative_allowed = false
+
+# FIXTURE-APPROVED TEST DATA (Part 41.4).
+# `approved_by = "FIXTURE"` is valid in discovery/prototype and is REJECTED in
+# production mode. That is what stops "we built it with demo data" from
+# silently becoming "we shipped it with demo definitions".
+[approvals]
+business_key         = { approved_by = "FIXTURE", approved_at = "2026-08-18T00:00:00Z", evidence = "tests/fixtures/reference/README.md" }
+load_mode            = { approved_by = "FIXTURE", approved_at = "2026-08-18T00:00:00Z", evidence = "tests/fixtures/reference/README.md" }
+deletion_rule        = { approved_by = "FIXTURE", approved_at = "2026-08-18T00:00:00Z", evidence = "tests/fixtures/reference/README.md" }
+control_total_column = { approved_by = "FIXTURE", approved_at = "2026-08-18T00:00:00Z", evidence = "tests/fixtures/reference/README.md" }
+storage_allowed      = { approved_by = "FIXTURE", approved_at = "2026-08-18T00:00:00Z", evidence = "tests/fixtures/reference/README.md" }

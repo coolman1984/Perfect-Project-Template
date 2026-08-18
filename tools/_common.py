@@ -54,11 +54,19 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+#: Generated per task and .gitignored on purpose (Part 20.10); it must never
+#: be treated as committable source, or every fresh `map context` run makes
+#: `map verify` report a phantom ignored file.
+GENERATED_FILES = {".ai/CONTEXT_PACK.md"}
+
+
 def is_excluded(path: Path) -> bool:
     """True when a repo-relative path is outside the scanned source of truth."""
     key = str(path).replace("\\", "/")
     parts = path.parts
 
+    if key in GENERATED_FILES:
+        return True
     if set(parts) & EXCLUDED_DIRS:
         return True
     if parts and parts[0] in EXCLUDED_ROOTS:

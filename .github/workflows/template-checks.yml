@@ -2,8 +2,11 @@
 # CI must run `verify`. A material change cannot be committed or released while
 # it fails.
 #
-# This workflow installs NOTHING. The tool tier is standard-library only
-# (Part 37.2 rule 1), which is exactly what makes it runnable here.
+# The tool tier (PROJECT_TOOL and everything under tools/) is standard-library
+# only (Part 37.2 rule 1) and every check up to "Test suite" below installs
+# NOTHING, which is exactly what proves that claim. DuckDB is installed only
+# afterwards, as the application-tier LOCKED component it is (Part 23.8), to
+# run the Golden Reference end to end.
 
 name: Template checks
 
@@ -44,8 +47,25 @@ jobs:
       - name: Report configuration (Part 41)
         run: ./project_tool.sh report validate
 
-      - name: Test suite (Part 15)
+      - name: Test suite (Part 15) — tool tier, nothing installed
         run: python3 -m unittest discover -s tests -t . --verbose
+
+      # DuckDB is a LOCKED application-tier component (Part 23.8), not part of
+      # the stdlib-only tool tier. Installing it here is the build-machine
+      # action Part 23.12 describes; it is bundled into the real release, not
+      # fetched at employee runtime. This step is what turns the Golden
+      # Reference tests from "skipped" into "actually run".
+      - name: Install application-tier dependency (DuckDB)
+        run: pip install --quiet duckdb
+
+      - name: Golden Reference — end-to-end pipeline (Part 15)
+        run: python3 -m unittest tests.golden.test_reference_pipeline --verbose
+
+      - name: Factory — business setup, second-report reuse
+        run: python3 -m unittest tests.factory.test_factory_flow --verbose
+
+      - name: Adversarial — approval bypass, fail-closed (scenarios E, F, G)
+        run: python3 -m unittest tests.adversarial.test_approval_bypass --verbose
 
       - name: Doctests
         run: |

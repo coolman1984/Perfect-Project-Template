@@ -1,0 +1,23 @@
+{
+  "answers": {
+    "business_key_columns": [
+      "event_date",
+      "line",
+      "event_id"
+    ],
+    "business_owner": "Maintenance Lead - Sara Ahmed",
+    "control_total_column": "Total downtime minutes",
+    "correction_window": "7",
+    "corrections": "can_be_corrected",
+    "dashboard_decision": "Which line loses the most time this week",
+    "disappearing_rows": "ignore",
+    "grain": "One downtime event on one line on one date",
+    "purpose": "Line Downtime Weekly",
+    "sources": "downtime_export.xlsx",
+    "storage_allowed": [
+      "D:/secure/downtime"
+    ]
+  },
+  "report_id": "line_downtime",
+  "updated_at": "2026-08-18T05:49:40.751779+00:00"
+}

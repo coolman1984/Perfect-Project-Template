@@ -1,0 +1,3 @@
+production_date,line,order_number,model_code,units_made,defect_qty,category
+2026-08-13,L1,ORD-1010,MDL-A,700,5,standard
+2026-08-13,L2,ORD-1011,MDL-B,650,2,standard

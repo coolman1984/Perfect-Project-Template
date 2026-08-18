@@ -1,0 +1,7 @@
+production_date,line,order_number,model_code,produced_qty,defect_qty,category
+2026-08-12,L1,ORD-1007,MDL-C,900,15,standard
+2026-08-12,L2,ORD-1008,MDL-B,1010,9,standard
+2026-08-12,L2,ORD-1008,MDL-B,1010,9,standard
+2026-08-10,L2,ORD-1003,MDL-A,1000,31,standard
+2026-08-12,L1,ORD-9999,MDL-X,-50,0,standard
+2026-08-12,L3,ORD-1009,MDL-D,500,3,trial

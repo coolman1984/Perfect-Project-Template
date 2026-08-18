@@ -1,0 +1,95 @@
+{
+  "_comment": [
+    "Known-good answers for the Golden Reference (Constitution Part 15).",
+    "",
+    "These were derived BY HAND from tests/fixtures/reference/*.csv before the",
+    "pipeline was run, then confirmed to match. That order matters: an expected",
+    "file filled in from whatever the code happened to produce is a snapshot,",
+    "not a golden test, and it cannot catch a broken formula.",
+    "",
+    "Hand derivation:",
+    "  period 1 produced = 1200+800+950+1100+760+1340         = 6150",
+    "  period 1 defects  = 12+4+31+7+0+22                     = 76",
+    "  correction        = ORD-1003 produced 950 -> 1000      = +50",
+    "  period 2 new rows = 900 + 1010 + 500                   = +2410",
+    "  produced total    = 6150 + 50 + 2410                   = 8610",
+    "  defects total     = 76 + 15 + 9 + 3                    = 103",
+    "  rows              = 6 + 3 new (correction updates)     = 9"
+  ],
+
+  "after_period_1": {
+    "produced_total": "6150",
+    "defect_total": "76",
+    "active_rows": 6,
+    "quality_status": "PASS",
+    "rows_extracted": 6,
+    "rows_rejected": 0,
+    "rows_filtered": 0,
+    "inserted": 6,
+    "updated": 0
+  },
+
+  "after_period_2": {
+    "produced_total": "8610",
+    "defect_total": "103",
+    "active_rows": 9,
+    "quality_status": "WARNING",
+    "rows_extracted": 6,
+    "rows_rejected": 1,
+    "rows_filtered": 1,
+    "inserted": 3,
+    "updated": 1,
+    "corrected_record": {
+      "production_date": "2026-08-10",
+      "line": "L2",
+      "order_number": "ORD-1003",
+      "model_code": "MDL-A",
+      "produced_qty_before": "950",
+      "produced_qty_after": "1000"
+    },
+    "quarantine": {
+      "EXACT_DUPLICATE": 1,
+      "NEGATIVE_MEASURE": 1
+    }
+  },
+
+  "metrics": {
+    "defect_rate_ppm_rounded_2dp": "11962.83",
+    "trend_produced_by_date": [
+      ["2026-08-10", "3000"],
+      ["2026-08-11", "3200"],
+      ["2026-08-12", "2410"]
+    ],
+    "pareto_defects_by_model": [
+      ["MDL-A", "65"],
+      ["MDL-C", "22"],
+      ["MDL-B", "13"],
+      ["MDL-D", "3"]
+    ],
+    "top_contributor": "MDL-A",
+    "top_contributor_defects": "65",
+    "top_contributor_share_pct_rounded_1dp": "63.1"
+  },
+
+  "idempotent_rerun": {
+    "inserted": 0,
+    "updated": 0,
+    "unchanged": 4,
+    "produced_total": "8610",
+    "active_rows": 9
+  },
+
+  "blocking_failure": {
+    "quality_status": "FAIL",
+    "run_status": "FAILED",
+    "error_code": "SCHEMA_REQUIRED_COLUMN_MISSING",
+    "produced_total_unchanged": "8610",
+    "active_rows_unchanged": 9
+  },
+
+  "lineage_drill_through": {
+    "model_code": "MDL-A",
+    "row_count": 3,
+    "produced_total": "3540"
+  }
+}

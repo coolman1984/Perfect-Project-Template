@@ -115,6 +115,50 @@ def build_parser() -> argparse.ArgumentParser:
                              choices=["discovery", "prototype", "production"],
                              help="production forbids PENDING_APPROVAL (Part 41.3)")
 
+    # ---- factory ---------------------------------------------------------
+    p_factory = groups.add_parser(
+        "factory", help="Excel Automation Project Factory (business setup)")
+    factory_cmds = p_factory.add_subparsers(dest="command", metavar="<command>")
+
+    f_new = factory_cmds.add_parser("new", help="start a new automation project")
+    f_new.add_argument("--id", required=True, dest="report_id")
+    f_new.add_argument("--title", default="")
+
+    f_int = factory_cmds.add_parser("interview", help="answer one business question")
+    f_int.add_argument("--id", required=True, dest="report_id")
+    f_int.add_argument("--question", required=True)
+    f_int.add_argument("--answer", required=True)
+
+    f_rev = factory_cmds.add_parser("review", help="what the system understood")
+    f_rev.add_argument("--id", required=True, dest="report_id")
+
+    f_app = factory_cmds.add_parser("approve", help="record a HUMAN approval")
+    f_app.add_argument("--id", required=True, dest="report_id")
+    f_app.add_argument("--decision", required=True)
+    f_app.add_argument("--by", required=True, help="the named person approving")
+    f_app.add_argument("--method", required=True,
+                       choices=sorted({"wizard_confirmation", "signed_artifact",
+                                       "pull_request_review", "external_workflow",
+                                       "fixture"}))
+    f_app.add_argument("--evidence", required=True)
+    f_app.add_argument("--notes", default="")
+
+    f_gen = factory_cmds.add_parser("generate", help="write the technical contract")
+    f_gen.add_argument("--id", required=True, dest="report_id")
+    f_gen.add_argument("--title", default="")
+
+    f_brief = factory_cmds.add_parser("brief", help="generate the agent work package")
+    f_brief.add_argument("--id", required=True, dest="report_id")
+
+    f_stat = factory_cmds.add_parser("status", help="project health from real evidence")
+    f_stat.add_argument("--id", dest="report_id", default=None)
+
+    f_val = factory_cmds.add_parser("validate", help="is this safe to build from?")
+    f_val.add_argument("--id", dest="report_id", default=None)
+
+    f_ref = factory_cmds.add_parser("reference", help="Golden Reference checks")
+    f_ref.add_argument("reference_command", choices=["verify"])
+
     # ---- doctor ----------------------------------------------------------
     groups.add_parser("doctor", help="aggregate readiness check across every group")
 
@@ -142,6 +186,9 @@ def _dispatch(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
     if group == "report":
         from tools import report_tool
         return report_tool.main(args)
+    if group == "factory":
+        from tools import factory_tool
+        return factory_tool.main(args)
     if group == "doctor":
         from tools import doctor
         return doctor.main(args)
