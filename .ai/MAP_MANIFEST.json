@@ -1,5 +1,5 @@
 {
-  "file_count": 149,
+  "file_count": 152,
   "files": {
     ".ai/CONTRACTS.md": {
       "bytes": 4047,
@@ -10,16 +10,16 @@
       "sha256": "ec2323f3c574b92eadcd0ecd1ea58f52645cb52051be74175a62e9833f892c2f"
     },
     ".ai/LESSONS.md": {
-      "bytes": 5529,
-      "sha256": "f3937edbaf765886e51d616f0ca640a7de9712f7b822b8df3911266cf1d01c4e"
+      "bytes": 7005,
+      "sha256": "02a3b6c60d5837e7594a8db3bc135e8275392d9961501be016b619803b3d7f4a"
     },
     ".ai/OPPORTUNITIES.md": {
       "bytes": 1201,
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 9006,
-      "sha256": "8eae10bb6a1be9c17186c135dd510b5441e176bce85fbd745c7acb93810a9f67"
+      "bytes": 9228,
+      "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
     ".ai/READ_FIRST.md": {
       "bytes": 3185,
@@ -32,6 +32,10 @@
     ".editorconfig": {
       "bytes": 333,
       "sha256": "f9d1e3c58ef322f066eb1b420a0fda9b324d22199da31921f7a2fd96ce931c5c"
+    },
+    ".gitattributes": {
+      "bytes": 878,
+      "sha256": "177d0fc2d2d0d64de00a5d338a7f56781b1456e9a3ac8ea94723e76ec52a1ecf"
     },
     ".github/copilot-instructions.md": {
       "bytes": 854,
@@ -54,12 +58,12 @@
       "sha256": "3124e1cfa940eca117bee6b59d0e14c2a2998f5fe8af122380a96f9f7b003815"
     },
     "BACKUP.bat": {
-      "bytes": 561,
-      "sha256": "b550e31240bc71f83435d14d5f5376508dc6bd386e6bc1fc9c6edfb6c246ee3b"
+      "bytes": 574,
+      "sha256": "37df5c01a5932c7feb934cc8f7309c382cacb4de84cb3e8ffab9c2dd45e63e23"
     },
     "BUILD_RELEASE.bat": {
-      "bytes": 777,
-      "sha256": "4b6fb32d9b1dff7cd52bbbd0bdd15be06d909c045865b6afc9bd5529bfbc19f6"
+      "bytes": 796,
+      "sha256": "923aa2f2ff6aa9145d5e746daa7f6a338b9a8bfe0ac3ab48994cfefa3a242ab9"
     },
     "CLAUDE.md": {
       "bytes": 658,
@@ -74,52 +78,56 @@
       "sha256": "8bfe03b1932f0e17c77d07da202ccc25f8ccee0be719e16f493f3c3a15e17e82"
     },
     "PROJECT_TOOL.bat": {
-      "bytes": 1093,
-      "sha256": "27e165da618ca7ef862db8954dee1429f64363fff8047be55572fcadfd4dc99d"
+      "bytes": 1127,
+      "sha256": "a4263f2860ad3da27b67cdd291f6937b997090f83475419344f9a7004aca56d6"
     },
     "README.md": {
-      "bytes": 7501,
-      "sha256": "3ac7f5c3861ef4db9f37b12a5b96dde3235bcfb48ef3056ae1e05025829a8b11"
+      "bytes": 7503,
+      "sha256": "3ce47a0db11ff0ba09701ad227264c9916363e6044e01e7fed50c59ca7966390"
     },
     "RUN_TESTS.bat": {
-      "bytes": 387,
-      "sha256": "579b516adfd851d6d2f6e8762e9ec2c82e974356da7e21060dbd4bb9fdb0be4b"
+      "bytes": 397,
+      "sha256": "2d30b601608c83ab1b2b24a7649c3c6d8251b7bf97585d1431b04a38cdbe5673"
     },
     "RUN_TESTS.sh": {
       "bytes": 356,
       "sha256": "f9d33213db04d7820844d3204293dd12bdc7fea403f639cf65af885a9ed81637"
     },
     "SETUP_OFFLINE.bat": {
-      "bytes": 697,
-      "sha256": "379daf0135cc98eb4b8d114116202c6df3bc57d37e63fce91d62932b567dcf08"
+      "bytes": 716,
+      "sha256": "48774df3e62d77a0daecdcd3f9f6cca8f42f8cfd3d05d77db008bdf0ee703ec9"
     },
     "START_APP.bat": {
-      "bytes": 1516,
-      "sha256": "02b85a9f53aa572594497ad2139b745109f02795da3465697fb1a1ecd38b6844"
+      "bytes": 1561,
+      "sha256": "93574d2a9a46b05ee16045c999d5f9df7acb2dabcbc8de4c5440d3fbfb54f37a"
     },
     "STOP_APP.bat": {
-      "bytes": 390,
-      "sha256": "b918f7fda256cd023a852b9c10af2337f7849bbaf209ad3cb130cc18d796ef15"
+      "bytes": 399,
+      "sha256": "2ad184a701b4b3414027fb30681e2c66cb1bdcc7c8dd741f461bf183c3df80b9"
     },
     "THIRD_PARTY_NOTICES.md": {
       "bytes": 1286,
       "sha256": "8fa0c009c6aff600732300519cf5540f44591251554be705249785ba70395e65"
     },
     "UPDATE_NEXT_WEEK.bat": {
-      "bytes": 318,
-      "sha256": "a55599adfc5e0304c791d0ccdca009d6a5c667c1e4ebb045801f50ee9a780b3b"
+      "bytes": 325,
+      "sha256": "8329292bd07fd95e34326704df94e44207b6c4543af16e15fca69a02411a7983"
     },
     "VERIFY_OFFLINE.bat": {
-      "bytes": 821,
-      "sha256": "363557ed935808fea2490be92c62d5b5f1ab45bf3542702fdd87996def2267db"
+      "bytes": 839,
+      "sha256": "9261ddc2be00fd743f3e57bb14e01c06f5af9df35cedc0185c83abe7704c2136"
     },
     "acceptance/evidence/README.md": {
       "bytes": 917,
       "sha256": "b3b193b6b8ea0d68210c1137d51bb5627ee958819d564d4187e7ed838a0ce03d"
     },
+    "acceptance/evidence/bug-sweep-2026-08-18.md": {
+      "bytes": 2868,
+      "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
+    },
     "acceptance/gates.yaml": {
-      "bytes": 15649,
-      "sha256": "9ba6f6d9eaacf409ca48e74350b0a118f8b643cfe156284b1716e4f8a581bfc0"
+      "bytes": 15292,
+      "sha256": "e910528c548829d3781ae903689d27a7c81458391b74f3dea97ac8bca5902c2b"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -206,8 +214,8 @@
       "sha256": "23a208311cfc4dc10f52f44dfc4d83563436ccbe106e5e57a73b736b82a93bbc"
     },
     "app/excel/conversion.py": {
-      "bytes": 5611,
-      "sha256": "84c5187142ad1b5fe928732f7c30bff390f15ae3f0045b5894b14170be47bb8f"
+      "bytes": 8368,
+      "sha256": "ad02cb3f62612b3ba4bfa8fe59e2001bee6995b3f4f636c034f60ca1e893c26f"
     },
     "app/excel/discovery.py": {
       "bytes": 778,
@@ -501,6 +509,10 @@
       "bytes": 2305,
       "sha256": "7d660bb279d8db95e3d9992847efe8b99230dfdc890f27865d3e785bda2744ff"
     },
+    "tests/unit/test_regression_fixes.py": {
+      "bytes": 7979,
+      "sha256": "4d5c5bbc2f6774b40c12469c94ed1016987769acd0db9488f24a69f18e4bacc4"
+    },
     "tests/unit/test_state_machine.py": {
       "bytes": 4273,
       "sha256": "d3c409207139ca43df89052343acc3af2764020bf7a342e5872b48bb67016243"
@@ -510,12 +522,12 @@
       "sha256": "d6da04e0068d6f1ac1fbaa5eeec176baab4c09110a55d9b42cfe20f755f92a84"
     },
     "tools/_common.py": {
-      "bytes": 7680,
-      "sha256": "7e75c0f264d3a9fa124c72e99b1c4bd54193cd25e8a29dac29597acc95ca8175"
+      "bytes": 8187,
+      "sha256": "9123d05ab706520c44ed10a3f929a09205677ff7cdcbbd6190032f9c428a2052"
     },
     "tools/_miniyaml.py": {
-      "bytes": 3188,
-      "sha256": "aa77e22d75239191e591a8d7299e8a9356231a8fd3649fd5dfb4af18ca3f9c3b"
+      "bytes": 3380,
+      "sha256": "2cd233a9551b9667af7fdde1f53d9449311a66ffc086122961dfa216fbe704fa"
     },
     "tools/doctor.py": {
       "bytes": 2704,
@@ -538,8 +550,8 @@
       "sha256": "5206de43ab77f05a91154a9473b3423ecf5f2b8c15858d781baadf5d392452f7"
     },
     "tools/project_map.py": {
-      "bytes": 17403,
-      "sha256": "ab90c457982f42bc3167eb99de28c8d30be602024cf336c2ab984d80c3f88e24"
+      "bytes": 17705,
+      "sha256": "b6a59e8ea2a9dcba4631d6264b1a7b261ff5d90464803caf2d8bb148b0f526ea"
     },
     "tools/project_memory.py": {
       "bytes": 8710,
@@ -550,12 +562,12 @@
       "sha256": "8700f96061a440a69e31bd7b038f173e3f9bb769dd54178ece86e223e146ee58"
     },
     "tools/report_tool.py": {
-      "bytes": 7829,
-      "sha256": "08a73edbc65957c401ab92357a6eb1f8cede4c98519ed749b70c1d5181f78490"
+      "bytes": 8415,
+      "sha256": "3d2040207dd0d3347a88c16c03e6fe2407152150d297c33cdebab1b0f52c7973"
     },
     "tools/verify_architecture.py": {
-      "bytes": 17973,
-      "sha256": "8ed1e28ae8e6094d3ee68cbad24b3ea3e07c87a684621877b9796b6493752688"
+      "bytes": 18067,
+      "sha256": "534cc9a36daca68506b5343677f06e2381edc522c4b3d32be32e1d748cbdc60d"
     },
     "tools/verify_constitution.py": {
       "bytes": 8421,
@@ -598,6 +610,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T04:40:04Z",
+  "generated_at": "2026-08-18T05:14:13Z",
   "schema_version": 1
 }

@@ -110,3 +110,29 @@ Second lesson: local green does not mean committed. `map verify` now fails when
 a mapped file is git-ignored, so the gap between "on disk" and "in the
 repository" is checked where the work happens, not one push later.
 Date: 2026-08-18 · Owner: platform
+
+### L-009 — A full-project sweep found eleven defects that per-change checks had missed
+
+Evidence: a deliberate audit across syntax, encodings, round-trips, cross-file
+consistency and doc/code agreement found 11 defects in code that had already
+passed every gate and three green CI runs. Evidence:
+`acceptance/evidence/bug-sweep-2026-08-18.md`.
+Lesson: gates catch what they were written to catch. They cannot catch a rule
+nobody encoded — locale ambiguity, line endings, a lookup missing a section, a
+docstring promising behaviour that was never implemented. Schedule periodic
+whole-project sweeps as their own activity, and turn every finding into a
+gate so the same class cannot return silently.
+Third recurrence of the "same mistake, different tool" pattern: the locale bug
+in `to_decimal` and the section-blind lookup in `report_tool` are both
+"handled the common case, silently mangled the rest".
+Date: 2026-08-18 · Owner: platform
+
+### L-010 — A test that depends on working-tree freshness fails for the wrong reason
+
+Evidence: `test_valid_invocation_passes` asserted `map verify` exits 0. That is
+true on a clean checkout and false whenever the tree is mid-edit, so the test
+reported a tooling bug when the only problem was an unrefreshed manifest.
+Lesson: a unit test must assert on committed content, not on mutable working
+state. Freshness belongs in `doctor` and CI, where staleness is the actual
+signal being measured.
+Date: 2026-08-18 · Owner: platform

@@ -47,7 +47,7 @@ All of it is **standard-library Python**, so it runs in a bare workspace, in CI,
 on Windows, Linux or macOS, with nothing installed.
 
 ```text
-97 tests · 0 failures · runs anywhere with Python 3.11+
+108 tests · 0 failures · runs anywhere with Python 3.11+
 ```
 
 ---
@@ -123,7 +123,7 @@ agents to overstate too.
 | Fixture extraction adapter + synthetic data | The loopback API implementation |
 | Gate ledger seeded with every Part 14/28/31/33 gate | Chart rendering, story mode, motion |
 | Web shell structure, design tokens, filter state, i18n | PyInstaller release, wheelhouse, clean-PC gate |
-| 97 passing tests | Everything downstream of a real report definition |
+| 108 passing tests | Everything downstream of a real report definition |
 
 Every unbuilt piece raises `NotImplementedError` with its task contract and the
 Part that governs it. Nothing pretends to work.

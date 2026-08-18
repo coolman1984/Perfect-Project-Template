@@ -87,6 +87,22 @@ def cmd_new(report_id: str, title: str) -> int:
     return report.emit()
 
 
+def _lookup_config_value(config: dict, key: str) -> object:
+    """Find an approvable value anywhere in the config.
+
+    Approvable keys live in different sections — `business_key` in [history],
+    `control_total_column` in [quality], `storage_allowed` in [output]. Hard-
+    coding a subset silently skipped storage_allowed, which is exactly the
+    IT-approved location that Part 13.5 requires a human to sign off.
+    """
+    if key in config and not isinstance(config[key], dict):
+        return config[key]
+    for section in config.values():
+        if isinstance(section, dict) and key in section:
+            return section[key]
+    return None
+
+
 def _validate_one(report_path: Path, mode: str, report: Report) -> None:
     report_id = report_path.name
     config_path = report_path / "report.toml"
@@ -131,8 +147,7 @@ def _validate_one(report_path: Path, mode: str, report: Report) -> None:
     for key, record in approvals.items() if isinstance(approvals, dict) else []:
         if not isinstance(record, dict):
             continue
-        value = config.get(key) or config.get("history", {}).get(key) \
-            or config.get("quality", {}).get(key)
+        value = _lookup_config_value(config, key)
         approved_by = str(record.get("approved_by", "")).strip()
         if value and value != SENTINEL and not approved_by:
             report.fail(f"{report_id}: '{key}' has a value but no approver — "

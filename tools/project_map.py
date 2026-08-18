@@ -16,8 +16,8 @@ import re
 from pathlib import Path
 
 from tools._common import (
-    EXIT_FAIL, EXIT_PASS, REPO_ROOT, Report, git_available, git_changed_files,
-    git_ignored, iter_source_files, read_text, sha256_file, utc_now,
+    EXIT_FAIL, EXIT_PASS, EXIT_USAGE, REPO_ROOT, Report, git_available, git_changed_files,
+    git_ignored, git_tracked_files, iter_source_files, read_text, sha256_file, utc_now,
 )
 from tools.project_intelligence import graph as pi_graph
 from tools.project_intelligence import rank as pi_rank
@@ -197,8 +197,13 @@ def _check_tracked_by_git(manifest: dict, report: Report) -> None:
             f"reach the repository, and every fresh clone will be missing it. "
             f"Anchor the ignore pattern to the root (Part 20.5)")
 
-    if not ignored:
-        report.note(f"all {len(mapped)} mapped files are committable")
+    untracked = sorted(set(mapped) - set(git_tracked_files()) - ignored)
+    for path in untracked:
+        report.warn(f"{path} is mapped but not yet tracked by git — "
+                    f"commit it in this change set (Part 21.5)")
+
+    if not ignored and not untracked:
+        report.note(f"all {len(mapped)} mapped files are committed and committable")
 
 
 def cmd_refresh(review: bool) -> int:
@@ -266,7 +271,7 @@ def _refresh_map_catalog(manifest: dict) -> None:
 def cmd_context(task: str, budget: int) -> int:
     if not 1000 <= budget <= 8000:
         print(f"usage error: --budget must be 1000-8000 (Part 20.10), got {budget}")
-        return EXIT_FAIL
+        return EXIT_USAGE
 
     files = iter_source_files()
     dependency_graph = pi_graph.build(REPO_ROOT, files)

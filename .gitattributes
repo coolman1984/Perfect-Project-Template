@@ -1,0 +1,28 @@
+# Line-ending policy (Constitution Part 30.7 rule 4).
+#
+# Windows launchers MUST be CRLF. cmd.exe can mis-parse an LF-only .bat —
+# multi-line blocks and labels are the usual casualties — and the employee
+# runtime is Windows-only, so this is a correctness rule, not cosmetics.
+# .gitattributes is what makes it survive a clone on any platform.
+
+*                text=auto eol=lf
+
+*.bat            text eol=crlf
+*.cmd            text eol=crlf
+*.ps1            text eol=crlf
+
+*.sh             text eol=lf
+*.py             text eol=lf
+
+# Binary and vendored assets: never touch the bytes.
+*.png            binary
+*.jpg            binary
+*.pdf            binary
+*.zip            binary
+*.xlsx           binary
+*.xlsm           binary
+*.xlsb           binary
+*.xls            binary
+*.duckdb         binary
+*.parquet        binary
+web/vendor/**    -text -diff linguist-vendored

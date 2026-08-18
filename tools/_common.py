@@ -128,6 +128,19 @@ def git_changed_files(base: str, root: Path | None = None) -> list[str]:
         return []
 
 
+def git_tracked_files(root: Path | None = None) -> set[str]:
+    """Repo-relative paths git currently tracks. Empty set when git is absent."""
+    root = root or REPO_ROOT
+    try:
+        result = subprocess.run(
+            ["git", "ls-files"], cwd=root, capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError):
+        return set()
+    if result.returncode != 0:
+        return set()
+    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+
+
 def git_ignored(paths: list[str], root: Path | None = None) -> set[str]:
     """Which of `paths` git would refuse to track.
 

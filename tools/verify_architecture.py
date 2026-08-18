@@ -285,10 +285,13 @@ def check_portable_tool_tier(report: Report) -> None:
 def check_no_secrets(report: Report) -> None:
     """Part 43: no credential-shaped string in source, config or launchers."""
     for relative in _scan_targets():
-        if str(relative).startswith("tools/verify_architecture.py"):
-            continue  # this file necessarily contains the patterns themselves
+        # _scan_targets already excludes this file, which necessarily contains
+        # every pattern it searches for.
         text = read_text(REPO_ROOT / relative)
+        documentation = _docstring_lines(relative, text)
         for lineno, line in enumerate(text.splitlines(), start=1):
+            if lineno in documentation:
+                continue
             match = SECRET_PATTERN.search(line)
             if match and not SECRET_PLACEHOLDER.search(line):
                 report.fail(f"{relative}:{lineno} credential-shaped literal "

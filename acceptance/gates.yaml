@@ -17,7 +17,7 @@
   verified_at: "2026-08-18T04:40:04Z"
   verified_by: CI run 32099930831
   conditional_reason: ""
-  next_action: Run PROJECT_TOOL doctor and save its output under acceptance/evidence/
+  next_action: ""
 
 - id: GATE_ARCHITECTURE_BASELINE
   part: 0.8 / 23.9 / 31.1
@@ -39,7 +39,7 @@
   verified_at: "2026-08-18T04:40:04Z"
   verified_by: CI run 32099930831
   conditional_reason: ""
-  next_action: Run architecture verify --source-scan and save the output
+  next_action: ""
 
 - id: GATE_BUSINESS_DEFINITION_APPROVED
   part: 4 / 41.3
@@ -325,7 +325,7 @@
   verified_at: "2026-08-17T16:21:12Z"
   verified_by: template author
   conditional_reason: ""
-  next_action: Run architecture verify --source-scan; default SQL auth to Integrated
+  next_action: ""
 
 - id: GATE_FAIL_CLOSED
   part: 23.11 / 31.1
@@ -435,7 +435,7 @@
   verified_at: "2026-08-18T04:40:04Z"
   verified_by: CI run 32099930831
   conditional_reason: ""
-  next_action: Run PROJECT_TOOL map verify and keep it green in CI
+  next_action: ""
 
 - id: GATE_SKILL_ONBOARDING
   part: 20.7 / 24.2 rule 5 / 31.1
@@ -457,7 +457,7 @@
   verified_at: "2026-08-17T16:21:13Z"
   verified_by: template author
   conditional_reason: ""
-  next_action: Run PROJECT_TOOL memory validate and keep it green in CI
+  next_action: ""
 
 - id: GATE_CONSTITUTION_CONSISTENCY
   part: 34.3 / 31.1
@@ -468,7 +468,7 @@
   verified_at: "2026-08-18T04:40:04Z"
   verified_by: CI run 32099930831
   conditional_reason: ""
-  next_action: Run PROJECT_TOOL constitution audit and record the semantic review
+  next_action: ""
 
 - id: GATE_OPERATOR_HANDOFF
   part: 28.1 Phase 10 / 31.1

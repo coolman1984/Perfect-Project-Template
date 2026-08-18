@@ -28,7 +28,10 @@ class MiniYamlError(ValueError):
 def _unquote(raw: str) -> str:
     value = raw.strip()
     if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
-        return value[1:-1]
+        inner = value[1:-1]
+        # dump_records escapes the enclosing quote; reverse it here or the
+        # value gains a backslash on every save/load cycle.
+        return inner.replace(f"\\{value[0]}", value[0])
     return value
 
 
