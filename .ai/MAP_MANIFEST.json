@@ -1,5 +1,5 @@
 {
-  "file_count": 232,
+  "file_count": 235,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 12245,
+      "bytes": 12315,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -667,29 +667,34 @@
       "sha256": "2c57f7ed1a3c4b9afa261ad6d29ad9e27a0e3a596b45e69e397bfe4915861b10"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/README.md": {
-      "bytes": 831,
+      "bytes": 1030,
       "scope": "project_config",
-      "sha256": "06a4a885245de8cd83b3643467cdd6264abc3c87e41afb85c9ae1a7d71c544c4"
+      "sha256": "a062c86eaa02d9f93c3bea846a92df70d411a994ef0337e64449c6e5183a74f7"
+    },
+    "projects/_REFERENCE_SUPPLY_CHAIN/business_rules/metrics.sql": {
+      "bytes": 3523,
+      "scope": "business_logic",
+      "sha256": "92841ddc936d261b16cbbc351b17a75e6d0d6e1bf07790c60187a27ff8bcf3c9"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/dashboard.toml": {
-      "bytes": 590,
+      "bytes": 1250,
       "scope": "presentation",
-      "sha256": "d621099db69732bdab47ccec444b683d92e186665082c3ee29742834df949820"
+      "sha256": "eb1824c63c5be851204adad8eb53d28f8ed8fcaf5024350df24d561b3164d938"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/project.toml": {
-      "bytes": 493,
+      "bytes": 491,
       "scope": "project_config",
-      "sha256": "bbaa251e0fab36bb523266d9d3194ad0f74a6ea2c51b2cdc849b949b2c6f8a1d"
+      "sha256": "259fb451b0a3c07aca9a2946a724fab9b03430afe15ea768af1c6c59797f372d"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/relationships.toml": {
-      "bytes": 467,
+      "bytes": 509,
       "scope": "project_config",
-      "sha256": "1dd25c2197f70c29912067909c94b538fe2804ef0f3dedbf158b9eb664f5ea56"
+      "sha256": "e48948781cb8ff9c42b2e956a100962e06dd91a4b9fa50b4d757cef8829656f2"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/sources.toml": {
-      "bytes": 1769,
+      "bytes": 2248,
       "scope": "project_config",
-      "sha256": "f432a3efe616254f40b1ac9c30d17ed601a8193f38193afa26b04479abfbb71c"
+      "sha256": "d4806a24276be059a73a2d5811bf36487de6552a53519107c6b15887264787f0"
     },
     "pyproject.toml": {
       "bytes": 1626,
@@ -876,6 +881,11 @@
       "scope": "test",
       "sha256": "9a01f26bbb335ad58925bbc9dcb32475b277323068be7bd3523279eb98f229c1"
     },
+    "tests/expected/supply_chain/expected.json": {
+      "bytes": 877,
+      "scope": "test",
+      "sha256": "07a695a230f1a29dfea35d5f49f407c7007eb91479e3ff77097bef32723023ce"
+    },
     "tests/factory/__init__.py": {
       "bytes": 21,
       "scope": "test",
@@ -935,6 +945,11 @@
       "bytes": 20,
       "scope": "test",
       "sha256": "25a278097efe29e4ce388ccb9014d64707a3ab9f2e772cb833202dc13370368d"
+    },
+    "tests/golden/test_multisource_supply_chain.py": {
+      "bytes": 8321,
+      "scope": "test",
+      "sha256": "e1720d4f9f621d9bcb3169aef2170ca93908a7fe2a52c2a65aada2fb4457d92e"
     },
     "tests/golden/test_reference_pipeline.py": {
       "bytes": 17292,
@@ -1162,6 +1177,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:31:33Z",
+  "generated_at": "2026-08-18T07:33:44Z",
   "schema_version": 2
 }
