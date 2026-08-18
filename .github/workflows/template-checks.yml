@@ -26,7 +26,8 @@ jobs:
       - run: python3 -m unittest tests.golden.test_reference_pipeline --verbose
       - run: python3 -m unittest tests.golden.test_second_report_pipeline --verbose
       - run: python3 -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine --verbose
-      - run: python3 -m unittest tests.unit.test_runtime_core --verbose
+      - name: Local runtime, real socket and standalone export
+        run: python3 -m unittest tests.unit.test_runtime_core tests.unit.test_loopback_listener tests.unit.test_standalone_html --verbose
       - run: python3 -m unittest tests.adversarial.test_approval_bypass --verbose
       - run: |
           python3 -m doctest app/excel/conversion.py -v
@@ -71,9 +72,9 @@ jobs:
         run: |
           python -m unittest tests.golden.test_reference_pipeline --verbose
           python -m unittest tests.golden.test_second_report_pipeline --verbose
-      - name: Local runtime core
+      - name: Local runtime, real socket and standalone export
         shell: cmd
-        run: python -m unittest tests.unit.test_runtime_core --verbose
+        run: python -m unittest tests.unit.test_runtime_core tests.unit.test_loopback_listener tests.unit.test_standalone_html --verbose
       - name: Environment-bound gates stay conditional
         shell: cmd
         run: call PROJECT_TOOL.bat gates status --severity block
