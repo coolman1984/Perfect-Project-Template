@@ -32,15 +32,22 @@
     </section>
 
     <section class="region operate-region" aria-labelledby="operate-heading">
-      <h2 id="operate-heading">Update report</h2>
-      <label for="report-select">Automation</label>
-      <select id="report-select"><option value="">Choose automation</option></select>
-      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Add one file: click, or drag a file here"><p>Drag one file here, or click to choose</p><input type="file" id="file-input" hidden></div>
-      <ul class="file-list" id="file-list"></ul><button type="button" id="process-button" disabled>Process</button>
+      <h2 id="operate-heading">Update automation</h2>
+      <p class="operation-help">Choose the business automation, then add every required source file. The system keeps each source role separate and will not combine unrelated workbooks just because their columns look similar.</p>
+      <label for="project-select">Automation project</label>
+      <select id="project-select"><option value="">Choose automation</option></select>
+      <div id="source-readiness" class="source-readiness" aria-live="polite"></div>
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Add Excel source files: click, or drag files here">
+        <p>Drag all required Excel files here, or click to choose</p>
+        <input type="file" id="file-input" multiple hidden>
+      </div>
+      <ul class="file-list" id="file-list"></ul>
+      <div id="unmatched-files" class="unmatched-files" hidden></div>
+      <button type="button" id="process-button" disabled>Process complete project</button>
       <div class="progress" id="progress" hidden><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div><p class="progress-message" id="progress-message" role="status" aria-live="polite"></p></div>
     </section>
 
-    <section class="region trust-region" aria-labelledby="trust-heading"><h2 id="trust-heading">Trust and history</h2><div id="quality-detail"></div><table class="history-table" id="history-table"><caption class="visually-hidden">Run history</caption><thead><tr><th>Run</th><th>Report</th><th>Status</th><th>Rows</th><th>Quality</th></tr></thead><tbody id="history-table-body"></tbody></table></section>
+    <section class="region trust-region" aria-labelledby="trust-heading"><h2 id="trust-heading">Trust and history</h2><div id="quality-detail"></div><table class="history-table" id="history-table"><caption class="visually-hidden">Run history</caption><thead><tr><th>Run</th><th>Project</th><th>Status</th><th>Rows</th><th>Quality</th></tr></thead><tbody id="history-table-body"></tbody></table></section>
     <section class="region support-region" aria-labelledby="support-heading"><h2 id="support-heading">Exports and support</h2><div id="downloads"></div><details><summary>Support details</summary><div id="support-details"></div></details></section>
   </main>
   <script type="module" src="app.js"></script>
