@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "components": [
+    {"type": "kpi", "binds": ["metric"], "supports": ["comparison", "target", "unit", "quality_state"]},
+    {"type": "line", "binds": ["dimension", "measure"], "supports": ["trend", "comparison", "filter_context"]},
+    {"type": "bar", "binds": ["dimension", "measure"], "supports": ["rank", "top_n", "filter_context"]},
+    {"type": "pareto", "binds": ["dimension", "measure"], "supports": ["cumulative_share", "top_n", "filter_context"]},
+    {"type": "heatmap", "binds": ["x_dimension", "y_dimension", "measure"], "supports": ["filter_context"]},
+    {"type": "table", "binds": ["columns"], "supports": ["sort", "drill_through", "export", "filter_context"]},
+    {"type": "quality", "binds": ["quality_results"], "supports": ["PASS", "WARNING", "BLOCK"]},
+    {"type": "history", "binds": ["run_history"], "supports": ["period", "run_status", "source_hash"]},
+    {"type": "insight_story", "binds": ["evidence_objects"], "supports": ["manual_next_previous", "print", "reduced_motion"]}
+  ]
+}

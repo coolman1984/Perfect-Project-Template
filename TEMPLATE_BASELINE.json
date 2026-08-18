@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "template_id": "universal-excel-automation-engine",
+  "template_version": "0.2.0-development",
+  "status": "development_unsealed",
+  "sealed": false,
+  "source_commit": "4c6f00f8a0b7b96cc0169f41fa6a6883e6e0d129",
+  "core_files": {},
+  "scope_rules": [
+    {"pattern": "projects/**/business_rules/**", "scope": "business_logic"},
+    {"pattern": "projects/**/dashboard.toml", "scope": "presentation"},
+    {"pattern": "projects/**/presentation/**", "scope": "presentation"},
+    {"pattern": "projects/**", "scope": "project_config"},
+    {"pattern": "tests/projects/**", "scope": "project_test"},
+    {"pattern": "app/**", "scope": "universal_core"},
+    {"pattern": "factory/**", "scope": "universal_core"},
+    {"pattern": "contracts/**", "scope": "universal_core"},
+    {"pattern": "constitution/**", "scope": "universal_core"},
+    {"pattern": "web/**", "scope": "universal_core"},
+    {"pattern": "capabilities/**", "scope": "universal_core"},
+    {"pattern": "policy/**", "scope": "universal_core"},
+    {"pattern": "tools/**", "scope": "tooling"},
+    {"pattern": "tests/**", "scope": "test"},
+    {"pattern": ".ai/**", "scope": "agent_context"},
+    {"pattern": "docs/**", "scope": "documentation"},
+    {"pattern": "reports/**", "scope": "legacy_report_config"}
+  ],
+  "allowed_project_roots": [
+    "projects/",
+    "tests/projects/",
+    "docs/decisions/"
+  ],
+  "ownership": {
+    "core_owned": ["app/**", "factory/**", "contracts/**", "constitution/**", "web/**", "capabilities/**", "policy/**", "tools/**"],
+    "project_owned": ["projects/**", "tests/projects/**"],
+    "rule": "A template upgrade may replace or migrate core-owned paths only. It must preserve project-owned paths, run compatibility migrations, verify the project pack, and retain rollback metadata."
+  },
+  "promotion_rule": "Employee projects may create reusable-capability candidates only. Promotion into Universal Core happens in the authoritative master-template repository and creates a new template version.",
+  "seal_note": "This development branch is intentionally unsealed. Before employee distribution run the Git-independent template baseline seal command so core_files contains SHA-256 hashes. An employee adaptation must refuse to treat an unsealed baseline as approved."
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/template_baseline.schema.json",
+  "title": "Template Baseline",
+  "type": "object",
+  "required": ["schema_version", "template_id", "template_version", "sealed", "core_files", "scope_rules", "ownership"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "template_id": {"type": "string", "minLength": 1},
+    "template_version": {"type": "string", "minLength": 1},
+    "sealed": {"type": "boolean"},
+    "core_files": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "scope_rules": {
+      "type": "array",
+      "items": {"type": "object", "required": ["pattern", "scope"], "properties": {"pattern": {"type": "string"}, "scope": {"enum": ["universal_core", "tooling", "project_config", "business_logic", "presentation", "project_test", "test", "agent_context", "documentation", "legacy_report_config", "unknown"]}}}
+    },
+    "ownership": {"type": "object", "required": ["core_owned", "project_owned", "rule"]}
+  }
+}

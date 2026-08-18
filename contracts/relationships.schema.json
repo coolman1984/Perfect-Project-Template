@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/relationships.schema.json",
+  "title": "Project Source Relationships",
+  "type": "object",
+  "required": ["relationships"],
+  "properties": {
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["relationship_id", "left_source", "right_source", "left_keys", "right_keys", "cardinality", "join_type", "approval_state"],
+        "properties": {
+          "relationship_id": {"type": "string"},
+          "left_source": {"type": "string"},
+          "right_source": {"type": "string"},
+          "left_keys": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "right_keys": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "cardinality": {"enum": ["one_to_one", "one_to_many", "many_to_one", "many_to_many"]},
+          "join_type": {"enum": ["inner", "left", "full"]},
+          "approval_state": {"enum": ["CONFIRMED", "SUGGESTED_HUMAN_APPROVAL_REQUIRED", "UNKNOWN"]}
+        }
+      }
+    }
+  }
+}

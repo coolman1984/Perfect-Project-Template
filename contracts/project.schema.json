@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/project.schema.json",
+  "title": "Employee Project Pack",
+  "type": "object",
+  "required": ["project_id", "project_version", "template", "business"],
+  "properties": {
+    "project_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$"},
+    "project_version": {"type": "integer", "minimum": 1},
+    "template": {"type": "object", "required": ["template_id", "template_version"], "properties": {"template_id": {"type": "string"}, "template_version": {"type": "string"}, "baseline_digest": {"type": ["string", "null"]}}},
+    "business": {"type": "object", "required": ["purpose", "owner", "decision"], "properties": {"purpose": {"type": "string"}, "owner": {"type": "string"}, "decision": {"type": "string"}}},
+    "outputs": {"type": "array", "items": {"type": "string"}}
+  }
+}

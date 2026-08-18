@@ -1,0 +1,65 @@
+[[sources]]
+source_id = "orders"
+role = "transaction"
+required = true
+grain = "One order line for one item and warehouse"
+business_key = ["order_id", "order_line"]
+event_date = "order_date"
+
+[sources.match]
+file_patterns = ["orders*.xlsx", "orders*.csv"]
+[sources.discovery]
+sheet = "Orders"
+header_row = 1
+[sources.history]
+mode = "upsert"
+lookback_days = 30
+deletion_rule = "mark_inactive"
+[sources.quality]
+required_columns = ["order_id", "order_line", "order_date", "item_id", "warehouse_id", "ordered_qty", "fulfilled_qty"]
+control_totals = ["ordered_qty", "fulfilled_qty"]
+non_negative_columns = ["ordered_qty", "fulfilled_qty"]
+
+[[sources]]
+source_id = "inventory"
+role = "snapshot"
+required = true
+grain = "One item balance in one warehouse at the snapshot date"
+business_key = ["snapshot_date", "warehouse_id", "item_id"]
+event_date = "snapshot_date"
+
+[sources.match]
+file_patterns = ["inventory*.xlsx", "inventory*.csv"]
+[sources.discovery]
+sheet = "Inventory"
+header_row = 1
+[sources.history]
+mode = "snapshot"
+lookback_days = 0
+deletion_rule = "ignore"
+[sources.quality]
+required_columns = ["snapshot_date", "warehouse_id", "item_id", "on_hand_qty"]
+control_totals = ["on_hand_qty"]
+non_negative_columns = ["on_hand_qty"]
+
+[[sources]]
+source_id = "item_master"
+role = "master"
+required = true
+grain = "One item master record"
+business_key = ["item_id"]
+event_date = "master_updated_at"
+
+[sources.match]
+file_patterns = ["item_master*.xlsx", "item_master*.csv"]
+[sources.discovery]
+sheet = "Item Master"
+header_row = 1
+[sources.history]
+mode = "upsert"
+lookback_days = 90
+deletion_rule = "mark_inactive"
+[sources.quality]
+required_columns = ["item_id", "item_name", "category", "lead_time_days"]
+control_totals = []
+non_negative_columns = ["lead_time_days"]

@@ -1,0 +1,29 @@
+title = "Supply Chain Risk Reference"
+
+[[kpis]]
+id = "ordered_qty"
+label = "Ordered quantity"
+metric = "ordered_qty"
+
+[[kpis]]
+id = "fulfillment_rate"
+label = "Fulfillment rate"
+metric = "fulfillment_rate"
+
+[[kpis]]
+id = "on_hand_qty"
+label = "On-hand quantity"
+metric = "on_hand_qty"
+
+[[charts]]
+id = "shortage_by_item"
+type = "bar"
+title = "Shortage risk by item"
+dimension = "item_id"
+measure = "shortage_qty"
+
+[[charts]]
+id = "coverage_by_warehouse"
+type = "table"
+title = "Coverage by warehouse"
+columns = ["warehouse_id", "item_id", "on_hand_qty", "open_demand_qty", "coverage_days"]

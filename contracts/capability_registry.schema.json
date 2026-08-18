@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/capability_registry.schema.json",
+  "title": "Reusable Capability Registry",
+  "type": "object",
+  "required": ["schema_version", "capabilities"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "capabilities": {"type": "array", "items": {"type": "object", "required": ["id", "purpose", "supported_patterns", "config_entry_points", "tests", "limitations"], "properties": {"id": {"type": "string"}, "purpose": {"type": "string"}, "supported_patterns": {"type": "array", "items": {"type": "string"}}, "config_entry_points": {"type": "array", "items": {"type": "string"}}, "extension_point": {"type": ["string", "null"]}, "tests": {"type": "array", "items": {"type": "string"}}, "limitations": {"type": "array", "items": {"type": "string"}}}}}
+  }
+}

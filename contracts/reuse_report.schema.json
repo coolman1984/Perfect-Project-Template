@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/reuse_report.schema.json",
+  "title": "Reuse Report",
+  "type": "object",
+  "required": ["project_id", "core_files_changed", "project_config_files_changed", "business_logic_files_changed", "reused_capabilities", "reused_tests", "context_proxy"],
+  "properties": {
+    "project_id": {"type": "string"},
+    "core_files_changed": {"type": "array", "items": {"type": "string"}},
+    "project_config_files_changed": {"type": "array", "items": {"type": "string"}},
+    "business_logic_files_changed": {"type": "array", "items": {"type": "string"}},
+    "reused_capabilities": {"type": "array", "items": {"type": "string"}},
+    "reused_tests": {"type": "array", "items": {"type": "string"}},
+    "new_architecture_decisions": {"type": "integer", "minimum": 0},
+    "context_proxy": {"type": "object", "required": ["estimated_tokens", "files_selected"], "properties": {"estimated_tokens": {"type": "integer", "minimum": 0}, "files_selected": {"type": "integer", "minimum": 0}, "bytes_selected": {"type": "integer", "minimum": 0}, "expansions": {"type": "integer", "minimum": 0}}},
+    "provider_tokens": {"type": ["integer", "null"], "minimum": 0}
+  }
+}

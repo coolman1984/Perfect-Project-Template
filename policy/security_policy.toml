@@ -1,0 +1,24 @@
+# Corporate policy is owned by IT/Security, not by the non-technical employee.
+policy_version = 1
+owner = "IT_SECURITY"
+status = "PENDING_IT_APPROVAL"
+
+[ai_context]
+default_profile_mode = "metadata_only"
+raw_values_allowed = false
+protected_rows_allowed = false
+samples_require_explicit_policy_approval = true
+external_ai_raw_data_allowed = false
+
+[storage]
+extracted_data_requires_approved_root = true
+approved_roots = []
+retention_is_it_owned = true
+
+[network]
+runtime_internet_allowed = false
+loopback_only = true
+
+# An employee describes business meaning. If this policy is incomplete, the
+# project waits for IT/Security; the employee is never asked to invent a storage
+# or external-AI security architecture.

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/adaptation_manifest.schema.json",
+  "title": "Adaptation Manifest",
+  "type": "object",
+  "required": ["schema_version", "project_id", "template", "sources", "relationships", "requirements", "core_changes", "verification"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "project_id": {"type": "string"},
+    "template": {"type": "object", "required": ["template_id", "template_version", "sealed"]},
+    "sources": {"type": "array", "items": {"type": "string"}},
+    "relationships": {"type": "array", "items": {"type": "string"}},
+    "requirements": {"type": "array", "items": {"type": "object", "required": ["requirement", "classification"], "properties": {"requirement": {"type": "string"}, "classification": {"enum": ["REUSE_AS_IS", "CONFIGURE", "PROJECT_SPECIFIC_BUSINESS_LOGIC", "NEW_REUSABLE_CAPABILITY_CANDIDATE"]}}},
+    "core_changes": {"type": "array", "items": {"type": "string"}},
+    "verification": {"type": "object"},
+    "context_metrics": {"type": "object"}
+  }
+}

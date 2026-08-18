@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "contracts/source_profile.schema.json",
+  "title": "Privacy-conscious Source Profile",
+  "type": "object",
+  "required": ["source_id", "rows", "columns", "column_profiles", "profile_mode", "sample_values_included"],
+  "properties": {
+    "source_id": {"type": "string"},
+    "rows": {"type": "integer", "minimum": 0},
+    "columns": {"type": "integer", "minimum": 0},
+    "profile_mode": {"enum": ["metadata_only", "masked_samples", "approved_values"]},
+    "sample_values_included": {"type": "boolean"},
+    "column_profiles": {"type": "array", "items": {"type": "object"}}
+  }
+}

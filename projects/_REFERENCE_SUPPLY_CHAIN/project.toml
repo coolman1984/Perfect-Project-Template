@@ -1,0 +1,18 @@
+project_id = "_reference_supply_chain"
+project_version = 1
+mode = "prototype"
+
+[template]
+template_id = "universal-excel-automation-engine"
+template_version = "0.2.0-development"
+baseline_digest = "PENDING_SEALED_TEMPLATE"
+
+[business]
+purpose = "Synthetic supply-chain multi-source reuse proof"
+owner = "FIXTURE"
+decision = "Which items and warehouses are at risk of shortage or poor fulfillment?"
+
+[security]
+policy = "policy/security_policy.toml"
+
+outputs = ["dashboard", "standalone_html"]
