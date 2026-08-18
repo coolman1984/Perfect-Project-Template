@@ -1,108 +1,55 @@
-"""Loopback transport: bind, secret, origin checks, lifecycle (Parts 0.9, 22.10, 25.5.1).
+"""Secure user-mode loopback transport for the offline local web application.
 
-This module is the security boundary of the whole product, so its rules are
-written out in full rather than summarized.
-
-**"No external server" does not mean "no local server."** It means no cloud
-host, no shared web server, no remote API and no office-network dependency.
-The bundled FastAPI/Uvicorn process stays. Removing it to avoid administrator
-rights is a Part 27.6 architecture violation — a user-mode loopback socket has
-never required elevation.
-
-Startup sequence (Part 25.5.1)::
-
-    verify package hashes and asInvoker execution level
-    -> acquire the per-user single-instance lock
-    -> choose an OS-assigned port (port 0) or a bounded approved high port
-    -> generate a per-launch secret IN MEMORY
-    -> start Uvicorn on 127.0.0.1 only
-    -> health check the exact process, address and port
-    -> open the renderer with a one-time bootstrap handshake
-    -> on exit: reject new work, finish or roll back at a safe boundary,
-       stop the listener, release the lock
-
-Mandatory invariants:
-
-1. The executable runs under the invoking standard user's token; its manifest is
-   `asInvoker`; no child process self-elevates.
-2. The launcher never uses `runas`; code never installs a service and never
-   invokes `netsh` for a URL reservation or firewall rule.
-3. The socket's **actual bound address** is verified as `127.0.0.1`. A host
-   string in configuration is not proof — read it back from the socket.
-4. The API accepts only the exact launch session and the expected loopback
-   origin and host. Wildcard CORS is forbidden.
-5. Port-conflict recovery changes only the local port, within the approved
-   algorithm, and updates the exact URL the launcher opens. Never "fix" a bind
-   failure by elevating.
-6. A browser refresh reconnects to durable state by `run_id` and event sequence.
-   The renderer never becomes the source of truth.
-7. Startup fails closed with a stable code — `LOCAL_LOOPBACK_BIND_FAILED`,
-   `LOCAL_ORIGIN_REJECTED`, `LOCAL_TRANSPORT_INTEGRITY_FAILED`,
-   `ELEVATION_FORBIDDEN` — and writes diagnostic evidence.
-8. The per-launch secret lives in process memory only: never on disk, never in
-   a log, never in a URL, never in browser history, never in a run manifest
-   (Part 43).
-
-If corporate endpoint policy blocks the loopback socket, that is an
-environmental compatibility failure to diagnose and document with IT. It is not
-permission to request administrator rights, add a firewall exclusion, bind to
-the LAN, or delete the local API (Part 22.10).
+The listener binds only to IPv4 loopback, uses an OS-assigned/high port, reads
+back the actual bound address, starts Uvicorn in-process and shuts it down
+cleanly. No service, elevation, URL reservation or firewall change is needed.
 """
-
 from __future__ import annotations
 
-import secrets
+import socket
+import threading
+import time
 from dataclasses import dataclass
+from typing import Any
 
-#: Bind address. IPv4 loopback only — never 0.0.0.0, ::, a hostname, a LAN
-#: address, or any public interface (Part 22.10).
+from app.errors import AppError
+
 LOOPBACK_HOST = "127.0.0.1"
-
-#: 0 asks the OS for a free port, which is the preferred strategy. The bounded
-#: list is the fallback when a deterministic port is operationally required.
 OS_ASSIGNED_PORT = 0
 APPROVED_FALLBACK_PORTS = (49731, 49732, 49733, 49734, 49735)
-
-#: Ports the application must never bind (Part 22.10).
 FORBIDDEN_PORTS = frozenset({80, 443})
 
 
 @dataclass(frozen=True)
 class TransportEvidence:
-    """Written to release/LOCAL_TRANSPORT_EVIDENCE.json (Part 23.10)."""
-
-    user_identity_class: str          # "standard" — never "administrator"
-    manifest_execution_level: str     # "asInvoker"
-    bound_address: str                # read back from the socket, not config
+    user_identity_class: str
+    manifest_execution_level: str
+    bound_address: str
     bound_port: int
     listener_process_id: int
-    rejected_probes: tuple[str, ...]  # wrong Host/Origin/secret, non-loopback
-    created_service: bool             # must be False
-    created_firewall_rule: bool       # must be False
-    created_url_reservation: bool     # must be False
+    rejected_probes: tuple[str, ...]
+    created_service: bool
+    created_firewall_rule: bool
+    created_url_reservation: bool
     lifecycle_clean_shutdown: bool
 
 
-def generate_launch_secret() -> str:
-    """A cryptographically random per-launch secret (Part 22.10).
+@dataclass
+class LoopbackListener:
+    host: str
+    port: int
+    launch_secret: str
+    server: Any
+    thread: threading.Thread
+    socket: socket.socket
 
-    Held in memory for exactly one launch. Never persisted, logged, placed in a
-    URL, or written to a manifest — a secret in a URL ends up in browser
-    history, which is why the handshake is one-time and header-based.
-    """
+
+def generate_launch_secret() -> str:
+    import secrets
     return secrets.token_urlsafe(32)
 
 
 def is_loopback_bind_legal(host: str, port: int) -> bool:
-    """Pure predicate, so the rule is unit-testable without a socket.
-
-    >>> is_loopback_bind_legal("127.0.0.1", 49731)
-    True
-    >>> is_loopback_bind_legal("0.0.0.0", 49731)
-    False
-    >>> is_loopback_bind_legal("127.0.0.1", 443)
-    False
-    """
     if host != LOOPBACK_HOST:
         return False
     if port in FORBIDDEN_PORTS:
@@ -110,21 +57,83 @@ def is_loopback_bind_legal(host: str, port: int) -> bool:
     return port == OS_ASSIGNED_PORT or 1024 <= port <= 65535
 
 
-def start_listener(*_args: object, **_kwargs: object):
-    raise NotImplementedError(
-        "Implement the Part 25.5.1 startup sequence. Verify the bound address "
-        "by reading it back from the socket — a host string in configuration "
-        "is not proof (invariant 3).")
+def expected_origin(port: int) -> str:
+    if not is_loopback_bind_legal(LOOPBACK_HOST, port) or port == 0:
+        raise ValueError("an actual high loopback port is required")
+    return f"http://{LOOPBACK_HOST}:{port}"
 
 
-def verify_origin(*_args: object, **_kwargs: object):
-    raise NotImplementedError(
-        "Validate Host and Origin against the exact current loopback origin. "
-        "Reject everything else with LOCAL_ORIGIN_REJECTED. Wildcard CORS and "
-        "credentials-to-wildcard are forbidden (Part 22.10).")
+def verify_origin(host_header: str | None, origin_header: str | None, port: int, *, require_origin: bool = False) -> bool:
+    """Validate exact Host and, when present/required, exact loopback Origin."""
+    origin = expected_origin(port)
+    expected_host = f"{LOOPBACK_HOST}:{port}"
+    if (host_header or "").strip().lower() != expected_host:
+        return False
+    if require_origin and not origin_header:
+        return False
+    if origin_header and origin_header.rstrip("/").lower() != origin:
+        return False
+    return True
 
 
-def shutdown(*_args: object, **_kwargs: object):
-    raise NotImplementedError(
-        "Reject new work, finish or roll back at a safe boundary, stop the "
-        "listener, release the single-instance lock (Part 25.5.1).")
+def start_listener(
+    app: Any, *, port: int = OS_ASSIGNED_PORT, secret: str | None = None,
+    startup_timeout: float = 10.0,
+) -> LoopbackListener:
+    """Bind first, verify the real socket, then hand that socket to Uvicorn."""
+    if not is_loopback_bind_legal(LOOPBACK_HOST, port):
+        raise AppError("LOCAL_LOOPBACK_BIND_FAILED", support_detail=f"illegal requested port {port}")
+    try:
+        import uvicorn
+    except ImportError as error:
+        raise AppError("PACKAGE_COMPONENT_MISSING", support_detail="uvicorn is not bundled") from error
+
+    listener_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        listener_socket.bind((LOOPBACK_HOST, port))
+        listener_socket.listen(128)
+        bound_host, bound_port = listener_socket.getsockname()[:2]
+        if bound_host != LOOPBACK_HOST or not is_loopback_bind_legal(bound_host, int(bound_port)) or int(bound_port) == 0:
+            raise AppError("LOCAL_TRANSPORT_INTEGRITY_FAILED", support_detail=f"actual_bind={bound_host}:{bound_port}")
+        launch_secret = secret or generate_launch_secret()
+        context = getattr(getattr(app, "state", None), "context", None)
+        if context is not None:
+            context.port = int(bound_port)
+            context.launch_secret = launch_secret
+
+        config = uvicorn.Config(
+            app, host=LOOPBACK_HOST, port=int(bound_port), log_level="warning",
+            access_log=False, proxy_headers=False, server_header=False,
+            date_header=False, workers=1,
+        )
+        server = uvicorn.Server(config)
+        thread = threading.Thread(
+            target=server.run, kwargs={"sockets": [listener_socket]},
+            name="excel-intelligence-loopback", daemon=True,
+        )
+        thread.start()
+        deadline = time.monotonic() + startup_timeout
+        while not server.started and thread.is_alive() and time.monotonic() < deadline:
+            time.sleep(0.02)
+        if not server.started:
+            server.should_exit = True
+            thread.join(timeout=1.0)
+            raise AppError("LOCAL_LOOPBACK_BIND_FAILED", support_detail="Uvicorn did not reach started state")
+        return LoopbackListener(LOOPBACK_HOST, int(bound_port), launch_secret, server, thread, listener_socket)
+    except Exception:
+        try:
+            listener_socket.close()
+        except OSError:
+            pass
+        raise
+
+
+def shutdown(listener: LoopbackListener, *, timeout: float = 10.0) -> None:
+    """Request graceful ASGI shutdown, then release the pre-bound socket."""
+    listener.server.should_exit = True
+    if threading.current_thread() is not listener.thread:
+        listener.thread.join(timeout=timeout)
+    try:
+        listener.socket.close()
+    except OSError:
+        pass

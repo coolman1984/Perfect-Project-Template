@@ -21,10 +21,12 @@ jobs:
       - run: ./project_tool.sh gates status
       - run: ./project_tool.sh report validate
       - run: python3 -m unittest discover -s tests -t . --verbose
-      - run: pip install --quiet duckdb
+      - name: Install application-tier CI dependencies
+        run: pip install --quiet duckdb fastapi uvicorn httpx
       - run: python3 -m unittest tests.golden.test_reference_pipeline --verbose
       - run: python3 -m unittest tests.golden.test_second_report_pipeline --verbose
       - run: python3 -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine --verbose
+      - run: python3 -m unittest tests.unit.test_runtime_core --verbose
       - run: python3 -m unittest tests.adversarial.test_approval_bypass --verbose
       - run: |
           python3 -m doctest app/excel/conversion.py -v
@@ -61,14 +63,17 @@ jobs:
           Get-ChildItem -Force | Where-Object { $_.Name -ne '.git' } | Copy-Item -Destination $target -Recurse -Force
           & (Join-Path $target 'PROJECT_TOOL.bat') doctor
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-      - name: Install build dependency
+      - name: Install application-tier CI dependencies
         shell: cmd
-        run: python -m pip install --quiet duckdb
+        run: python -m pip install --quiet duckdb fastapi uvicorn httpx
       - name: Golden + second-domain pipelines
         shell: cmd
         run: |
           python -m unittest tests.golden.test_reference_pipeline --verbose
           python -m unittest tests.golden.test_second_report_pipeline --verbose
+      - name: Local runtime core
+        shell: cmd
+        run: python -m unittest tests.unit.test_runtime_core --verbose
       - name: Environment-bound gates stay conditional
         shell: cmd
         run: call PROJECT_TOOL.bat gates status --severity block
