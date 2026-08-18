@@ -702,8 +702,8 @@
       "sha256": "66badf51fd81c7fd01998a6c2302b4a1a443ce7eaf8869ccbeaac7b83c3d09ef"
     },
     "tests/unit/test_loopback_listener.py": {
-      "bytes": 2540,
-      "sha256": "e00b72c44c0babb8d090c4e5d0e621a615e391832a2a5221391af3d1ca9badd8"
+      "bytes": 2571,
+      "sha256": "8bc407bea4099c5783b7bca32c5ed885d3028949037fd1d5157a3d7873e9b89b"
     },
     "tests/unit/test_regression_fixes.py": {
       "bytes": 7979,
@@ -822,6 +822,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T06:52:33Z",
+  "generated_at": "2026-08-18T06:53:33Z",
   "schema_version": 1
 }
