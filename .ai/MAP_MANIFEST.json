@@ -612,9 +612,9 @@
       "sha256": "89e1138c1840f64a0e0653969054c9179c7f577fd63c8502c52f9e38f05306ca"
     },
     "factory/project_contract.py": {
-      "bytes": 9733,
+      "bytes": 11305,
       "scope": "universal_core",
-      "sha256": "67078af04c39960a9430e7cbc490b25c872cfe2f6eaf9ba11a48bffe649f38d6"
+      "sha256": "606ba844b415818ad70bd85391acc291f79bd06835d7679f50f92b78b4bb3623"
     },
     "factory/project_questionnaire.py": {
       "bytes": 2998,
@@ -1177,6 +1177,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T07:47:19Z",
+  "generated_at": "2026-08-18T07:49:09Z",
   "schema_version": 2
 }
