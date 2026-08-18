@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 12583,
+      "bytes": 12627,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -1077,9 +1077,9 @@
       "sha256": "2cd233a9551b9667af7fdde1f53d9449311a66ffc086122961dfa216fbe704fa"
     },
     "tools/adaptation_tool.py": {
-      "bytes": 2856,
+      "bytes": 4135,
       "scope": "tooling",
-      "sha256": "ae7bcb75bd3d5128f3ea3ddc6bb15674e911ddafaa573eb18c0d1df22a53b516"
+      "sha256": "26bf3f024d3cfbb9a6a2cc447fb67d39d9a7de04da179d9d8389fd5994c213b6"
     },
     "tools/doctor.py": {
       "bytes": 2704,
@@ -1197,6 +1197,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T07:55:21Z",
+  "generated_at": "2026-08-18T07:55:43Z",
   "schema_version": 2
 }
