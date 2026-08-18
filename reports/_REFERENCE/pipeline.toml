@@ -1,25 +1,19 @@
-# Wiring for the Golden Reference (Factory Core reads this; it is not business
-# meaning). It tells the report-agnostic engine which tables and SQL names this
-# report uses, so no engine code is report-specific.
-
 [tables]
-raw     = "raw.production"
-clean   = "clean.production"
+raw = "raw.production"
+clean = "clean.production"
 history = "analytics.history_production"
 
 [columns]
-business = ["production_date", "line", "order_number", "model_code",
-            "produced_qty", "defect_qty", "category"]
+business = ["production_date", "line", "order_number", "model_code", "produced_qty", "defect_qty", "category"]
 measures = ["produced_qty", "defect_qty"]
 category = "category"
 
 [sql]
-clean    = "clean.sql"
-checks   = "checks.sql"
-metrics  = "metrics.sql"
-history  = "history.sql"
+clean = "clean.sql"
+checks = "checks.sql"
+metrics = "metrics.sql"
+history = "history.sql"
 insights = "insights.sql"
 
 [dashboard]
-title    = "Production Quality — Golden Reference"
-decision = "Where is production loss concentrated, and which model explains most of it?"
+config = "dashboard.toml"

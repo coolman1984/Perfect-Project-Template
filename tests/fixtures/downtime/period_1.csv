@@ -1,0 +1,5 @@
+event_date,line,event_id,machine,reason,downtime_minutes,planned_flag
+2026-08-01,L1,E001,M01,Breakdown,60,false
+2026-08-01,L2,E002,M02,Changeover,30,true
+2026-08-02,L1,E003,M01,Material,45,false
+2026-08-02,L3,E004,M03,Breakdown,90,false

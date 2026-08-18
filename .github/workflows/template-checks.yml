@@ -1,15 +1,4 @@
-# Constitution Part 20.9: RUN_TESTS, the local pre-commit gate and any available
-# CI must run `verify`. A material change cannot be committed or released while
-# it fails.
-#
-# The tool tier (PROJECT_TOOL and everything under tools/) is standard-library
-# only (Part 37.2 rule 1) and every check up to "Test suite" below installs
-# NOTHING, which is exactly what proves that claim. DuckDB is installed only
-# afterwards, as the application-tier LOCKED component it is (Part 23.8), to
-# run the Golden Reference end to end.
-
 name: Template checks
-
 on:
   push:
     branches: ["**"]
@@ -17,64 +6,69 @@ on:
   workflow_dispatch:
 
 jobs:
-  verify:
+  linux-verify:
+    name: Linux portable + application proof
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Map freshness (Part 20.5)
-        run: ./project_tool.sh map verify
-
-      - name: Architecture baseline (Part 23.9)
-        run: ./project_tool.sh architecture verify --baseline
-
-      - name: Architecture source scan (Part 23.10)
-        run: ./project_tool.sh architecture verify --source-scan
-
-      - name: Constitution consistency (Part 34.3)
-        run: ./project_tool.sh constitution audit
-
-      - name: Project memory admission (Part 21.6)
-        run: ./project_tool.sh memory validate
-
-      - name: Acceptance ledger integrity (Part 38)
-        run: ./project_tool.sh gates status
-
-      - name: Report configuration (Part 41)
-        run: ./project_tool.sh report validate
-
-      - name: Test suite (Part 15) — tool tier, nothing installed
-        run: python3 -m unittest discover -s tests -t . --verbose
-
-      # DuckDB is a LOCKED application-tier component (Part 23.8), not part of
-      # the stdlib-only tool tier. Installing it here is the build-machine
-      # action Part 23.12 describes; it is bundled into the real release, not
-      # fetched at employee runtime. This step is what turns the Golden
-      # Reference tests from "skipped" into "actually run".
-      - name: Install application-tier dependency (DuckDB)
-        run: pip install --quiet duckdb
-
-      - name: Golden Reference — end-to-end pipeline (Part 15)
-        run: python3 -m unittest tests.golden.test_reference_pipeline --verbose
-
-      - name: Factory — business setup, second-report reuse
-        run: python3 -m unittest tests.factory.test_factory_flow --verbose
-
-      - name: Adversarial — approval bypass, fail-closed (scenarios E, F, G)
-        run: python3 -m unittest tests.adversarial.test_approval_bypass --verbose
-
-      - name: Doctests
-        run: |
+        with: {python-version: "3.11"}
+      - run: ./project_tool.sh map verify
+      - run: ./project_tool.sh architecture verify --baseline
+      - run: ./project_tool.sh architecture verify --source-scan
+      - run: ./project_tool.sh constitution audit
+      - run: ./project_tool.sh memory validate
+      - run: ./project_tool.sh gates status
+      - run: ./project_tool.sh report validate
+      - run: python3 -m unittest discover -s tests -t . --verbose
+      - run: pip install --quiet duckdb
+      - run: python3 -m unittest tests.golden.test_reference_pipeline --verbose
+      - run: python3 -m unittest tests.golden.test_second_report_pipeline --verbose
+      - run: python3 -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine --verbose
+      - run: python3 -m unittest tests.adversarial.test_approval_bypass --verbose
+      - run: |
           python3 -m doctest app/excel/conversion.py -v
           python3 -m doctest app/excel/port.py
           python3 -m doctest app/local_transport.py
+      - run: ./project_tool.sh gates status --severity block
 
-      # Environment-bound gates cannot run here and must not appear to pass.
-      # They stay `conditional` in acceptance/gates.yaml until a real Windows
-      # machine with Excel and the protected files exercises them (Part 44.3).
-      - name: Report environment-bound gates
-        run: ./project_tool.sh gates status --severity block
+  windows-verify:
+    name: Windows portable + reusable-engine proof
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: BAT launcher and governance checks
+        shell: cmd
+        run: |
+          call PROJECT_TOOL.bat map verify
+          call PROJECT_TOOL.bat architecture verify --baseline
+          call PROJECT_TOOL.bat architecture verify --source-scan
+          call PROJECT_TOOL.bat constitution audit
+          call PROJECT_TOOL.bat memory validate
+          call PROJECT_TOOL.bat gates status
+          call PROJECT_TOOL.bat report validate
+      - name: Portable tests
+        shell: cmd
+        run: python -m unittest discover -s tests -t . --verbose
+      - name: Workspace path with spaces and Arabic
+        shell: pwsh
+        run: |
+          $target = Join-Path $env:TEMP 'Excel Engine عربي'
+          if (Test-Path $target) { Remove-Item -Recurse -Force $target }
+          New-Item -ItemType Directory -Path $target | Out-Null
+          Get-ChildItem -Force | Where-Object { $_.Name -ne '.git' } | Copy-Item -Destination $target -Recurse -Force
+          & (Join-Path $target 'PROJECT_TOOL.bat') doctor
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Install build dependency
+        shell: cmd
+        run: python -m pip install --quiet duckdb
+      - name: Golden + second-domain pipelines
+        shell: cmd
+        run: |
+          python -m unittest tests.golden.test_reference_pipeline --verbose
+          python -m unittest tests.golden.test_second_report_pipeline --verbose
+      - name: Environment-bound gates stay conditional
+        shell: cmd
+        run: call PROJECT_TOOL.bat gates status --severity block

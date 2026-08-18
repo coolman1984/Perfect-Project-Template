@@ -1,0 +1,73 @@
+[meta]
+title="Line Downtime — Reuse Proof"
+decision="Which line is losing the most production time, and is downtime improving?"
+period_query="latest_period"
+[lineage]
+rows_query="active_row_count"
+mapping_version="1"
+metric_version="1"
+[[filters]]
+id="line"
+label="Line"
+type="multi"
+[[filters]]
+id="reason"
+label="Reason"
+type="multi"
+[[kpis]]
+id="total_downtime_minutes"
+query="total_downtime_minutes"
+label="Downtime"
+unit="minutes"
+format="integer"
+direction="down_good"
+[[kpis]]
+id="event_count"
+query="event_count"
+label="Downtime events"
+unit="events"
+format="integer"
+direction="down_good"
+[[kpis]]
+id="average_event_minutes"
+query="average_event_minutes"
+label="Average event"
+unit="minutes"
+format="decimal"
+direction="down_good"
+[[charts]]
+id="downtime_trend"
+query="trend_by_date"
+title="Is downtime improving over time?"
+type="line"
+dimension="event_date"
+series_name="Downtime minutes"
+x_index=0
+y_index=1
+unit="minutes"
+summary_format="{x}: {y} minutes"
+[[charts]]
+id="line_pareto"
+query="pareto_by_line"
+title="Which lines account for most downtime?"
+type="pareto"
+dimension="line"
+series_name="Downtime minutes"
+x_index=0
+y_index=1
+cumulative_index=2
+unit="minutes"
+summary_format="{x}: {y} minutes"
+[[insights]]
+id="period_change"
+type="period_change_value"
+query="period_change_evidence"
+metric_id="total_downtime_minutes"
+label="Daily downtime"
+unit="minutes"
+[[insights]]
+id="top_line"
+type="top_contributor"
+query="top_contributor_evidence"
+metric_id="downtime_minutes"
+value_label="downtime minutes"

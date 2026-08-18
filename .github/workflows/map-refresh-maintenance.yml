@@ -1,0 +1,29 @@
+name: Map refresh maintenance
+
+on:
+  push:
+    branches: ["agent/universal-excel-automation-engine"]
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/universal-excel-automation-engine
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Refresh reviewed map artifacts
+        run: ./project_tool.sh map refresh --review
+      - name: Commit generated map artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .ai/MAP_MANIFEST.json .ai/PROJECT_MAP.md
+          git diff --cached --quiet || git commit -m "Refresh project map for universal engine changes"
+          git push origin HEAD:agent/universal-excel-automation-engine
