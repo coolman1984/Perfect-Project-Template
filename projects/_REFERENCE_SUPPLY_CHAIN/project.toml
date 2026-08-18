@@ -13,5 +13,8 @@ purpose = "Synthetic supply-chain multi-source reuse proof"
 owner = "FIXTURE"
 decision = "Which items and warehouses are at risk of shortage or poor fulfillment?"
 
+[execution]
+fixture_adapter = true
+
 [security]
 policy = "policy/security_policy.toml"
