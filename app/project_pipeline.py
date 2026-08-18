@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 import re
+import tomllib
 from typing import Any
 
 from app.analytics.configured import ConfiguredAnalytics, load_dashboard_config
@@ -27,6 +28,7 @@ from app.dashboard import project_json_builder
 from app.data.database import Database
 from app.data.history import HistoryEngine, HistoryResult
 from app.data.migrations import migrate
+from app.data.project_migrations import migrate as migrate_project
 from app.data.staging import LINEAGE_COLUMNS, StagingWriter
 from app.excel.port import LineageStamp
 from app.quality.engine import BLOCK, PASS, WARNING, CheckResult, QualityEngine, QualityReport
@@ -38,6 +40,7 @@ from app.quality.quarantine import (
     quarantine_rows,
 )
 from app.quality.reconciliation import ControlTotal, Population, check_control_total, check_population
+from app.rules.runner import ProjectRuleRunner, parse_rule_specs
 from factory.project_contract import ProjectContract, RelationshipSpec, SourceSpec
 
 SAFE_ID = re.compile(r"^[a-z][a-z0-9_]*$")
@@ -72,6 +75,9 @@ class ProjectOutcome:
     error_message: str | None = None
     demo_data: bool = False
     unapproved_definitions: bool = False
+    #: Rows written per declared project Python rule (Part 14.3). Empty for the
+    #: normal project, which expresses everything in SQL.
+    rule_rows: dict[str, int] = field(default_factory=dict)
 
     @property
     def succeeded(self) -> bool:
@@ -98,6 +104,22 @@ class ProjectPipeline:
             metrics_file="metrics.sql",
             insights_file="insights.sql",
         )
+        # Part 14.1 keeps Python last: a project declares rules only when SQL
+        # cannot express the calculation, and a project with none pays nothing.
+        # Declared in metrics.toml (V10 Part 16), not dashboard.toml: a rule is
+        # business logic, not presentation, and most projects have no rules at
+        # all and so carry no metrics.toml.
+        metrics_path = contract.directory / "metrics.toml"
+        metrics_config = (
+            tomllib.loads(metrics_path.read_text(encoding="utf-8"))
+            if metrics_path.is_file() else {})
+        self.python_rules = parse_rule_specs(metrics_config)
+        self.rules = ProjectRuleRunner(
+            database,
+            self.sql,
+            rules_root=contract.directory / "business_rules" / "python",
+            metrics_file="metrics.sql",
+        )
 
     # ------------------------------------------------------------------ schema
     def prepare(self) -> None:
@@ -109,8 +131,33 @@ class ProjectPipeline:
             application_version=self.application_version,
             max_version=1,
         )
+        # Three phases, in this order, so both a genuinely fresh database and
+        # an evolving one reach the same validated shape (Part 15):
+        #
+        # 1. CREATE TABLE IF NOT EXISTS from *current* sources.toml. On a
+        #    fresh database this alone produces the full current shape and no
+        #    migration does real work. On an existing database it is a no-op.
+        # 2. Project migrations. On a fresh database each ALTER ... ADD COLUMN
+        #    IF NOT EXISTS is a no-op against the column phase 1 just created.
+        #    On an existing database this is where a column actually gets
+        #    added — which is why migrations cannot run before phase 1: an
+        #    ALTER TABLE against a table phase 1 has not created yet fails
+        #    outright rather than doing nothing.
+        # 3. Validate: current configuration must now match the database
+        #    exactly. A configured column with neither history (phase 1
+        #    already fresh) nor a migration (phase 2) is the one case this
+        #    still rejects, on purpose — Part 15's "schema drift never
+        #    silently changes trusted tables".
         for source in self.contract.sources:
-            self._ensure_source_tables(source)
+            self._create_source_tables(source)
+        migrate_project(
+            self.database,
+            project_id=self.contract.project_id,
+            migrations_dir=self.contract.directory / "migrations",
+            application_version=self.application_version,
+        )
+        for source in self.contract.sources:
+            self._validate_source_schema(source)
 
     def raw_table(self, source: SourceSpec | str) -> str:
         source_id = source if isinstance(source, str) else source.source_id
@@ -146,7 +193,7 @@ class ProjectPipeline:
             raise ProjectPipelineError(f"unsupported configured SQL type: {kind}")
         return kind
 
-    def _ensure_source_tables(self, source: SourceSpec) -> None:
+    def _create_source_tables(self, source: SourceSpec) -> None:
         business = [self._column(name) for name in source.business_columns]
         raw_columns = ",\n                ".join(
             f"{name} VARCHAR" for name in business)
@@ -192,6 +239,9 @@ class ProjectPipeline:
                 _source_row_number BIGINT
             )
         """)
+
+    def _validate_source_schema(self, source: SourceSpec) -> None:
+        business = [self._column(name) for name in source.business_columns]
         expected_raw = set(business) | set(LINEAGE_COLUMNS)
         actual_raw = set(self.database.columns_of(self.raw_table(source)))
         if expected_raw != actual_raw:
@@ -272,6 +322,11 @@ class ProjectPipeline:
                         requested_period=requested_periods.get(source.source_id),
                     )
                     outcome.sources[source.source_id].history = result
+                # Rules run after trusted history and before presentation, so a
+                # rule reads committed-in-transaction history and its output is
+                # available to dashboard SQL. A failing rule aborts the same
+                # transaction as any other downstream failure.
+                outcome.rule_rows = self.rules.run(self.python_rules)
                 analytics = self.analytics.run()
                 outcome.dashboard = project_json_builder.build(
                     contract=self.contract,

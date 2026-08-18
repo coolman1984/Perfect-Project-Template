@@ -1,5 +1,5 @@
 {
-  "file_count": 246,
+  "file_count": 253,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -12,9 +12,9 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 3480,
+      "bytes": 4560,
       "scope": "unknown",
-      "sha256": "b7ab44b0b8634fbc609d52d3424df60086ca6af26747a902d0fd158ecfd769f1"
+      "sha256": "c3be4fb5ee12880fd889c8cea784b197d892abecd28c8c744d5cf6de340f1f55"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 12902,
+      "bytes": 13154,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -67,9 +67,9 @@
       "sha256": "d7772d22ffeab4e1b30319d84ba8da48b491498d4f21ee8a919b248d8d4f2f00"
     },
     ".github/workflows/template-checks.yml": {
-      "bytes": 4276,
+      "bytes": 5024,
       "scope": "unknown",
-      "sha256": "3d8d9f1da7f3a5f86ad4978d53901cbb7eeee210a08f5a74693de9c518e9e222"
+      "sha256": "2446ad200468696f7e24e4a765098847f7c1d9e66ca74e6e933939af0ed92576"
     },
     ".gitignore": {
       "bytes": 1078,
@@ -281,6 +281,11 @@
       "scope": "universal_core",
       "sha256": "4c1c85d5ac803ef31e74a2eef1e63145e5a9686566a86394f9fef6a7a6afc817"
     },
+    "app/data/project_migrations.py": {
+      "bytes": 6177,
+      "scope": "universal_core",
+      "sha256": "a5f0fe0994de3a7cb6c2e5109e0d1738629254b8bb25ac4bf27ccd8a500501de"
+    },
     "app/data/sql_server.py": {
       "bytes": 925,
       "scope": "universal_core",
@@ -392,9 +397,9 @@
       "sha256": "f736a4b0441ae8c1b2efe03a21b363f201f018829023f67fecc23bb569475410"
     },
     "app/project_pipeline.py": {
-      "bytes": 31401,
+      "bytes": 34579,
       "scope": "universal_core",
-      "sha256": "d0680fc1ac3e03d8c279c1b4db92a05578be9283df13ece81cb5705a3d4512a1"
+      "sha256": "2845a1893503890bc86c6a7e9306879db62ecbb1f2391b98cf41bf20a5f5a6dd"
     },
     "app/quality/__init__.py": {
       "bytes": 182,
@@ -420,6 +425,16 @@
       "bytes": 3993,
       "scope": "universal_core",
       "sha256": "d92167c757a66f5a5cf3ac9436f2d4e66c9f38db94d051acf916431843164324"
+    },
+    "app/rules/__init__.py": {
+      "bytes": 59,
+      "scope": "universal_core",
+      "sha256": "dd8981fec19b4b75b4e28bcda39d5c62d420f3d864524b763ba91a16a09fadc7"
+    },
+    "app/rules/runner.py": {
+      "bytes": 12612,
+      "scope": "universal_core",
+      "sha256": "c30b9cafbb52b23993393dd99e156171b792ac3736798eb85e940f3cfc2432e3"
     },
     "app/server.py": {
       "bytes": 27688,
@@ -991,6 +1006,16 @@
       "scope": "test",
       "sha256": "c3563010b78900430ed7e75e015b4796f5e902f5e320c336ded71474851ec6be"
     },
+    "tests/golden/test_project_migration.py": {
+      "bytes": 10871,
+      "scope": "test",
+      "sha256": "94fdef06506cd0909fc91e7f3fc6b4a134c53672e2caa0da5d2e077f761032a1"
+    },
+    "tests/golden/test_project_python_rule.py": {
+      "bytes": 9450,
+      "scope": "test",
+      "sha256": "8d5892998bb11a89688c94b4af442fdf71a43abd19acf4d326bb680b8cf3c3df"
+    },
     "tests/golden/test_reference_pipeline.py": {
       "bytes": 17292,
       "scope": "test",
@@ -1055,6 +1080,16 @@
       "bytes": 2571,
       "scope": "test",
       "sha256": "8bc407bea4099c5783b7bca32c5ed885d3028949037fd1d5157a3d7873e9b89b"
+    },
+    "tests/unit/test_project_migrations.py": {
+      "bytes": 5789,
+      "scope": "test",
+      "sha256": "d3fe99eda7bc9048047a787da88e19ead37fc95e8769c98289f8f49ac0c82123"
+    },
+    "tests/unit/test_project_rules.py": {
+      "bytes": 9961,
+      "scope": "test",
+      "sha256": "1f40ef245320efd13726a0a1ca171a867e677f9d5bdb8d3aa91edd3e95a3f69f"
     },
     "tests/unit/test_project_runtime_api.py": {
       "bytes": 6965,
@@ -1232,6 +1267,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T15:03:26Z",
+  "generated_at": "2026-08-18T15:28:55Z",
   "schema_version": 2
 }

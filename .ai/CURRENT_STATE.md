@@ -18,6 +18,22 @@ The ready application is the product. Employee agents should adapt project confi
   rerun, whole-project rollback on downstream failure, and Parquet archive
   rebuild of every source. Proof: `tests/golden/test_multisource_supply_chain.py`
   and `acceptance/evidence/multisource-archive-rebuild-2026-08-18.txt`.
+- The project contract (V10 Phase I2) is complete: a project may declare a
+  Python business rule (`app/rules/runner.py`, `metrics.toml`
+  `[[python_rules]]`) that runs inside the same project transaction as
+  history and analytics, with a declared output schema enforced at
+  materialization and an import allowlist enforced at both parse and
+  execution time; and a project may declare additive schema migrations
+  (`app/data/project_migrations.py`, `projects/<id>/migrations/*.sql`)
+  tracked in their own per-project ledger, ordered before table creation so a
+  fresh database and an evolving one reach the same validated shape. Proof:
+  `tests/golden/test_project_python_rule.py`,
+  `tests/golden/test_project_migration.py`,
+  `tests/unit/test_project_rules.py`, `tests/unit/test_project_migrations.py`
+  and `acceptance/evidence/project-python-rule-and-migrations-2026-08-18.txt`.
+  Both paths are proven on the fixture port only, and both are unused by
+  every existing reference — none needed them, which is itself evidence SQL
+  configuration covers the ordinary case.
 
 ## V8.1 remediation now present
 
