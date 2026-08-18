@@ -3,7 +3,6 @@
 This module owns the employee-facing local boundary once. Department reports
 supply configuration and SQL; they do not create their own upload/run server.
 """
-from __future__ import annotations
 
 import asyncio
 import hashlib
