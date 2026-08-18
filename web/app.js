@@ -1,26 +1,6 @@
-/**
- * Application shell: navigation, API access, events, accessibility.
- * Constitution Parts 22.2, 22.4, 25.5.
- *
- * Boundaries this file must respect:
- *   - Every server call goes through the loopback API. The browser never
- *     touches Excel COM, DuckDB or the filesystem (Part 0.9).
- *   - No trusted arithmetic. Values arrive pre-calculated and pre-rounded;
- *     this file formats and displays them (rule 6).
- *   - No remote request of any kind. No CDN, font, icon or telemetry
- *     (Part 23.6). The browser verification step fails the build on one.
- *   - Durable state lives on the server. A refresh reconnects by run_id and
- *     event sequence; the renderer is never the source of truth
- *     (Part 25.5.1 rule 6).
- */
+import { renderChart, disposeChart } from './dashboard.js';
 
 const API = {
-  /**
-   * Same-origin fetch against the loopback API.
-   *
-   * The per-launch secret is injected by the bootstrap handshake and kept in
-   * memory only — never in a URL, a log or browser history (Part 43).
-   */
   async request(path, options = {}) {
     const response = await fetch(path, {
       ...options,
@@ -32,171 +12,169 @@ const API = {
       },
     });
     if (!response.ok) {
-      // Never surface a raw stack trace as the primary message (Part 22.8).
       const payload = await response.json().catch(() => ({}));
-      throw new AppError(payload);
+      throw new AppError(payload, response.status);
     }
-    return response.json();
+    const type = response.headers.get('content-type') || '';
+    return type.includes('application/json') ? response.json() : response;
   },
-
-  health()          { return this.request('/api/health'); },
-  reports()         { return this.request('/api/reports'); },
-  dashboard()       { return this.request('/api/dashboard'); },
-  history()         { return this.request('/api/history'); },
-  run(id)           { return this.request(`/api/runs/${encodeURIComponent(id)}`); },
+  health() { return this.request('/api/health'); },
+  reports() { return this.request('/api/reports'); },
+  dashboard() { return this.request('/api/dashboard'); },
+  history() { return this.request('/api/history'); },
+  run(id) { return this.request(`/api/runs/${encodeURIComponent(id)}`); },
   events(id, since) { return this.request(`/api/runs/${encodeURIComponent(id)}/events?since=${since}`); },
+  upload(reportId, file) {
+    return this.request(`/api/uploads?report_id=${encodeURIComponent(reportId)}`, {
+      method: 'POST', body: file,
+      headers: { 'Content-Type': 'application/octet-stream', 'X-File-Name': encodeURIComponent(file.name) },
+    });
+  },
+  startRun(reportId, uploadId) {
+    return this.request('/api/runs', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ report_id: reportId, upload_id: uploadId }),
+    });
+  },
 };
 
-/** Carries a registry error code and its four-part operator screen (Part 22.8). */
 class AppError extends Error {
-  constructor(payload) {
-    super(payload.what_went_wrong || 'Something went wrong.');
-    this.supportCode = payload.support_code || 'UNKNOWN';
+  constructor(payload, status = 0) {
+    super(payload.what_went_wrong || payload.message || 'Something went wrong.');
+    this.status = status;
+    this.supportCode = payload.support_code || payload.status || 'UNKNOWN';
     this.dataIsSafe = payload.is_my_data_safe !== false;
     this.nextAction = payload.next_action || '';
     this.supportDetail = payload.support_detail || '';
   }
 }
 
-/**
- * Durable progress stream (Part 22.4).
- *
- * Server-sent events are preferred. Polling by (run_id, last sequence) is a
- * DELIVERY fallback for a verified renderer limitation — it is not permission
- * to remove the server.
- */
 class ProgressStream {
-  constructor(runId, onEvent) {
-    this.runId = runId;
-    this.onEvent = onEvent;
-    this.lastSequence = -1;
-    this.source = null;
-    this.pollTimer = null;
-  }
-
+  constructor(runId, onEvent) { this.runId = runId; this.onEvent = onEvent; this.lastSequence = -1; this.source = null; this.pollTimer = null; }
   start() {
     if (typeof EventSource !== 'undefined') {
       this.source = new EventSource(`/api/runs/${encodeURIComponent(this.runId)}/events`);
       this.source.onmessage = (message) => this.handle(JSON.parse(message.data));
-      this.source.onerror = () => { this.source.close(); this.startPolling(); };
+      this.source.onerror = () => { this.source.close(); this.source = null; this.startPolling(); };
       return;
     }
     this.startPolling();
   }
-
   startPolling() {
+    if (this.pollTimer) return;
     this.pollTimer = setInterval(async () => {
-      const batch = await API.events(this.runId, this.lastSequence);
-      batch.forEach((event) => this.handle(event));
+      try { (await API.events(this.runId, this.lastSequence)).forEach((event) => this.handle(event)); } catch (_) { /* next poll retries */ }
     }, 1000);
   }
-
-  /** Events are ordered and replayable, so out-of-order arrivals are dropped. */
   handle(event) {
     if (event.sequence <= this.lastSequence) return;
-    this.lastSequence = event.sequence;
-    this.onEvent(event);
+    this.lastSequence = event.sequence; this.onEvent(event);
+    if (['COMPLETE', 'FAILED', 'CANCELLED'].includes(event.stage)) this.stop();
   }
-
-  stop() {
-    if (this.source) this.source.close();
-    if (this.pollTimer) clearInterval(this.pollTimer);
-  }
+  stop() { if (this.source) this.source.close(); if (this.pollTimer) clearInterval(this.pollTimer); this.source = null; this.pollTimer = null; }
 }
 
 const UI = {
-  /** Quality and freshness are never hidden (Part 26.11). */
   renderHeader(pack) {
     document.getElementById('report-title').textContent = pack.report.title;
     document.getElementById('report-period').textContent = pack.report.period;
-
-    const badge = document.getElementById('quality-badge');
-    badge.dataset.status = pack.quality.status;
+    const badge = document.getElementById('quality-badge'); badge.dataset.status = pack.quality.status;
     document.getElementById('quality-text').textContent = pack.quality.status;
-    // Icon plus text, so meaning survives greyscale printing (Part 11.4).
-    badge.querySelector('.badge-icon').textContent =
-      { PASS: '✓', WARNING: '!', FAIL: '✕' }[pack.quality.status] || '•';
-
+    badge.querySelector('.badge-icon').textContent = { PASS: '✓', WARNING: '!', FAIL: '✕' }[pack.quality.status] || '•';
     document.getElementById('freshness').textContent = `Data date ${pack.freshness.data_date}`;
     document.getElementById('demo-watermark').hidden = !pack.demo_data;
     document.getElementById('unapproved-watermark').hidden = !pack.unapproved_definitions;
     document.getElementById('partial-warning').hidden = !pack.freshness.is_partial;
   },
-
   renderKpis(kpis) {
     const strip = document.getElementById('kpi-strip');
     strip.replaceChildren(...kpis.map((kpi) => {
-      const card = document.createElement('article');
-      card.className = 'kpi-card';
-
-      const label = document.createElement('h3');
-      label.textContent = kpi.label;
-
-      const value = document.createElement('p');
-      value.className = 'kpi-value';
-      // A null value is shown as an em dash, never as a false zero (Part 26.5).
-      value.textContent = kpi.value === null ? '—' : kpi.display;
-
-      const unit = document.createElement('p');
-      unit.className = 'kpi-unit';
-      unit.textContent = `${kpi.unit}${kpi.period ? ` · ${kpi.period}` : ''}`;
-
-      card.append(label, value, unit);
-
-      if (kpi.comparison) {
-        const comparison = document.createElement('p');
-        comparison.className = 'kpi-comparison';
-        comparison.dataset.direction = UI.directionOf(kpi);
-        // The comparison base is visible beside the KPI, not hidden in a
-        // tooltip (Part 22.6).
-        comparison.textContent =
-          `${kpi.comparison.change_percent}% vs ${kpi.comparison.base}`;
-        card.append(comparison);
-      }
-      return card;
+      const card = document.createElement('article'); card.className = 'kpi-card';
+      const label = document.createElement('h3'); label.textContent = kpi.label;
+      const value = document.createElement('p'); value.className = 'kpi-value'; value.textContent = kpi.value === null ? '—' : kpi.display;
+      const unit = document.createElement('p'); unit.className = 'kpi-unit'; unit.textContent = `${kpi.unit}${kpi.period ? ` · ${kpi.period}` : ''}`;
+      card.append(label, value, unit); return card;
     }));
   },
-
-  directionOf(kpi) {
-    const change = kpi.comparison && kpi.comparison.change_absolute;
-    if (!change) return 'flat';
-    if (kpi.direction === 'neutral') return 'flat';
-    const improving = kpi.direction === 'up_good' ? change > 0 : change < 0;
-    return improving ? 'good' : 'bad';
+  renderCharts(charts) {
+    const grid = document.getElementById('chart-grid');
+    grid.querySelectorAll('.chart').forEach((node) => disposeChart(node.id));
+    grid.replaceChildren();
+    charts.forEach((spec, index) => {
+      const figure = document.createElement('figure'); figure.className = `panel ${index === 0 ? 'span-8' : 'span-6'}`;
+      const title = document.createElement('figcaption'); title.className = 'panel-title'; title.textContent = spec.title;
+      const chart = document.createElement('div'); chart.className = 'chart'; chart.id = `chart-${spec.id}`; chart.setAttribute('role', 'img');
+      const summary = document.createElement('p'); summary.className = 'chart-summary visually-hidden'; summary.textContent = spec.accessible_summary || '';
+      figure.append(title, chart, summary); grid.append(figure); renderChart(chart.id, spec);
+    });
   },
-
-  /** The four-part error screen. Technical detail stays collapsed (Part 22.8). */
+  renderInsights(insights) {
+    const body = document.getElementById('insight-focus-body'); body.replaceChildren();
+    insights.forEach((insight) => { const item = document.createElement('p'); item.className = 'insight-item'; item.textContent = insight.text; body.append(item); });
+    document.getElementById('insight-focus').hidden = insights.length === 0;
+  },
   renderError(error) {
-    const panel = document.getElementById('support-details');
-    panel.replaceChildren();
-    const heading = document.createElement('p');
-    heading.textContent = error.message;
-    const safety = document.createElement('p');
-    safety.textContent = error.dataIsSafe
-      ? 'Your previous dashboard and history are unchanged and still correct.'
-      : 'Support attention is required.';
-    const action = document.createElement('p');
-    action.textContent = error.nextAction;
-    const code = document.createElement('code');
-    code.textContent = error.supportCode;
+    const panel = document.getElementById('support-details'); panel.replaceChildren();
+    const heading = document.createElement('p'); heading.textContent = error.message;
+    const safety = document.createElement('p'); safety.textContent = error.dataIsSafe ? 'Your previous dashboard and history are unchanged and still correct.' : 'Support attention is required.';
+    const action = document.createElement('p'); action.textContent = error.nextAction;
+    const code = document.createElement('code'); code.textContent = error.supportCode;
     panel.append(heading, safety, action, code);
   },
+  renderDashboard(pack) { this.renderHeader(pack); this.renderKpis(pack.kpis || []); this.renderCharts(pack.charts || []); this.renderInsights(pack.insights || []); },
 };
 
+let selectedFile = null;
+let reports = [];
+
+function wireOperations() {
+  const input = document.getElementById('file-input');
+  const dropzone = document.getElementById('dropzone');
+  const button = document.getElementById('process-button');
+  const list = document.getElementById('file-list');
+  const select = document.getElementById('report-select');
+  const choose = (files) => {
+    selectedFile = files && files[0] ? files[0] : null;
+    list.replaceChildren();
+    if (selectedFile) { const li = document.createElement('li'); li.textContent = `${selectedFile.name} · ${(selectedFile.size / 1048576).toFixed(1)} MB`; list.append(li); }
+    button.disabled = !selectedFile || !select.value;
+  };
+  dropzone.addEventListener('click', () => input.click());
+  dropzone.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); input.click(); } });
+  dropzone.addEventListener('dragover', (event) => event.preventDefault());
+  dropzone.addEventListener('drop', (event) => { event.preventDefault(); choose(event.dataTransfer.files); });
+  input.addEventListener('change', () => choose(input.files));
+  select.addEventListener('change', () => { button.disabled = !selectedFile || !select.value; });
+  button.addEventListener('click', async () => {
+    if (!selectedFile || !select.value) return;
+    button.disabled = true;
+    const progress = document.getElementById('progress'); const message = document.getElementById('progress-message'); progress.hidden = false;
+    try {
+      message.textContent = 'Copying the selected file into the local intake area…';
+      const uploaded = await API.upload(select.value, selectedFile);
+      message.textContent = 'Starting the configured automation…';
+      const started = await API.startRun(select.value, uploaded.upload_id);
+      const stream = new ProgressStream(started.run_id, async (event) => {
+        message.textContent = event.stage.replaceAll('_', ' ');
+        if (event.stage === 'COMPLETE') { UI.renderDashboard(await API.dashboard()); button.disabled = false; }
+        if (event.stage === 'FAILED') { UI.renderError(new AppError({ what_went_wrong: 'The new update failed.', next_action: 'Open support details. Your previous dashboard was not replaced.', support_code: 'RUN_FAILED' })); button.disabled = false; }
+      });
+      stream.start();
+    } catch (error) { UI.renderError(error instanceof AppError ? error : new AppError({})); button.disabled = false; }
+  });
+}
+
 async function boot() {
+  wireOperations();
   try {
     await API.health();
-    const pack = await API.dashboard();
-    UI.renderHeader(pack);
-    UI.renderKpis(pack.kpis);
-    // Charts, filters, story and motion are wired by their own modules.
-  } catch (error) {
-    // Golden operating rule: never a blank page. Show the last truth, with its
-    // date, or a plain-language explanation (Part 12.6).
-    UI.renderError(error instanceof AppError ? error : new AppError({}));
-  }
+    reports = await API.reports();
+    const select = document.getElementById('report-select');
+    reports.forEach((report) => { const option = document.createElement('option'); option.value = report.report_id; option.textContent = report.report_id; select.append(option); });
+    if (reports.length === 1) select.value = reports[0].report_id;
+    try { UI.renderDashboard(await API.dashboard()); } catch (error) { if (!(error instanceof AppError) || error.status !== 404) throw error; }
+  } catch (error) { UI.renderError(error instanceof AppError ? error : new AppError({})); }
 }
 
 document.addEventListener('DOMContentLoaded', boot);
-
 export { API, AppError, ProgressStream, UI };

@@ -20,34 +20,25 @@ class TestDurableEvents(unittest.TestCase):
             first = events.emit("RUN-1", "STARTING", root=root, progress=0)
             second = events.emit("RUN-1", "COMPLETE", root=root, progress=100)
             self.assertEqual((first["sequence"], second["sequence"]), (0, 1))
-            replay = events.since("RUN-1", 0, root=root)
-            self.assertEqual([item["stage"] for item in replay], ["COMPLETE"])
+            self.assertEqual([item["stage"] for item in events.since("RUN-1", 0, root=root)], ["COMPLETE"])
             self.assertTrue((root / "RUN-1" / "events.jsonl").exists())
 
 
 class TestReportLocks(unittest.TestCase):
     def test_live_lock_is_not_stolen(self):
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            lock = acquire_report_lock("quality", root=root)
+            root = Path(temp); lock = acquire_report_lock("quality", root=root)
             try:
-                with self.assertRaises(AppError) as caught:
-                    acquire_report_lock("quality", root=root)
+                with self.assertRaises(AppError) as caught: acquire_report_lock("quality", root=root)
                 self.assertEqual(caught.exception.code, "REPORT_LOCKED")
-            finally:
-                lock.release()
+            finally: lock.release()
 
     def test_stale_lock_is_recovered(self):
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp); root.mkdir(exist_ok=True)
-            path = root / "quality.lock"
-            path.write_text(json.dumps({"pid": 99999999}), encoding="utf-8")
+            root = Path(temp); path = root / "quality.lock"; path.write_text(json.dumps({"pid": 99999999}), encoding="utf-8")
             lock = acquire_report_lock("quality", root=root)
-            try:
-                self.assertTrue(path.exists())
-                self.assertEqual(json.loads(path.read_text("utf-8"))["pid"], os.getpid())
-            finally:
-                lock.release()
+            try: self.assertEqual(json.loads(path.read_text("utf-8"))["pid"], os.getpid())
+            finally: lock.release()
 
 
 class TestOriginRules(unittest.TestCase):
@@ -66,37 +57,39 @@ class TestLocalApi(unittest.TestCase):
     def setUp(self):
         from fastapi.testclient import TestClient
         from app.server import ServerContext, create_app
-        self.temp = tempfile.TemporaryDirectory()
-        root = Path(self.temp.name)
+        self.temp = tempfile.TemporaryDirectory(); root = Path(self.temp.name)
         (root / "reports" / "demo").mkdir(parents=True)
-        (root / "reports" / "demo" / "report.toml").write_text(
-            'report_id="demo"\nmode="prototype"\n[excel]\nadapter="fixture"\n', encoding="utf-8")
-        (root / "web").mkdir()
-        (root / "web" / "index.html").write_text(
-            '<html><body><script type="module" src="app.js"></script></body></html>', encoding="utf-8")
-        (root / "web" / "app.js").write_text("", encoding="utf-8")
-        self.context = ServerContext(root, "secret-123", 49731)
+        (root / "reports" / "demo" / "report.toml").write_text('report_id="demo"\nmode="prototype"\n[excel]\nadapter="fixture"\nsheet="Raw"\n', encoding="utf-8")
+        (root / "web").mkdir(); (root / "web" / "index.html").write_text('<html><body><script type="module" src="app.js"></script></body></html>', encoding="utf-8"); (root / "web" / "app.js").write_text("", encoding="utf-8")
+        self.root = root; self.context = ServerContext(root, "secret-123", 49731)
         self.client = TestClient(create_app(self.context), base_url="http://127.0.0.1:49731")
+        self.auth = {"Origin": "http://127.0.0.1:49731", "X-Launch-Secret": "secret-123"}
 
-    def tearDown(self):
-        self.client.close(); self.temp.cleanup()
+    def tearDown(self): self.client.close(); self.temp.cleanup()
 
     def test_health_and_report_discovery(self):
         self.assertEqual(self.client.get("/api/health").status_code, 200)
         self.assertEqual(self.client.get("/api/reports").json()[0]["report_id"], "demo")
 
     def test_wrong_host_is_rejected(self):
-        response = self.client.get("/api/health", headers={"Host": "localhost:49731"})
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(self.client.get("/api/health", headers={"Host": "localhost:49731"}).status_code, 403)
 
     def test_mutation_requires_origin_and_launch_secret(self):
         origin = "http://127.0.0.1:49731"
         self.assertEqual(self.client.post("/api/shutdown", headers={"Origin": origin}).status_code, 403)
-        response = self.client.post("/api/shutdown", headers={"Origin": origin, "X-Launch-Secret": "secret-123"})
+        self.assertEqual(self.client.post("/api/shutdown", headers=self.auth).status_code, 200)
+
+    def test_raw_upload_is_local_hashed_and_allow_listed(self):
+        headers = {**self.auth, "X-File-Name": "period.csv", "Content-Type": "application/octet-stream"}
+        response = self.client.post("/api/uploads?report_id=demo", headers=headers, content=b"a,b\n1,2\n")
         self.assertEqual(response.status_code, 200)
+        payload = response.json(); self.assertEqual(payload["file_name"], "period.csv"); self.assertEqual(payload["size"], 8); self.assertEqual(len(payload["sha256"]), 64)
+        meta = self.root / "inbox" / "demo" / payload["upload_id"] / "upload.json"; self.assertTrue(meta.exists())
+
+    def test_upload_rejects_path_traversal(self):
+        headers = {**self.auth, "X-File-Name": "..%2Fevil.csv", "Content-Type": "application/octet-stream"}
+        response = self.client.post("/api/uploads?report_id=demo", headers=headers, content=b"x")
+        self.assertEqual(response.status_code, 400)
 
     def test_root_injects_secret_in_memory_and_disables_docs(self):
-        response = self.client.get("/")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("window.__launchSecret", response.text)
-        self.assertEqual(self.client.get("/docs").status_code, 404)
+        response = self.client.get("/"); self.assertEqual(response.status_code, 200); self.assertIn("window.__launchSecret", response.text); self.assertEqual(self.client.get("/docs").status_code, 404)

@@ -18,7 +18,8 @@ from app.pipeline import Pipeline, ReportContract, RunOutcome
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def _run_id() -> str:
+def new_run_id() -> str:
+    """Create an opaque sortable-enough id before a background run starts."""
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     return f"RUN-{stamp}-{uuid.uuid4().hex[:8]}"
 
@@ -35,13 +36,18 @@ def run(
     repo_root: Path | None = None, database_path: Path | None = None,
     requested_period: str | None = None,
 ) -> RunOutcome:
-    """Run one configured report and publish only a successful new dashboard."""
+    """Run one configured report and publish only a successful new dashboard.
+
+    One source is deliberately enforced in this vertical slice. Multiple
+    unrelated workbooks require a source-composition contract that maps each
+    role/table separately; concatenating them would manufacture false data.
+    """
     root = Path(repo_root) if repo_root is not None else REPO_ROOT
     source_list = [sources] if isinstance(sources, (str, Path)) else list(sources)  # type: ignore[arg-type]
     if len(source_list) != 1:
         raise ValueError("this vertical slice accepts one source; multi-source reports must use an approved source-composition contract")
     source_path = Path(source_list[0]).resolve()
-    rid = run_id or _run_id()
+    rid = run_id or new_run_id()
     contract = ReportContract(root / "reports" / report_id)
     database = Database(database_path or root / "data" / "warehouse.duckdb")
     adapter: Any = FixtureExtractionAdapter(source_path) if contract.uses_fixture_adapter else ComExtractionAdapter()
@@ -52,8 +58,7 @@ def run(
             pipeline = Pipeline(database, contract)
             pipeline.prepare()
             identity = adapter.open(str(source_path), {
-                "report_id": report_id,
-                "run_id": rid,
+                "report_id": report_id, "run_id": rid,
                 "sheet": contract.report.get("excel", {}).get("sheet", ""),
                 "extraction": contract.report.get("extraction", {}),
             })
