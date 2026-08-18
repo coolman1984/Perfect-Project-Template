@@ -50,8 +50,8 @@
       "sha256": "be53fb640c2d7e63c7485dda9a94d88b0c2a1f3c0d8d363998839479dcace070"
     },
     ".github/workflows/map-refresh-maintenance.yml": {
-      "bytes": 955,
-      "sha256": "79edb780885aea75c97f4843eb9a68087bdab2e95d7a52ded5c59f9b289d797a"
+      "bytes": 2581,
+      "sha256": "d7772d22ffeab4e1b30319d84ba8da48b491498d4f21ee8a919b248d8d4f2f00"
     },
     ".github/workflows/template-checks.yml": {
       "bytes": 3681,
@@ -822,6 +822,6 @@
       "sha256": "0ef315118d9aa9f5d71c19daaf2dbc58e6b54688c018bf4e48a3df5a0c8e7180"
     }
   },
-  "generated_at": "2026-08-18T06:54:08Z",
+  "generated_at": "2026-08-18T06:56:58Z",
   "schema_version": 1
 }
