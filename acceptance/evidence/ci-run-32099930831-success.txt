@@ -1,0 +1,23 @@
+CI run 32099930831 — branch main — commit e5f8dca — conclusion: SUCCESS
+https://github.com/coolman1984/Perfect-Project-Template/actions/runs/32099930831
+
+Fresh Ubuntu runner, Python 3.11, NOTHING installed beyond the interpreter.
+This is the real proof of the Part 37.2 rule 1 claim that the portable tool
+tier is standard-library only: a clean machine with no pip install step ran
+every verifier and the whole suite.
+
+Steps, all passing:
+  Map freshness (Part 20.5)                ./project_tool.sh map verify
+  Architecture baseline (Part 23.9)        architecture verify --baseline
+  Architecture source scan (Part 23.10)    architecture verify --source-scan
+  Constitution consistency (Part 34.3)     constitution audit
+  Project memory admission (Part 21.6)     memory validate
+  Acceptance ledger integrity (Part 38)    gates status
+  Report configuration (Part 41)           report validate
+  Test suite (Part 15)                     108 tests, 0 failures
+  Doctests                                 conversion, port, local_transport
+  Environment-bound gates reported         gates status --severity block
+
+Prior run 32099712082 on commit 65f5940 FAILED and caught a real defect —
+see ci-run-32099712082-failure.txt. That failure is the evidence that these
+gates are load-bearing rather than decorative.

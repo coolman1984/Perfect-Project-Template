@@ -13,9 +13,9 @@
   title: Template instantiated and every verifier runs green on the skeleton
   severity: block
   status: pass
-  evidence: acceptance/evidence/doctor-2026-08-17.txt
-  verified_at: "2026-08-17T16:21:12Z"
-  verified_by: template author
+  evidence: acceptance/evidence/ci-run-32099930831-success.txt
+  verified_at: "2026-08-18T04:40:04Z"
+  verified_by: CI run 32099930831
   conditional_reason: ""
   next_action: Run PROJECT_TOOL doctor and save its output under acceptance/evidence/
 
@@ -35,9 +35,9 @@
   title: No CDN, package download, font, icon or telemetry call in runtime code
   severity: block
   status: pass
-  evidence: acceptance/evidence/source-scan-2026-08-17.txt
-  verified_at: "2026-08-17T16:21:12Z"
-  verified_by: template author
+  evidence: acceptance/evidence/ci-run-32099930831-success.txt
+  verified_at: "2026-08-18T04:40:04Z"
+  verified_by: CI run 32099930831
   conditional_reason: ""
   next_action: Run architecture verify --source-scan and save the output
 
@@ -431,9 +431,9 @@
   title: Map verify passes; task routes, tests and contracts are current
   severity: block
   status: pass
-  evidence: acceptance/evidence/doctor-2026-08-17.txt
-  verified_at: "2026-08-17T16:21:13Z"
-  verified_by: template author
+  evidence: acceptance/evidence/ci-run-32099930831-success.txt
+  verified_at: "2026-08-18T04:40:04Z"
+  verified_by: CI run 32099930831
   conditional_reason: ""
   next_action: Run PROJECT_TOOL map verify and keep it green in CI
 
@@ -464,9 +464,9 @@
   title: Machine and semantic constitution audits both pass
   severity: block
   status: pass
-  evidence: acceptance/evidence/doctor-2026-08-17.txt
-  verified_at: "2026-08-17T16:21:13Z"
-  verified_by: template author
+  evidence: acceptance/evidence/ci-run-32099930831-success.txt
+  verified_at: "2026-08-18T04:40:04Z"
+  verified_by: CI run 32099930831
   conditional_reason: ""
   next_action: Run PROJECT_TOOL constitution audit and record the semantic review
 
