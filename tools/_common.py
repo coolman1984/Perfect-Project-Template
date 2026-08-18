@@ -14,26 +14,12 @@ EXIT_PASS, EXIT_FAIL, EXIT_USAGE, EXIT_BLOCKED = 0, 1, 2, 3
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# Paths the map, scanners and hashers must never read into (Part 20.8 rule 3).
-# Generated, runtime, vendor and data folders are catalogued as groups, never
-# file-by-file (Part 20.3), and protected data is never inspected at all.
-#
-# These are matched by ROOT-RELATIVE PREFIX, not by directory name at any depth.
-# That distinction matters: `data/` is the DuckDB folder and must be excluded,
-# while `app/data/` is the history-engine source layer and must be scanned. A
-# name-based match silently hides an entire layer from the map and from every
-# verifier — the exact failure the map exists to prevent.
 EXCLUDED_ROOTS = {
     "runtime", "offline_packages", "repair_payload", "release", "dist", "build",
     "inbox", "workspace", "data", "archive", "output", "runs", "logs",
     "licenses",
 }
-
-#: Nested paths excluded wherever they appear, as root-relative prefixes.
 EXCLUDED_PREFIXES = ("web/vendor",)
-
-#: Tooling and cache directories, excluded at any depth. These never contain
-#: project truth, so a name match is safe here.
 EXCLUDED_DIRS = {
     ".git", ".venv", "venv", "__pycache__", ".pytest_cache", ".mypy_cache",
     "node_modules", ".ai_cache", ".ruff_cache",
@@ -42,8 +28,6 @@ EXCLUDED_GLOBS = (
     "*.pyc", "*.duckdb", "*.duckdb.wal", "*.parquet", "*.xlsx", "*.xlsm",
     "*.xlsb", "*.xls", "*.zip", "*.log", "*.jsonl.gz", "*.sqlite",
 )
-
-# Files that carry project truth and must be catalogued individually.
 SOURCE_SUFFIXES = {
     ".py", ".sql", ".toml", ".json", ".md", ".html", ".css", ".js",
     ".yaml", ".yml", ".bat", ".sh", ".cfg", ".ini",
@@ -54,9 +38,6 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-#: Generated per task and .gitignored on purpose (Part 20.10); it must never
-#: be treated as committable source, or every fresh `map context` run makes
-#: `map verify` report a phantom ignored file.
 GENERATED_FILES = {".ai/CONTEXT_PACK.md"}
 
 
@@ -64,7 +45,6 @@ def is_excluded(path: Path) -> bool:
     """True when a repo-relative path is outside the scanned source of truth."""
     key = str(path).replace("\\", "/")
     parts = path.parts
-
     if key in GENERATED_FILES:
         return True
     if set(parts) & EXCLUDED_DIRS:
@@ -82,7 +62,6 @@ def iter_source_files(root: Path | None = None) -> list[Path]:
     found: list[Path] = []
     for dirpath, dirnames, filenames in os.walk(root):
         current = Path(dirpath).relative_to(root)
-        # Prune excluded directories before reading them (Part 20.5 rule 2).
         dirnames[:] = sorted(
             name for name in dirnames
             if not is_excluded(current / name if str(current) != "." else Path(name))
@@ -141,45 +120,43 @@ def git_tracked_files(root: Path | None = None) -> set[str]:
     root = root or REPO_ROOT
     try:
         result = subprocess.run(
-            ["git", "ls-files"], cwd=root, capture_output=True, text=True, timeout=30)
+            ["git", "ls-files", "-z"], cwd=root, capture_output=True,
+            text=True, timeout=30,
+        )
     except (OSError, subprocess.SubprocessError):
         return set()
     if result.returncode != 0:
         return set()
-    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+    return {item for item in result.stdout.split("\0") if item}
 
 
 def git_ignored(paths: list[str], root: Path | None = None) -> set[str]:
-    """Which of `paths` git would refuse to track.
+    """Return ignored repo paths without Windows newline/quoting corruption.
 
-    This is the check that catches a silent repository hole: the map scans a
-    file, the tools verify it, the tests import it — and `.gitignore` quietly
-    excludes it, so it never reaches the repository at all. Git reports success
-    because, from its point of view, nothing was asked of it.
-
-    Returns an empty set when git is unavailable; callers treat that as
-    "unknown", never as "clean".
+    Git's normal newline protocol can preserve carriage returns as part of a
+    path when `--stdin` crosses Windows text-mode boundaries. `-z` makes both
+    input and output NUL-delimited, so spaces, Unicode, quotes and CRLF cannot
+    mutate the filename being checked.
     """
     root = root or REPO_ROOT
     if not paths:
         return set()
     try:
+        payload = "\0".join(paths) + "\0"
         result = subprocess.run(
-            ["git", "check-ignore", "--stdin"],
-            cwd=root, input="\n".join(paths), capture_output=True,
-            text=True, timeout=30,
+            ["git", "check-ignore", "-z", "--stdin"],
+            cwd=root, input=payload, capture_output=True, text=True, timeout=30,
         )
     except (OSError, subprocess.SubprocessError):
         return set()
-    # Exit 0 = some paths ignored, 1 = none ignored, other = real error.
     if result.returncode not in (0, 1):
         return set()
-    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+    return {item for item in result.stdout.split("\0") if item}
 
 
 @dataclass
 class Report:
-    """Collects findings so a command reports every problem, not just the first."""
+    """Collect findings so a command reports every problem, not just the first."""
 
     title: str
     failures: list[str] = field(default_factory=list)

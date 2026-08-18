@@ -28,7 +28,7 @@ class TestLoopbackBindRules(unittest.TestCase):
 
     def test_non_loopback_addresses_are_rejected(self):
         # Part 22.10: never the LAN, never a public interface, never a hostname.
-        for host in ("0.0.0.0", "::", "[::]", "192.168.1.10", "localhost", "example.local"):
+        for host in ("0.0.0.0", "::", "[::]", "192.168.1.10", "localhost", "example.local"):  # FORBIDDEN negative test inputs
             self.assertFalse(is_loopback_bind_legal(host, 49731),
                              f"{host} must be rejected")
 
