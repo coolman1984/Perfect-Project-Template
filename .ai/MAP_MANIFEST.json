@@ -1,5 +1,5 @@
 {
-  "file_count": 239,
+  "file_count": 240,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -1141,6 +1141,11 @@
       "scope": "tooling",
       "sha256": "cb4049105e5719c6428e3a13b6f1b403fcb57888cad845b1bb101fade2286bc2"
     },
+    "tools/template_upgrade.py": {
+      "bytes": 10679,
+      "scope": "tooling",
+      "sha256": "5e05b4d2dbae6df155ad48279ed853a1bdb3c5e358b2bdb8f55fec3d8ef0e6c4"
+    },
     "tools/verify_architecture.py": {
       "bytes": 18385,
       "scope": "tooling",
@@ -1197,6 +1202,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T07:56:19Z",
+  "generated_at": "2026-08-18T07:57:06Z",
   "schema_version": 2
 }
