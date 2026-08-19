@@ -254,34 +254,34 @@
   part: 11.5 / 26.10 / 31.1
   title: Zero network requests, zero JS errors, charts/filters/theme/RTL/print all work
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: in_progress
+  evidence: acceptance/evidence/browser-standalone-chromium-2026-08-19.txt
+  verified_at: "2026-08-19T04:02:51Z"
+  verified_by: tests/browser/test_standalone_dashboard_browser.py (12 tests in real Chromium)
   conditional_reason: ""
-  next_action: Wire the headless browser verification into the publish step
+  next_action: "Zero-network, zero-JS-error, theme, RTL and print are PROVEN. Still open: (a) chart RENDERING needs the pinned Apache ECharts 6.1.0 binary vendored into web/vendor/ with a verified checksum; (b) filters/cross-filter/drill-through/reset live in the local app UI, not the standalone report, and need their own browser coverage."
 
 - id: GATE_ACCESSIBILITY
   part: 22.9 / 31.1
   title: Keyboard, focus, labels, WCAG 2.2 AA contrast and reduced motion all pass
   severity: major
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: in_progress
+  evidence: acceptance/evidence/browser-standalone-chromium-2026-08-19.txt
+  verified_at: "2026-08-19T04:02:51Z"
+  verified_by: tests/browser/test_standalone_dashboard_browser.py (keyboard reachability + Enter activation, chart role=img and accessible name, WCAG 2.2 AA contrast measured in both themes, prefers-reduced-motion respected)
   conditional_reason: ""
-  next_action: Add accessibility assertions to the browser suite
+  next_action: Standalone report is covered. Extend the same assertions to the local app UI (web/app.js) once its browser suite exists.
 
 - id: GATE_BILINGUAL_RTL
   part: 22.9
   title: Arabic renders as correct right-to-left layout, not only translated words
   severity: major
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: in_progress
+  evidence: acceptance/evidence/browser-standalone-chromium-2026-08-19.txt
+  verified_at: "2026-08-19T04:02:52Z"
+  verified_by: "tests/browser/test_standalone_dashboard_browser.py::test_right_to_left_layout_actually_flips (computed direction flips to rtl and content survives)"
   conditional_reason: ""
-  next_action: Build i18n dictionaries and test the RTL layout
+  next_action: "RTL layout is proven on the standalone report. Still open: prove web/i18n/ar.json actually drives the local app UI so Arabic is translated, not only mirrored."
 
 - id: GATE_STANDARD_USER_STARTUP
   part: 31.1 / 33

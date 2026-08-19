@@ -23,6 +23,25 @@ def _float(value: Decimal | None) -> float | None:
     return None if value is None else float(value)
 
 
+def _readable(value: Decimal | None) -> str:
+    """Render a trusted number the way a person would write it.
+
+    DECIMAL(18,4) arithmetic widens the result scale, so a variance of 25 comes
+    back as `25.00000000`. That is the same trusted number, but an insight is
+    operator-facing narrative (Part 20) and trailing noise there reads as
+    false precision. Only the presentation changes; the value carried in
+    `current` and in the evidence refs stays exact.
+    """
+    if value is None:
+        return "—"
+    normalized = value.normalize()
+    # normalize() renders large round numbers in scientific notation
+    # (1E+3); expand those back to plain digits.
+    if normalized == normalized.to_integral_value():
+        normalized = normalized.quantize(Decimal(1))
+    return f"{normalized:,f}"
+
+
 def _index(spec: dict[str, Any], name: str, default: int) -> int:
     return int(spec.get(name, default))
 
@@ -132,5 +151,5 @@ def _top_contributor(spec: dict[str, Any], row: tuple) -> dict[str, Any] | None:
         "current": _float(value),
         "confidence": "verified",
         "evidence_refs": [f"metric:{metric_id}", f"sql:{query}"],
-        "text": f"{dimension} is the largest contributor with {value} {value_label}{share_text}. Treat it as an investigation priority, not a confirmed cause.",
+        "text": f"{dimension} is the largest contributor with {_readable(value)} {value_label}{share_text}. Treat it as an investigation priority, not a confirmed cause.",
     }

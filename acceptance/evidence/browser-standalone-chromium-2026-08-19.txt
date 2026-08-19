@@ -1,0 +1,47 @@
+# Browser proof: standalone dashboard in real Chromium (V10 Part 35.6)
+# Generated 2026-08-19T04:01:51Z
+# Chromium: /opt/pw-browsers/chromium-1194 (already present; never downloaded)
+# Source data: real Reference D (Finance PPV) pipeline output, not a hand-written pack
+
+## Full portable suite
+----------------------------------------------------------------------
+Ran 348 tests in 38.943s
+
+OK (skipped=1)
+
+## Browser suite
+test_charts_are_given_an_accessible_name_and_the_correct_data (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_charts_are_given_an_accessible_name_and_the_correct_data)
+test_every_kpi_on_screen_is_the_value_the_engine_computed (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_every_kpi_on_screen_is_the_value_the_engine_computed) ... ok
+test_insight_text_is_rendered_without_false_precision (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_insight_text_is_rendered_without_false_precision) ... ok
+test_print_layout_keeps_trusted_content_and_drops_the_control (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_print_layout_keeps_trusted_content_and_drops_the_control) ... ok
+test_quality_and_watermark_state_reaches_the_page (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_quality_and_watermark_state_reaches_the_page) ... ok
+test_reduced_motion_preference_is_respected (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_reduced_motion_preference_is_respected)
+test_report_opens_offline_with_no_network_and_no_script_errors (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_report_opens_offline_with_no_network_and_no_script_errors) ... ok
+test_right_to_left_layout_actually_flips (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_right_to_left_layout_actually_flips) ... ok
+test_the_html_file_contains_no_remote_reference_at_all (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_the_html_file_contains_no_remote_reference_at_all)
+test_the_theme_control_is_keyboard_reachable (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_the_theme_control_is_keyboard_reachable) ... ok
+test_theme_toggle_switches_and_keeps_content (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_theme_toggle_switches_and_keeps_content) ... ok
+test_trusted_text_meets_wcag_aa_contrast_in_both_themes (tests.browser.test_standalone_dashboard_browser.TestStandaloneDashboardInChromium.test_trusted_text_meets_wcag_aa_contrast_in_both_themes)
+Ran 12 tests in 9.203s
+OK
+
+## PROVEN
+  zero network requests (mutation-verified: adding a CDN script tag fails all 10 page tests)
+  zero JavaScript / page errors
+  KPI values on screen equal the engine's computed values
+  charts carry role=img and the accessible summary, with correct data handed to the renderer
+  WCAG 2.2 AA contrast measured in BOTH themes (mutation-verified: #bbb on #fff fails at 1.92:1)
+  prefers-reduced-motion respected (no animation or transition runs)
+  keyboard reachability and Enter activation of the only control
+  RTL direction actually flips and content survives
+  print keeps trusted content and drops the interactive control
+  demo-data watermark reaches the screen
+
+## NOT PROVEN — do not read this file as closing GATE_BROWSER_OFFLINE
+  chart RENDERING: web/vendor/echarts.min.js is absent. The repo pins Apache
+    ECharts 6.1.0 but the binary must be fetched from the official Apache
+    release and checksummed as a deliberate licensed vendoring step.
+    These tests inject a recorder to assert the DATA handed to the renderer.
+  filters / cross-filter / drill-through / reset: those live in the local app UI
+    (web/app.js + web/filters.js), not in the standalone report tested here.
+  full Arabic i18n: RTL layout is proven; the ar.json dictionary path is not.

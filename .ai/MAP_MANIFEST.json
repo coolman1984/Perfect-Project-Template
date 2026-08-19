@@ -1,5 +1,5 @@
 {
-  "file_count": 272,
+  "file_count": 273,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -67,9 +67,9 @@
       "sha256": "d7772d22ffeab4e1b30319d84ba8da48b491498d4f21ee8a919b248d8d4f2f00"
     },
     ".github/workflows/template-checks.yml": {
-      "bytes": 6082,
+      "bytes": 6361,
       "scope": "unknown",
-      "sha256": "2f06e1e1bee91432999630a645b676fa7b6d1e7689d7ed48839370a7295c62b4"
+      "sha256": "da2f6646ac0f0f8b14710af9daf21f8cb20e5c7f9f2945534caef27ce01fa0f0"
     },
     ".gitignore": {
       "bytes": 1078,
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 17636,
+      "bytes": 18757,
       "scope": "unknown",
-      "sha256": "c60079aa740c1775a58fa88f569e3c3667e801f33e29980cb0ad484e93750e85"
+      "sha256": "d7d8471208cdeacaea1d6aa4a937223c7350a1613ab007171398a7a47cf4643a"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -217,9 +217,9 @@
       "sha256": "4ee00ae65e4f2db15ddc0b64d3ac99ceb80fb4d7005b8405d0bb29d0218d76d7"
     },
     "app/analytics/patterns.py": {
-      "bytes": 5991,
+      "bytes": 6811,
       "scope": "universal_core",
-      "sha256": "f25f79576693b5047fb551ab4793074d21f56720dfc80bb161a58e2e41ff1392"
+      "sha256": "3451f96d2836f79ae36d89963974b14f78c842c6fc7b0923a54d2bf897520642"
     },
     "app/analytics/registry.py": {
       "bytes": 702,
@@ -971,6 +971,11 @@
       "scope": "test",
       "sha256": "8b0d9f647e03f5417da734a89526544a9690e6f932c82a11a76b170e97463b5c"
     },
+    "tests/browser/test_standalone_dashboard_browser.py": {
+      "bytes": 16951,
+      "scope": "test",
+      "sha256": "19d35d02395b051b7eda5e038f4285ec85451ab50149e3a48adce2486870ccd8"
+    },
     "tests/constitution/__init__.py": {
       "bytes": 26,
       "scope": "test",
@@ -1077,9 +1082,9 @@
       "sha256": "c3881488144fb2481012f4fe8be2f6884e59ef360557983d0ebdf3232621383a"
     },
     "tests/golden/test_finance_ppv_reference.py": {
-      "bytes": 13862,
+      "bytes": 14129,
       "scope": "test",
-      "sha256": "564d94fc983f7db40af6c58332ee93075a12a99c58aad2eaaf28165c0a5e7ad8"
+      "sha256": "97403824e0789aef35e0108f287f7100ff4341f874c1f7624f786404663b769c"
     },
     "tests/golden/test_multisource_supply_chain.py": {
       "bytes": 15123,
@@ -1362,6 +1367,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T03:52:26Z",
+  "generated_at": "2026-08-19T04:02:59Z",
   "schema_version": 2
 }

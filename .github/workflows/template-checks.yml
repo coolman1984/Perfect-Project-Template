@@ -50,6 +50,12 @@ jobs:
           python3 -m unittest tests.architecture.test_no_browser_arithmetic --verbose
           python3 -m unittest tests.architecture.test_no_cell_by_cell_extraction --verbose
           python3 -m unittest tests.unit.test_workbook_identity --verbose
+      - name: Browser proof against the local Chromium (never downloaded)
+        run: |
+          pip install --quiet playwright
+          python3 -m unittest tests.browser.test_standalone_dashboard_browser --verbose
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       - run: |
           python3 -m doctest app/excel/conversion.py -v
           python3 -m doctest app/excel/port.py

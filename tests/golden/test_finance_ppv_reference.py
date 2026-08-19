@@ -180,6 +180,10 @@ class TestFinancePpvReference(unittest.TestCase):
 
         self.assertEqual(insight["current"], expected["top_vendor_ppv"])
         self.assertIn(expected["top_vendor"], insight["text"])
+        # An insight is operator-facing narrative. DECIMAL(18,4) arithmetic
+        # widens the scale, and "25.00000000 USD" reads as false precision.
+        self.assertIn("25 USD variance", insight["text"])
+        self.assertNotIn("25.00000000", insight["text"])
         self.assertEqual(insight["confidence"], "verified")
         self.assertIn("metric:ppv_amount", insight["evidence_refs"])
         # Part 20: an insight may prioritise investigation, never assert cause.
