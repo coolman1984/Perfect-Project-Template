@@ -162,9 +162,17 @@ class HistoryEngine:
               AND c._run_id = ?
               AND h.row_content_hash <> c.row_content_hash
         """, [run_id])
+        # `is_active = TRUE` matters here, not only in the changed-row update
+        # above. A record that vanished from one export was deactivated by the
+        # deletion rule; when it reappears with identical content it takes this
+        # branch, and leaving it inactive would drop it from every KPI
+        # permanently even though the business source says it is present again.
+        # Presence in this run's clean data is what makes a record active —
+        # not whether its values happened to change (Part 8.3).
         self.database.execute(f"""
             UPDATE {self.history_table} AS h
-            SET last_seen_run_id = c._run_id
+            SET last_seen_run_id = c._run_id,
+                is_active = TRUE
             FROM {self.clean_table} AS c
             WHERE h.business_key_hash = c.business_key_hash
               AND c._run_id = ?

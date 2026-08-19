@@ -1,5 +1,5 @@
 {
-  "file_count": 273,
+  "file_count": 274,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -67,9 +67,9 @@
       "sha256": "d7772d22ffeab4e1b30319d84ba8da48b491498d4f21ee8a919b248d8d4f2f00"
     },
     ".github/workflows/template-checks.yml": {
-      "bytes": 6361,
+      "bytes": 6526,
       "scope": "unknown",
-      "sha256": "da2f6646ac0f0f8b14710af9daf21f8cb20e5c7f9f2945534caef27ce01fa0f0"
+      "sha256": "d794786be49a191909cfee88e019d5982b95883c2e4af90a4dd624abc73176a4"
     },
     ".gitignore": {
       "bytes": 1078,
@@ -272,9 +272,9 @@
       "sha256": "6be2caad95e9f908b09de6efacb2db0b3d241e5e673fc589094a153f8430c1d8"
     },
     "app/data/history.py": {
-      "bytes": 10030,
+      "bytes": 10594,
       "scope": "universal_core",
-      "sha256": "5038dd77224d985b756116bbfd45aacbda12673454125c31d713f669bb8a8f95"
+      "sha256": "c657a808c9554b15472f076c875250966e0a172b2b590b8608c7061032849e23"
     },
     "app/data/migrations.py": {
       "bytes": 3508,
@@ -1111,6 +1111,11 @@
       "scope": "test",
       "sha256": "99346aa89a981a737081a72388c1ca99c39531f52427a07e4f691fce8ef0b72b"
     },
+    "tests/golden/test_returning_record_history.py": {
+      "bytes": 7380,
+      "scope": "test",
+      "sha256": "c2ef7488a308ea0d7a4f566e6a72eac8003d4a0cda044c2692aebf4cd9a11e3f"
+    },
     "tests/golden/test_second_report_pipeline.py": {
       "bytes": 3989,
       "scope": "test",
@@ -1367,6 +1372,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T04:23:43Z",
+  "generated_at": "2026-08-19T04:28:11Z",
   "schema_version": 2
 }
