@@ -437,9 +437,9 @@
       "sha256": "c82b23fa5cd88c44386b5b927f5200d4dba7774ee21ddef8e6c4cda5e2e8083e"
     },
     "app/server.py": {
-      "bytes": 32569,
+      "bytes": 32872,
       "scope": "universal_core",
-      "sha256": "83ee0dabc0e393eaadc5d425b6128a7c8ea451301814a24ec87a51b744b9394f"
+      "sha256": "5a2980dc1821efc5b6f0cd8957fdf2a2ebc32cf999b813a687b5c666d3b6dfeb"
     },
     "app/settings.py": {
       "bytes": 851,
@@ -1052,9 +1052,9 @@
       "sha256": "8b0d9f647e03f5417da734a89526544a9690e6f932c82a11a76b170e97463b5c"
     },
     "tests/browser/test_local_app_browser.py": {
-      "bytes": 9972,
+      "bytes": 14092,
       "scope": "test",
-      "sha256": "cd6a8cc33f1b9d2267f213dbd4be145fee7dbbea20457e221e62a97423d9f388"
+      "sha256": "c6e2af6bfdb6af45bc2622b087fdea36d8bfe963336ecf1e60936500b3d57fee"
     },
     "tests/browser/test_standalone_dashboard_browser.py": {
       "bytes": 20714,
@@ -1437,14 +1437,14 @@
       "sha256": "a1654c6359914262dfa81e0087a9112ce66c24f3790eba9aac21785e96dfca09"
     },
     "web/app.js": {
-      "bytes": 26576,
+      "bytes": 29421,
       "scope": "universal_core",
-      "sha256": "965f98b8e02f34cd900afcea063d4030824229ab6a2cd62d31b7da41543a4d12"
+      "sha256": "5f8f580019050ef003e401c2397cb8c69151cca5032080b3564afc0b1f8c9996"
     },
     "web/dashboard.js": {
-      "bytes": 2941,
+      "bytes": 3301,
       "scope": "universal_core",
-      "sha256": "51518e67940644a49f2cae1fda0dd1c996b0d5d889178070b0833be1906ff287"
+      "sha256": "2167e8820322c8a0809ecbc12914fb4d1b6fb615d9f4a61100857f59697fa1ea"
     },
     "web/filters.js": {
       "bytes": 3724,
@@ -1482,11 +1482,11 @@
       "sha256": "7d1fdc83168a1ff39346c0ba6137c46f68ef9a8ecf820b12ce29620ef11319aa"
     },
     "web/styles.css": {
-      "bytes": 9949,
+      "bytes": 10404,
       "scope": "universal_core",
-      "sha256": "c4e703ddaf28ec722c3f985074a97ea62d4abbc561a6aa082ac787fe2df6c84e"
+      "sha256": "2ce209d223192c14faff82daf0f8251f60be276ec7922f2c06d1132c2821b5e1"
     }
   },
-  "generated_at": "2026-08-19T13:58:04Z",
+  "generated_at": "2026-08-19T14:10:42Z",
   "schema_version": 2
 }

@@ -857,7 +857,12 @@ def create_app(context: ServerContext | None = None):
         headers = {
             "Content-Security-Policy": (
                 "default-src 'self'; script-src 'self' 'nonce-" + nonce + "'; "
-                "style-src 'self'; img-src 'self' data:; connect-src 'self'; "
+                # The pinned local ECharts renderer positions canvas layers
+                # with runtime style attributes. Scripts remain nonce/self
+                # only; inline style is allowed solely so chart interaction is
+                # not blocked by CSP.
+                "style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
+                "connect-src 'self'; "
                 "object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
         }
         return HTMLResponse(html, headers=headers)

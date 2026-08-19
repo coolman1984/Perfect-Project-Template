@@ -25,7 +25,7 @@ function fallback(container, spec) {
   table.append(caption, body); container.append(table);
 }
 
-export function renderChart(containerId, chartSpec) {
+export function renderChart(containerId, chartSpec, onPointSelect = null) {
   const container = document.getElementById(containerId);
   if (!container) return;
   disposeChart(containerId);
@@ -54,6 +54,15 @@ export function renderChart(containerId, chartSpec) {
     yAxis: series.length > 1 ? [{ type: 'value', name: chartSpec.unit || '' }, { type: 'value', name: '%', min: 0, max: 100 }] : { type: 'value', name: chartSpec.unit || '' },
     series,
   });
+  if (typeof onPointSelect === 'function') {
+    container.dataset.interactive = 'true';
+    chart.on('click', (event) => {
+      const value = event && event.name !== undefined
+        ? event.name
+        : categories[event && event.dataIndex];
+      if (value !== undefined && value !== null) onPointSelect(String(value));
+    });
+  }
   instances.set(containerId, chart);
 }
 

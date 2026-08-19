@@ -53,6 +53,11 @@ const API = {
       body: JSON.stringify({ project_id: projectId, uploads }),
     });
   },
+  retryRun(runId) {
+    return this.request(`/api/runs/${encodeURIComponent(runId)}/retry`, {
+      method: 'POST',
+    });
+  },
 };
 
 class AppError extends Error {
@@ -180,9 +185,34 @@ const UI = {
       summary.className = 'chart-summary visually-hidden';
       summary.textContent = spec.accessible_summary || '';
       figure.append(title, chart, summary);
+      const dimension = (spec.dimensions || [])[0];
+      const points = ((spec.series || [])[0] || {}).points || [];
+      const choosePoint = dimension
+        ? (value) => activateChartPoint(dimension, value)
+        : null;
+      if (choosePoint && points.length) {
+        const controls = document.createElement('div');
+        controls.className = 'chart-point-controls';
+        controls.setAttribute('role', 'group');
+        controls.setAttribute('aria-label', `Filter ${spec.title} by ${dimension}`);
+        const label = document.createElement('span');
+        label.textContent = `Drill into ${dimension}:`;
+        controls.append(label);
+        const active = state.filterState.global.get(dimension) || [];
+        [...new Set(points.map((point) => String(point.x)))].forEach((value) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = value;
+          button.dataset.chartPoint = value;
+          button.setAttribute('aria-pressed', String(active.includes(value)));
+          button.addEventListener('click', () => choosePoint(value));
+          controls.append(button);
+        });
+        figure.append(controls);
+      }
       if (index === 0) grid.insertBefore(figure, insightFocus);
       else grid.append(figure);
-      renderChart(chart.id, spec);
+      renderChart(chart.id, spec, choosePoint);
     });
   },
   renderActions(actions) {
@@ -382,6 +412,18 @@ function applyFilters(snapshot) {
   document.getElementById('filter-status').textContent = problems.join('; ');
 }
 
+function activateChartPoint(dimension, value) {
+  const selected = state.filterState.global.get(dimension) || [];
+  const clear = selected.length === 1 && selected[0] === value;
+  state.filterState.set('global', dimension, clear ? null : [value]);
+  const select = document.getElementById(`filter-${dimension}`);
+  if (select) {
+    Array.from(select.options).forEach((option) => {
+      option.selected = !clear && option.value === value;
+    });
+  }
+}
+
 const state = {
   projects: [],
   project: null,
@@ -391,6 +433,7 @@ const state = {
   pack: null,
   filterState: new FilterState(),
   dictionary: null,
+  waitingRunId: null,
 };
 state.filterState.subscribe(applyFilters);
 
@@ -601,6 +644,18 @@ function wireOperations() {
   });
 
   button.addEventListener('click', async () => {
+    if (state.waitingRunId) {
+      button.disabled = true;
+      try {
+        await API.retryRun(state.waitingRunId);
+        button.textContent = translate(
+          state.dictionary || {}, 'operate.process', 'Process');
+      } catch (error) {
+        UI.renderError(error instanceof AppError ? error : new AppError({}));
+        button.disabled = false;
+      }
+      return;
+    }
     if (!state.project || !isReady()) return;
     button.disabled = true;
     const progress = document.getElementById('progress');
@@ -628,17 +683,31 @@ function wireOperations() {
         if (event.stage === 'SOURCE_OPENED') fill.style.width = '45%';
         if (event.stage === 'VALIDATING_PROJECT') fill.style.width = '65%';
         if (event.stage === 'COMPLETE') {
+          state.waitingRunId = null;
           fill.style.width = '100%';
           UI.renderDashboard(await API.dashboard());
           button.disabled = false;
         }
         if (event.stage === 'FAILED') {
+          state.waitingRunId = null;
           fill.style.width = '100%';
           UI.renderError(new AppError({
             what_went_wrong: 'The project update failed.',
             next_action: 'Open support details. Your previous trusted dashboard was not replaced.',
             support_code: 'RUN_FAILED',
           }));
+          button.disabled = false;
+        }
+        if (event.stage === 'WAITING_FOR_USER') {
+          state.waitingRunId = started.run_id;
+          fill.style.width = '40%';
+          UI.renderError(new AppError(event.error || {
+            what_went_wrong: 'Excel needs an action from you.',
+            next_action: 'Open the workbook in Excel, then press Retry.',
+            support_code: 'DRM_USER_ACTION_REQUIRED',
+          }));
+          button.textContent = translate(
+            state.dictionary || {}, 'operate.retry', 'Retry');
           button.disabled = false;
         }
       });

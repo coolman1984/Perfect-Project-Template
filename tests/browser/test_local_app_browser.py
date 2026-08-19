@@ -191,6 +191,97 @@ class TestLocalAppInChromium(unittest.TestCase):
         self.assertEqual(selected, [])
         self._assert_no_js_errors()
 
+    def test_chart_point_button_cross_filters_and_drills_into_category(self):
+        page = self._open()
+        button = page.query_selector('.chart-point-controls button')
+        self.assertIsNotNone(button)
+        value = button.get_attribute('data-chart-point')
+        button.click()
+        self.assertIn(value, page.inner_text('#active-chips'))
+        self.assertEqual(
+            page.get_attribute(
+                f'.chart-point-controls button[data-chart-point="{value}"]',
+                'aria-pressed'),
+            'true')
+        self.assertEqual(page.inner_text('#filter-status').strip(), '')
+        self._assert_no_js_errors()
+
+    def test_clicking_a_real_chart_mark_cross_filters_the_dashboard(self):
+        page = self._open()
+        page.locator(
+            'figure[data-dimensions*="model_code"] .chart'
+        ).scroll_into_view_if_needed()
+        point = page.evaluate("""
+        () => {
+          const node = document.querySelector(
+            'figure[data-dimensions*="model_code"] .chart');
+          const chart = window.echarts.getInstanceByDom(node);
+          const option = chart.getOption();
+          const category = String(option.xAxis[0].data[0]);
+          const value = Number(option.series[0].data[0]);
+          const pixel = chart.convertToPixel(
+            { seriesIndex: 0 }, [category, value / 2]);
+          const bounds = node.getBoundingClientRect();
+          return {
+            x: bounds.left + pixel[0],
+            y: bounds.top + pixel[1],
+            category,
+          };
+        }
+        """)
+        page.mouse.click(point['x'], point['y'])
+        page.wait_for_function(
+            "(value) => document.querySelector('#active-chips').textContent.includes(value)",
+            arg=point['category'])
+        self.assertEqual(page.inner_text('#filter-status').strip(), '')
+        self._assert_no_js_errors()
+
+    def test_chart_drill_control_is_keyboard_operable(self):
+        page = self._open()
+        button = page.query_selector('.chart-point-controls button')
+        value = button.get_attribute('data-chart-point')
+        button.focus()
+        page.keyboard.press('Enter')
+        self.assertIn(value, page.inner_text('#active-chips'))
+        self._assert_no_js_errors()
+
+    def test_focus_indicator_and_text_contrast_meet_accessibility_floor(self):
+        page = self._open()
+        page.focus('#theme-toggle')
+        outline = page.evaluate(
+            "getComputedStyle(document.querySelector('#theme-toggle')).outlineStyle")
+        self.assertNotEqual(outline, 'none')
+
+        ratios = page.evaluate("""
+        () => {
+          const rgb = (value) => value.match(/[0-9.]+/g).slice(0, 3).map(Number);
+          const luminance = (value) => {
+            const channels = rgb(value).map((part) => {
+              const normalized = part / 255;
+              return normalized <= 0.03928
+                ? normalized / 12.92
+                : Math.pow((normalized + 0.055) / 1.055, 2.4);
+            });
+            return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+          };
+          const ratio = (foreground, background) => {
+            const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+            return (values[0] + 0.05) / (values[1] + 0.05);
+          };
+          return ['body', '.period', '.filter-control label'].map((selector) => {
+            const node = document.querySelector(selector);
+            const style = getComputedStyle(node);
+            const background = getComputedStyle(node.closest('.command-header, .filter-ribbon') || document.body).backgroundColor;
+            return { selector, ratio: ratio(style.color, background) };
+          });
+        }
+        """)
+        for result in ratios:
+            self.assertGreaterEqual(
+                result['ratio'], 4.5,
+                f"{result['selector']} contrast was {result['ratio']:.2f}:1")
+        self._assert_no_js_errors()
+
     # ------------------------------------------------------------- i18n/RTL
 
     def test_language_toggle_sets_lang_and_dir_and_translates_text(self):
@@ -222,6 +313,9 @@ class TestLocalAppInChromium(unittest.TestCase):
         page.wait_for_function(
             "(t) => document.documentElement.dataset.theme !== t",
             arg=starting_theme)
+        page.wait_for_function(
+            "(color) => getComputedStyle(document.body).backgroundColor !== color",
+            arg=before)
         after = page.evaluate(
             "getComputedStyle(document.body).backgroundColor")
         self.assertNotEqual(before, after)
