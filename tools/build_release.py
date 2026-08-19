@@ -116,6 +116,64 @@ def write_sbom(destination: Path) -> None:
         json.dumps(document, indent=2) + "\n", encoding="utf-8")
 
 
+def write_licenses(destination: Path) -> None:
+    license_root = destination / "licenses"
+    license_root.mkdir()
+    rows = []
+    for wheel in sorted(WHEELHOUSE.glob("*.whl")):
+        with zipfile.ZipFile(wheel) as archive:
+            metadata_name = next(
+                (name for name in archive.namelist()
+                 if name.endswith(".dist-info/METADATA")), None)
+            metadata = (
+                archive.read(metadata_name).decode("utf-8", errors="replace")
+                if metadata_name else "")
+            fields = {}
+            for line in metadata.splitlines():
+                if ": " in line:
+                    key, value = line.split(": ", 1)
+                    fields.setdefault(key, value)
+            package = fields.get("Name", wheel.stem)
+            version = fields.get("Version", "locked")
+            expression = fields.get(
+                "License-Expression", fields.get("License", "SEE-WHEEL-METADATA"))
+            target = license_root / package.replace("/", "-")
+            target.mkdir(exist_ok=True)
+            extracted = []
+            for name in archive.namelist():
+                base = Path(name).name
+                if not base or not any(
+                    token in base.casefold()
+                    for token in ("license", "copying", "notice")
+                ):
+                    continue
+                output = target / base
+                output.write_bytes(archive.read(name))
+                extracted.append(output.relative_to(destination).as_posix())
+            rows.append((package, version, expression, sha256(wheel), ", ".join(extracted)))
+
+    python_license = Path(sys.base_prefix) / "LICENSE.txt"
+    if python_license.is_file():
+        shutil.copy2(python_license, license_root / "python.txt")
+    shutil.copy2(REPO_ROOT / "licenses" / "README.md", license_root / "README.md")
+    header = [
+        "# Third-party notices", "",
+        "Generated from the exact locked wheels in the release update kit.", "",
+        "| Component | Version | License | SHA-256 | Extracted notices |",
+        "|---|---:|---|---|---|",
+    ]
+    body = [
+        f"| {name} | `{version}` | {license_name} | `{digest}` | {files or 'wheel metadata'} |"
+        for name, version, license_name, digest, files in rows
+    ]
+    body.append(
+        "| Apache ECharts | `6.1.0` | Apache-2.0 | `"
+        + sha256(destination / "web" / "vendor" / "echarts.min.js")
+        + "` | `web/vendor/README.md` and licensed source header |")
+    (destination / "THIRD_PARTY_NOTICES.md").write_text(
+        "\n".join(header + body) + "\n", encoding="utf-8")
+
+
 def release_baseline(destination: Path) -> None:
     baseline = json.loads(
         (REPO_ROOT / "IMPLEMENTATION_BASELINE.lock.json").read_text("utf-8"))
@@ -124,6 +182,7 @@ def release_baseline(destination: Path) -> None:
         "native-runtime-dlls": list((destination / "app").rglob("*.dll")),
         "pywin32": list((destination / "app").rglob("*win32*")),
         "duckdb": list((destination / "app").rglob("*duckdb*")),
+        "parquet": list((destination / "app").rglob("*duckdb*")),
         "fastapi-stack": [destination / "app"],
         "loopback-transport": [destination / "app" / "excel-intelligence.exe"],
         "echarts": [destination / "web" / "vendor" / "echarts.min.js"],
@@ -142,10 +201,20 @@ def release_baseline(destination: Path) -> None:
         "loopback-transport": RELEASE_VERSION,
         "fastapi-stack": "locked",
         "duckdb": "1.5.5",
+        "parquet": "DuckDB 1.5.5",
         "pywin32": "312",
+        "echarts": "6.1.0",
+        "project-intelligence": "1.0.0",
     }
     for component in baseline["required_components"]:
         identifier = component["id"]
+        if identifier == "browser-renderer":
+            chrome = Path("C:/Program Files/Google/Chrome/Application/chrome.exe")
+            if chrome.is_file():
+                component["sha256"] = sha256(chrome)
+                component["version"] = "build-machine Chrome (exact binary hash)"
+                component["environment_evidence_only"] = True
+            continue
         paths = component_paths.get(identifier)
         if paths:
             root = destination if all(destination in path.parents or path == destination
@@ -164,6 +233,7 @@ def repair_payload(destination: Path) -> str:
     included = [
         destination / "app", destination / "web", destination / "projects",
         destination / "contracts", destination / "START_APP.bat",
+        destination / "licenses", destination / "THIRD_PARTY_NOTICES.md",
         destination / "VERSION.json", destination / "sbom.spdx.json",
         destination / "IMPLEMENTATION_BASELINE.lock.json",
     ]
@@ -246,6 +316,7 @@ def build() -> Path:
     (destination / "VERSION.json").write_text(
         json.dumps(version, indent=2) + "\n", encoding="utf-8")
     write_sbom(destination)
+    write_licenses(destination)
     release_baseline(destination)
     payload_hash = repair_payload(destination)
     write_setup(destination, payload_hash)

@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 22770,
+      "bytes": 16068,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -72,9 +72,9 @@
       "sha256": "ee1a7a95cc2831afd2d56b6ce95c3f4c8483c46ff5da9a1f60f76c21705d1518"
     },
     ".gitignore": {
-      "bytes": 1078,
+      "bytes": 1085,
       "scope": "unknown",
-      "sha256": "39623ec399e9c087b4365854cbd4e69f21a0d962b2f2ec151d3e1a60b1885ba7"
+      "sha256": "f94ed6c27e2ef238bffd54ce0a0fb22bb4535673feb5c5171aa1e2cd8ecacbd9"
     },
     "AGENTS.md": {
       "bytes": 1918,
@@ -1372,9 +1372,9 @@
       "sha256": "ee525b88f86cc4582f9ab730cc7358e57cbe89de1236430bade5f87339b90d2d"
     },
     "tools/build_release.py": {
-      "bytes": 10352,
+      "bytes": 13636,
       "scope": "tooling",
-      "sha256": "2c476d4262caec60baf24b56e0f51ee25da9d1bdec28dc61f7c29af7d52d6e65"
+      "sha256": "01cc43fd634f83567deb294fc15aae26175dbacf72abb72d1f496f852f70e396"
     },
     "tools/doctor.py": {
       "bytes": 2704,
@@ -1507,6 +1507,6 @@
       "sha256": "2ce209d223192c14faff82daf0f8251f60be276ec7922f2c06d1132c2821b5e1"
     }
   },
-  "generated_at": "2026-08-19T14:27:25Z",
+  "generated_at": "2026-08-19T14:33:42Z",
   "schema_version": 2
 }
