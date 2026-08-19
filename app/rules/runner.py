@@ -30,6 +30,7 @@ import builtins
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
+import re
 from typing import Any, Callable, Iterable
 
 #: Deterministic, offline-safe modules a project rule may import. Anything that
@@ -62,8 +63,44 @@ ALLOWED_OUTPUT_TYPES = frozenset({
 })
 
 
+#: The identifier shape the rest of the engine already enforces
+#: (`app/project_pipeline.SAFE_ID`). Every name a rule declaration contributes
+#: to SQL or to a file path must match it.
+SAFE_ID = re.compile(r"^[a-z][a-z0-9_]*$")
+
+
 class ProjectRuleError(RuntimeError):
     """A declared rule is missing, unsafe, or produced an undeclared shape."""
+
+
+def _safe_identifier(value: str, *, label: str) -> str:
+    """Reject anything that would be interpolated into SQL as more than a name.
+
+    Table and column names cannot be passed as query parameters, so they are
+    interpolated — which makes validating them here the only thing standing
+    between project configuration and arbitrary SQL.
+    """
+    text = str(value).strip()
+    if not SAFE_ID.fullmatch(text):
+        raise ProjectRuleError(
+            f"{label} must be lower_snake_case starting with a letter: "
+            f"{value!r}")
+    return text
+
+
+def _safe_table(value: str, *, label: str) -> str:
+    """Validate a `schema.table` (or bare `table`) target, part by part.
+
+    Returns the name rebuilt from the validated parts rather than the original
+    string, so what was checked is exactly what gets interpolated. Returning
+    the raw input would let `"analytics. x"` pass validation on its stripped
+    parts while a different string reached the query.
+    """
+    parts = str(value).strip().split(".")
+    if len(parts) > 2:
+        raise ProjectRuleError(
+            f"{label} must be 'table' or 'schema.table': {value!r}")
+    return ".".join(_safe_identifier(part, label=label) for part in parts)
 
 
 def _guarded_import(name, globals=None, locals=None, fromlist=(), level=0):
@@ -120,11 +157,17 @@ def parse_rule_specs(document: dict[str, Any]) -> tuple[PythonRuleSpec, ...]:
                 raise ProjectRuleError(f"{rule_id}: {field} is required")
 
         columns: list[RuleColumn] = []
+        seen_columns: set[str] = set()
         for column in raw.get("output_schema", []):
             name = str(column.get("name", "")).strip()
             sql_type = str(column.get("type", "")).strip()
             if not name:
                 raise ProjectRuleError(f"{rule_id}: output column needs a name")
+            name = _safe_identifier(name, label=f"{rule_id}: output column")
+            if name in seen_columns:
+                raise ProjectRuleError(
+                    f"{rule_id}: duplicate output column {name!r}")
+            seen_columns.add(name)
             if sql_type not in ALLOWED_OUTPUT_TYPES:
                 raise ProjectRuleError(
                     f"{rule_id}: unsupported output type {sql_type!r} for "
@@ -140,13 +183,22 @@ def parse_rule_specs(document: dict[str, Any]) -> tuple[PythonRuleSpec, ...]:
             raise ProjectRuleError(
                 f"{rule_id}: declare the named SQL inputs the rule reads")
 
+        entrypoint = str(raw.get("entrypoint", "evaluate")).strip()
+        if not entrypoint.isidentifier() or entrypoint.startswith("_"):
+            raise ProjectRuleError(
+                f"{rule_id}: entrypoint must be a public Python identifier: "
+                f"{entrypoint!r}")
+
         specs.append(PythonRuleSpec(
-            rule_id=rule_id,
+            rule_id=_safe_identifier(rule_id, label="rule_id"),
             version=str(raw["version"]),
-            module=str(raw["module"]),
-            entrypoint=str(raw.get("entrypoint", "evaluate")),
+            # A module name becomes a file path, so `../secret` would read code
+            # from outside the project's own rules directory.
+            module=_safe_identifier(raw["module"], label=f"{rule_id}: module"),
+            entrypoint=entrypoint,
             inputs=inputs,
-            output_table=str(raw["output_table"]),
+            output_table=_safe_table(
+                raw["output_table"], label=f"{rule_id}: output_table"),
             output_schema=tuple(columns),
         ))
     return tuple(specs)
@@ -180,7 +232,22 @@ def _reject_unsafe_source(spec: PythonRuleSpec, source: str, path: Path) -> ast.
 
 def load_rule_callable(spec: PythonRuleSpec, *, rules_root: Path) -> Callable:
     """Load one declared rule from `business_rules/python/<module>.py`."""
-    path = Path(rules_root) / f"{spec.module}.py"
+    root = Path(rules_root)
+    path = root / f"{spec.module}.py"
+
+    # `parse_rule_specs` already restricts a module name to a bare identifier.
+    # This repeats the containment check on the resolved path so a spec built
+    # directly in code, or a symlink planted inside the rules directory, still
+    # cannot load code from outside the project's own rules folder.
+    try:
+        resolved_root = root.resolve()
+        resolved_path = path.resolve()
+        resolved_path.relative_to(resolved_root)
+    except (OSError, ValueError) as error:
+        raise ProjectRuleError(
+            f"{spec.rule_id}: module {spec.module!r} resolves outside the "
+            f"project rules directory") from error
+
     if not path.is_file():
         raise ProjectRuleError(
             f"{spec.rule_id}: declared module is missing: {path}")

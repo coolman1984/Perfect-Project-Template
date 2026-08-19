@@ -70,6 +70,72 @@ class TestRuleDeclaration(unittest.TestCase):
         with self.assertRaises(ProjectRuleError):
             parse_rule_specs({"python_rules": [entry, dict(entry)]})
 
+    def _spec(self, **overrides):
+        entry = {
+            "rule_id": "r", "version": "1", "module": "m",
+            "output_table": "analytics.r", "inputs": ["q"],
+            "output_schema": [{"name": "a", "type": "VARCHAR"}],
+        }
+        entry.update(overrides)
+        return {"python_rules": [entry]}
+
+    def test_output_table_cannot_smuggle_sql(self):
+        """Table and column names cannot be query parameters, so they are
+        interpolated — which makes validating them the only thing between
+        project configuration and arbitrary SQL."""
+        for hostile in (
+            "analytics.x (a VARCHAR); DROP TABLE victim; --",
+            "analytics.x; DELETE FROM analytics.history",
+            'analytics."x"',
+            "analytics.x--",
+            "a.b.c",
+            "",
+        ):
+            with self.assertRaises(ProjectRuleError, msg=hostile):
+                parse_rule_specs(self._spec(output_table=hostile))
+
+    def test_the_validated_table_name_is_the_one_that_gets_used(self):
+        """Returning the raw input would let a string pass validation on its
+        stripped parts while a different string reached the query."""
+        specs = parse_rule_specs(self._spec(output_table="analytics. rule_x "))
+        self.assertEqual(specs[0].output_table, "analytics.rule_x")
+
+    def test_output_column_names_cannot_smuggle_sql(self):
+        for hostile in (
+            "a VARCHAR, injected INTEGER DEFAULT 1",
+            "a); DROP TABLE victim; --",
+            "a b",
+            "1a",
+            "A",
+        ):
+            with self.assertRaises(ProjectRuleError, msg=hostile):
+                parse_rule_specs(
+                    self._spec(output_schema=[{"name": hostile, "type": "VARCHAR"}]))
+
+    def test_duplicate_output_columns_are_rejected(self):
+        with self.assertRaises(ProjectRuleError):
+            parse_rule_specs(self._spec(output_schema=[
+                {"name": "a", "type": "VARCHAR"},
+                {"name": "a", "type": "INTEGER"},
+            ]))
+
+    def test_module_name_cannot_escape_the_rules_directory(self):
+        """A module name becomes a file path."""
+        for hostile in ("../secret", "..", "/etc/passwd", "sub/mod", "a.b",
+                        "~/secret", "mod\\other"):
+            with self.assertRaises(ProjectRuleError, msg=hostile):
+                parse_rule_specs(self._spec(module=hostile))
+
+    def test_rule_id_is_a_safe_identifier(self):
+        for hostile in ("r; DROP TABLE x", "r-1", "R", "1r", "r x"):
+            with self.assertRaises(ProjectRuleError, msg=hostile):
+                parse_rule_specs(self._spec(rule_id=hostile))
+
+    def test_entrypoint_must_be_a_public_identifier(self):
+        for hostile in ("__class__", "_private", "eval(", "a b", ""):
+            with self.assertRaises(ProjectRuleError, msg=hostile):
+                parse_rule_specs(self._spec(entrypoint=hostile))
+
     def test_a_complete_declaration_parses(self):
         specs = parse_rule_specs({"python_rules": [{
             "rule_id": "r", "version": "2", "module": "m",

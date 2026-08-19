@@ -47,9 +47,21 @@ from app.data.database import Database
 
 FILENAME = re.compile(r"^(\d{4})_([a-z0-9_]+)\.sql$")
 
+#: Used only to answer "does this file contain any statement at all", never to
+#: rewrite SQL that will be executed. A `--` inside a string literal could be
+#: mis-stripped, which is harmless here: the surrounding statement text still
+#: proves the file is not empty.
+_BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
+_LINE_COMMENT = re.compile(r"--[^\n]*")
+
 
 class ProjectMigrationError(RuntimeError):
     pass
+
+
+def _has_executable_sql(sql: str) -> bool:
+    stripped = _LINE_COMMENT.sub("", _BLOCK_COMMENT.sub("", sql))
+    return bool(stripped.strip().strip(";").strip())
 
 
 @dataclass(frozen=True)
@@ -132,6 +144,16 @@ def migrate(
                 f"{project_id}: migration {migration.version:04d} "
                 f"({migration.name}) was edited after apply; project "
                 f"migrations are immutable — write a new one instead")
+        # An empty or comment-only file is a half-written migration, not an
+        # intentional no-op. Recording it as applied would be a trap: writing
+        # the intended SQL afterwards then trips the immutability rule above,
+        # and that version can never be used again.
+        if migration.version not in already and not _has_executable_sql(migration.sql):
+            raise ProjectMigrationError(
+                f"{project_id}: migration {migration.version:04d} "
+                f"({migration.name}) contains no SQL statement. Write the "
+                f"migration before running it — recording an empty file as "
+                f"applied would permanently block that version")
 
     newly_applied: list[int] = []
     for migration in available:

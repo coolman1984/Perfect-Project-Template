@@ -357,6 +357,54 @@ class TestMultiSourceSupplyChainReference(unittest.TestCase):
             self._shortage_by_item(),
             "cross-source metrics must reconcile against rebuilt history")
 
+    def test_archiving_a_source_with_no_active_rows_still_recovers(self):
+        """Recovery must survive a source that legitimately holds nothing.
+
+        A project can carry a source that has received no data yet, or whose
+        every row has been deactivated. Archiving it produces a real archive
+        directory containing no Parquet files, and restoring that means
+        restoring zero rows. Failing there would turn a recoverable state into
+        a failed recovery — the opposite of what the archive exists for.
+        """
+        from app.data.archive import archive_history, rebuild_history_from_archive
+
+        self.pipeline.run("SC-E1", self._ports(1, "SC-E1"))
+        source = self.contract.source("orders")
+        table = self.pipeline.history_table(source)
+        archive_root = Path(self.temp.name) / "archive-empty"
+
+        # Deactivate everything, exactly as a fully superseded source looks.
+        self.database.execute(f"UPDATE {table} SET is_active = FALSE")
+        result = archive_history(
+            self.database, history_table=table,
+            report_id=f"{self.contract.project_id}_orders_empty",
+            archive_root=archive_root, event_date_column=source.event_date)
+        self.assertEqual(result.rows, 0)
+
+        self.database.execute(f"DELETE FROM {table}")
+        restored = rebuild_history_from_archive(
+            self.database, history_table=table, archive_root=archive_root,
+            report_id=f"{self.contract.project_id}_orders_empty")
+        self.assertEqual(restored, 0)
+        self.assertEqual(
+            self._scalar(f"SELECT count(*) FROM {table}"), 0)
+
+    def test_rebuilding_from_an_archive_that_was_never_taken_still_fails(self):
+        """The empty-archive tolerance must not swallow a missing archive.
+
+        No archive at all is a different situation from an archive of nothing,
+        and only one of them is safe to report as a successful recovery.
+        """
+        from app.data.archive import rebuild_history_from_archive
+
+        with self.assertRaises(FileNotFoundError):
+            rebuild_history_from_archive(
+                self.database,
+                history_table=self.pipeline.history_table(
+                    self.contract.source("orders")),
+                archive_root=Path(self.temp.name) / "never-archived",
+                report_id="absent")
+
 
 if __name__ == "__main__":
     unittest.main()

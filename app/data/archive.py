@@ -67,6 +67,16 @@ def rebuild_history_from_archive(
     columns = database.columns_of(history_table)
     column_list = ", ".join(columns)
     database.execute(f"DELETE FROM {history_table}")
+
+    # An archive of a source that had no active rows is a real, valid archive:
+    # `archive_history` creates the partition directory and writes no Parquet
+    # files. Restoring it means restoring zero rows, which is the truthful
+    # answer. Handing that case to read_parquet instead raises a raw database
+    # IO error and turns a recoverable state into a failed recovery — the
+    # opposite of what this function exists for (Part 8.6).
+    if not any(source.rglob("*.parquet")):
+        return 0
+
     database.execute(f"""
         INSERT INTO {history_table} ({column_list})
         SELECT {column_list} FROM read_parquet('{source.as_posix()}/**/*.parquet')

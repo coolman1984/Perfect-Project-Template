@@ -76,6 +76,43 @@ class TestProjectMigrations(unittest.TestCase):
             self._migrate()
         self.assertIn("immutable", str(caught.exception))
 
+    def test_an_empty_migration_is_refused_before_it_becomes_a_trap(self):
+        """Creating the file and forgetting the SQL must not cost the version.
+
+        If an empty file were recorded as applied, writing the intended SQL
+        afterwards would trip the immutability rule and that version could
+        never be used again — a confusing dead end for a simple slip.
+        """
+        from app.data.project_migrations import ProjectMigrationError
+
+        path = _write(self.migrations_dir, "0001_add_column.sql", "")
+        with self.assertRaises(ProjectMigrationError) as caught:
+            self._migrate()
+        self.assertIn("no SQL statement", str(caught.exception))
+
+        # The slip costs nothing: writing the real migration now works.
+        path.write_text("CREATE TABLE t1 (x INTEGER)", encoding="utf-8")
+        self.assertEqual(self._migrate(), [1])
+
+    def test_a_comment_only_migration_is_also_refused(self):
+        from app.data.project_migrations import ProjectMigrationError
+
+        for body in ("-- todo: write this\n", "/* placeholder */\n", ";\n",
+                     "-- a\n/* b */\n;\n", "   \n\t\n"):
+            self.migrations_dir_clear = [
+                p.unlink() for p in self.migrations_dir.glob("*.sql")]
+            _write(self.migrations_dir, "0001_placeholder.sql", body)
+            with self.assertRaises(ProjectMigrationError, msg=body):
+                self._migrate()
+
+    def test_sql_containing_a_double_dash_inside_a_string_still_counts(self):
+        """The emptiness check must not mistake data for a comment."""
+        _write(self.migrations_dir, "0001_real.sql",
+               "CREATE TABLE t1 (x VARCHAR); INSERT INTO t1 VALUES ('a--b')")
+        self.assertEqual(self._migrate(), [1])
+        self.assertEqual(
+            self.database.query("SELECT x FROM t1"), [("a--b",)])
+
     def test_malformed_filename_is_rejected(self):
         _write(self.migrations_dir, "add_column.sql", "SELECT 1")
         from app.data.project_migrations import ProjectMigrationError
