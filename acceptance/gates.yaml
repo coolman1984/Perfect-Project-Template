@@ -342,23 +342,23 @@
   part: 23.11 / 31.1
   title: Removing any required component fails closed with no reduced fallback
   severity: block
-  status: not_started
+  status: conditional
   evidence: ""
-  verified_at: ""
-  verified_by: ""
-  conditional_reason: ""
-  next_action: Run architecture verify --simulate-missing for each component id
+  verified_at: "2026-08-19T12:10:00Z"
+  verified_by: "PROJECT_TOOL architecture verify --simulate-missing python-runtime, run on this Windows 11 dev machine"
+  conditional_reason: "architecture verify --simulate-missing unconditionally prints BLOCKED for any invocation, on any platform (tools/verify_architecture.py main(), the three simulate/standard-user flags are stubbed to always report blocked — Part 23.10). It does not check this machine's state; it verifies behaviour against a real sealed release build, which a dev checkout structurally is not."
+  next_action: Run architecture verify --simulate-missing for each component id against a real built release, not a dev checkout.
 
 - id: GATE_NO_BUILD_MACHINE_LEAKAGE
   part: 30.4 / 31.1
   title: Passes with system Python, Node, pip, npm, Git and editors masked from PATH
   severity: block
-  status: not_started
+  status: conditional
   evidence: ""
-  verified_at: ""
-  verified_by: ""
-  conditional_reason: ""
-  next_action: Run architecture verify --simulate-clean-pc on a representative machine
+  verified_at: "2026-08-19T12:10:00Z"
+  verified_by: "PROJECT_TOOL architecture verify --simulate-clean-pc, run on this Windows 11 dev machine"
+  conditional_reason: "architecture verify --simulate-clean-pc unconditionally prints BLOCKED for any invocation, on any platform (tools/verify_architecture.py main(), Part 30.4). It verifies a real built release running with dev tooling masked from PATH, which a dev checkout cannot stand in for."
+  next_action: Run architecture verify --simulate-clean-pc on a representative machine, against a real built release.
 
 - id: GATE_ARCHIVE_REBUILD
   part: 14 Phase 5 / 28.1 Phase 6

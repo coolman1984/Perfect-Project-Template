@@ -1,5 +1,5 @@
 {
-  "file_count": 277,
+  "file_count": 293,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 2995,
@@ -12,9 +12,9 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 8450,
+      "bytes": 9088,
       "scope": "unknown",
-      "sha256": "96c21b3c806b765ff2a5e248da09c9c2c48d5b6032bcddd9be48b867fd40efd5"
+      "sha256": "247b8b0af1f4ab2bb45445f95b030a06ef2bc18a3dc821d3fd7c07a2f0077448"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 14833,
+      "bytes": 15830,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 19152,
+      "bytes": 20114,
       "scope": "unknown",
-      "sha256": "52c19bae8adf9fd00ad68ab6b41aca85991713bba61d617b491580c80163ef45"
+      "sha256": "b994a53b64ba3a4ec68af34523e364f1572b5256060abb3113875b2ea5468338"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -397,9 +397,9 @@
       "sha256": "f736a4b0441ae8c1b2efe03a21b363f201f018829023f67fecc23bb569475410"
     },
     "app/project_pipeline.py": {
-      "bytes": 35383,
+      "bytes": 35574,
       "scope": "universal_core",
-      "sha256": "2f3ac8bb5e75a9fd4562919dba0fce944c3f0d39c7c97e6bc6a9bff0e431a72d"
+      "sha256": "a727a41e55c9b17dc6ee641ffda85c51347bdd7743dacda342910561402bd07b"
     },
     "app/quality/__init__.py": {
       "bytes": 182,
@@ -532,9 +532,9 @@
       "sha256": "d1724f0c8385a1647ba6306768a43c1f41518b2ce6c8183f5d496ae435acf2bf"
     },
     "contracts/source_registry.schema.json": {
-      "bytes": 2096,
+      "bytes": 2353,
       "scope": "universal_core",
-      "sha256": "96af7556d9f72838ec4fa7f7bd62cd4ed22fa7aa778d9ec04708063dc25929f6"
+      "sha256": "260749484f70df7f6c16932075cbea9d4d3cd70d08d7ccd8987da365722cede9"
     },
     "contracts/template_baseline.schema.json": {
       "bytes": 1080,
@@ -587,9 +587,9 @@
       "sha256": "fdc31a30ae6ff6a3db52c4f9ddacc100e57945fe1eb84b20d9a2556b36c095f3"
     },
     "docs/V10_BUILD_PROGRAM.md": {
-      "bytes": 14005,
+      "bytes": 15079,
       "scope": "documentation",
-      "sha256": "627f72ec79d02c92793da5798c85cfe65703f6a5686aec3a2b6d3b22784c918b"
+      "sha256": "3c47d3eb8559f6b69a492bf949341bc5afb308e3eb1528e5d80c724778bb3269"
     },
     "docs/V10_CODING_PLAN.md": {
       "bytes": 17072,
@@ -652,9 +652,9 @@
       "sha256": "8209461a8e784c8e90bba1b93523c644811a2ed102fb75d5dd3f2741d3bbe1e1"
     },
     "factory/project_contract.py": {
-      "bytes": 11305,
+      "bytes": 11706,
       "scope": "universal_core",
-      "sha256": "606ba844b415818ad70bd85391acc291f79bd06835d7679f50f92b78b4bb3623"
+      "sha256": "8b888c074fee0056f213e5d3abf865f8d44abc0c2977824b593be3c7a606f0ea"
     },
     "factory/project_generator.py": {
       "bytes": 4733,
@@ -755,6 +755,76 @@
       "bytes": 3713,
       "scope": "project_config",
       "sha256": "77c89209c7ab36ecd0a497d08af740e89f8ca1a87e20a4311a5da518e3087812"
+    },
+    "projects/_REFERENCE_MAINTENANCE_DOWNTIME/README.md": {
+      "bytes": 2140,
+      "scope": "project_config",
+      "sha256": "32e8c48be0e33a471272c0eb46420d26cc4340cd21075f35983d69fd682d3074"
+    },
+    "projects/_REFERENCE_MAINTENANCE_DOWNTIME/business_rules/insights.sql": {
+      "bytes": 767,
+      "scope": "business_logic",
+      "sha256": "ede56807cb015440b07f2db7ccddba9a3aa76628978feffb405d45d30def7286"
+    },
+    "projects/_REFERENCE_MAINTENANCE_DOWNTIME/business_rules/metrics.sql": {
+      "bytes": 1751,
+      "scope": "business_logic",
+      "sha256": "6fc607e1fafb89562a94460e7d99b5342a8ec7504d8f2770210fa9d3c4c6cf8d"
+    },
+    "projects/_REFERENCE_MAINTENANCE_DOWNTIME/dashboard.toml": {
+      "bytes": 1659,
+      "scope": "presentation",
+      "sha256": "ef4766e8cd92a6ae8cd9b6b35c216c6e14aaf5852aa1b244a9f8bcf46ef0dadb"
+    },
+    "projects/_REFERENCE_MAINTENANCE_DOWNTIME/project.toml": {
+      "bytes": 638,
+      "scope": "project_config",
+      "sha256": "80b054a152fde95781a0266a5d96735545a6e20bce82f1561d50e2059d1a4d23"
+    },
+    "projects/_REFERENCE_MAINTENANCE_DOWNTIME/relationships.toml": {
+      "bytes": 237,
+      "scope": "project_config",
+      "sha256": "4f8259c295e835aad521c9131acf799d87ae8a530eff9e09076eb7b90efa0ea4"
+    },
+    "projects/_REFERENCE_MAINTENANCE_DOWNTIME/sources.toml": {
+      "bytes": 1122,
+      "scope": "project_config",
+      "sha256": "01f162524a7755dac85f8468b42186c9dea4906230ba9623681c49bebbcd99e6"
+    },
+    "projects/_REFERENCE_PRODUCTION_QUALITY/README.md": {
+      "bytes": 2196,
+      "scope": "project_config",
+      "sha256": "46f6dd6b83c12da36cc39faf1644b9018fa6a95cd26f5f5a5e85c122a7a5fae7"
+    },
+    "projects/_REFERENCE_PRODUCTION_QUALITY/business_rules/insights.sql": {
+      "bytes": 1822,
+      "scope": "business_logic",
+      "sha256": "d1fbda2340017f2663cbed64ed0f020915dcab2d38bdf741ab9469b88aa8a9d8"
+    },
+    "projects/_REFERENCE_PRODUCTION_QUALITY/business_rules/metrics.sql": {
+      "bytes": 2185,
+      "scope": "business_logic",
+      "sha256": "84a6018ec88e8183d6d237ad471db10ca58162662c6f26ad1c487c45224d832a"
+    },
+    "projects/_REFERENCE_PRODUCTION_QUALITY/dashboard.toml": {
+      "bytes": 1836,
+      "scope": "presentation",
+      "sha256": "366d6816d04669dbed45aaeecd8027788564cd25a02749586eef0bea76d07f5c"
+    },
+    "projects/_REFERENCE_PRODUCTION_QUALITY/project.toml": {
+      "bytes": 645,
+      "scope": "project_config",
+      "sha256": "83b2738fb6e9c81fdf005bb888456b6e97f2bfa68e768f6f7aa786292dee3b26"
+    },
+    "projects/_REFERENCE_PRODUCTION_QUALITY/relationships.toml": {
+      "bytes": 237,
+      "scope": "project_config",
+      "sha256": "23b99c5b348697e5338fa1d0c7fcd517018377de56ab29ecb6231a7fa63c3e5d"
+    },
+    "projects/_REFERENCE_PRODUCTION_QUALITY/sources.toml": {
+      "bytes": 976,
+      "scope": "project_config",
+      "sha256": "eaa370d28c38fdaf9360e7dbd480bebf6631cb195f5e6d906db904df8446986c"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/README.md": {
       "bytes": 1325,
@@ -1086,6 +1156,11 @@
       "scope": "test",
       "sha256": "97403824e0789aef35e0108f287f7100ff4341f874c1f7624f786404663b769c"
     },
+    "tests/golden/test_maintenance_downtime_project_pipeline.py": {
+      "bytes": 6388,
+      "scope": "test",
+      "sha256": "c5b99e2b32150af75991131b48a73e5c7366de460a6285ad1c66a6a3d3526b7b"
+    },
     "tests/golden/test_multisource_supply_chain.py": {
       "bytes": 17487,
       "scope": "test",
@@ -1105,6 +1180,11 @@
       "bytes": 17292,
       "scope": "test",
       "sha256": "01faae229fe04ea8256eb6b38df97dfc12aedb7ba9e6429e1d272e73ab248222"
+    },
+    "tests/golden/test_reference_project_pipeline.py": {
+      "bytes": 9589,
+      "scope": "test",
+      "sha256": "1c687579e22cdd987883a17f548302842af489d7de29a5a2341cbed268669840"
     },
     "tests/golden/test_reference_reuse_boundary.py": {
       "bytes": 7613,
@@ -1387,6 +1467,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T11:36:11Z",
+  "generated_at": "2026-08-19T12:10:09Z",
   "schema_version": 2
 }

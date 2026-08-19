@@ -1,0 +1,20 @@
+project_id = "reference_production_quality"
+project_version = 1
+mode = "prototype"
+outputs = ["dashboard", "standalone_html"]
+
+[template]
+template_id = "universal-excel-automation-engine"
+template_version = "0.2.0-development"
+baseline_digest = "PENDING_SEALED_TEMPLATE"
+
+[business]
+purpose = "Golden Production Quality reference (V10 Reference A), migrated from the legacy report-shaped reports/_REFERENCE onto the project-centric contract (V10 S4)"
+owner = "FIXTURE"
+decision = "Where is production loss concentrated, and which model explains most of it?"
+
+[execution]
+fixture_adapter = true
+
+[security]
+policy = "policy/security_policy.toml"

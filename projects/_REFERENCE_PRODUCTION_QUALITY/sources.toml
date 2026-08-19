@@ -1,0 +1,32 @@
+[[sources]]
+source_id = "production"
+role = "transaction"
+required = true
+grain = "One production order line for one line and model on one date"
+business_key = ["production_date", "line", "order_number", "model_code"]
+event_date = "production_date"
+
+[sources.column_types]
+production_date = "DATE"
+line = "VARCHAR"
+order_number = "VARCHAR"
+model_code = "VARCHAR"
+produced_qty = "DECIMAL(18,4)"
+defect_qty = "DECIMAL(18,4)"
+category = "VARCHAR"
+
+[sources.match]
+file_patterns = ["production*.xlsx", "production*.csv", "*raw*data*.xlsx"]
+[sources.discovery]
+sheet = "Raw Data"
+table = "tblProduction"
+header_row = 1
+[sources.history]
+mode = "upsert"
+lookback_days = 7
+deletion_rule = "ignore"
+[sources.quality]
+required_columns = ["production_date", "line", "order_number", "model_code", "produced_qty", "defect_qty", "category"]
+control_totals = ["produced_qty"]
+non_negative_columns = ["produced_qty", "defect_qty"]
+approved_categories = { category = ["standard", "rework"] }

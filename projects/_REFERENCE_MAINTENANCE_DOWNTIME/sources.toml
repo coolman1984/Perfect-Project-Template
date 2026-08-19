@@ -1,0 +1,35 @@
+[[sources]]
+source_id = "downtime"
+role = "transaction"
+required = true
+grain = "One downtime event for one line and machine"
+business_key = ["event_date", "line", "event_id"]
+event_date = "event_date"
+
+[sources.column_types]
+event_date = "DATE"
+line = "VARCHAR"
+event_id = "VARCHAR"
+machine = "VARCHAR"
+reason = "VARCHAR"
+downtime_minutes = "DECIMAL(18,4)"
+planned_flag = "BOOLEAN"
+
+[sources.match]
+file_patterns = ["downtime*.xlsx", "downtime*.csv"]
+[sources.discovery]
+# The legacy report used data_area = "used_range", which Part 7.2 forbids
+# (UsedRange remembers deleted rows). The project path's bounded discover
+# strategy (no `table` configured here) is a correctness improvement, not a
+# faithfulness gap.
+sheet = "Downtime"
+header_row = 1
+[sources.history]
+mode = "upsert"
+lookback_days = 7
+deletion_rule = "ignore"
+[sources.quality]
+required_columns = ["event_date", "line", "event_id", "machine", "reason", "downtime_minutes", "planned_flag"]
+control_totals = ["downtime_minutes"]
+non_negative_columns = ["downtime_minutes"]
+approved_categories = { reason = ["Breakdown", "Material", "Changeover", "Other"] }

@@ -22,7 +22,7 @@
           "event_date": {"type": ["string", "null"]},
           "column_types": {"type": "object", "minProperties": 1, "additionalProperties": {"enum": ["VARCHAR", "DATE", "INTEGER", "BIGINT", "BOOLEAN", "DECIMAL(18,4)", "DECIMAL(18,2)"]}},
           "history": {"type": "object", "required": ["mode", "deletion_rule"], "properties": {"mode": {"enum": ["append", "upsert", "snapshot", "replace_period"]}, "lookback_days": {"type": "integer", "minimum": 0}, "deletion_rule": {"enum": ["ignore", "mark_inactive", "soft_delete"]}}},
-          "quality": {"type": "object", "required": ["required_columns", "control_totals"], "properties": {"required_columns": {"type": "array", "items": {"type": "string"}}, "control_totals": {"type": "array", "items": {"type": "string"}}, "non_negative_columns": {"type": "array", "items": {"type": "string"}}}}
+          "quality": {"type": "object", "required": ["required_columns", "control_totals"], "properties": {"required_columns": {"type": "array", "items": {"type": "string"}}, "control_totals": {"type": "array", "items": {"type": "string"}}, "non_negative_columns": {"type": "array", "items": {"type": "string"}}, "approved_categories": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}, "minItems": 1}, "description": "column -> approved value list. A row outside the list is loaded and flagged WARNING, never blocked (Part 9)."}}}
         }
       }
     }

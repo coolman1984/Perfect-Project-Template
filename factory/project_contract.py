@@ -38,6 +38,7 @@ class SourceSpec:
     required_columns: tuple[str, ...]
     control_totals: tuple[str, ...]
     non_negative_columns: tuple[str, ...]
+    approved_categories: dict[str, tuple[str, ...]]
     column_types: dict[str, str]
 
     @property
@@ -184,7 +185,13 @@ def load_project(directory: str | Path) -> ProjectContract:
         controls = tuple(str(x) for x in quality.get("control_totals", []))
         non_negative = tuple(
             str(x) for x in quality.get("non_negative_columns", []))
-        referenced = set(required) | set(key) | set(controls) | set(non_negative)
+        approved_categories = {
+            _validate_identifier(str(column), label=f"{source_id} column"):
+                tuple(str(v) for v in values)
+            for column, values in quality.get("approved_categories", {}).items()
+        }
+        referenced = (set(required) | set(key) | set(controls)
+                      | set(non_negative) | set(approved_categories))
         if raw.get("event_date"):
             referenced.add(str(raw["event_date"]))
         missing_types = referenced - set(column_types)
@@ -219,6 +226,7 @@ def load_project(directory: str | Path) -> ProjectContract:
             required_columns=required,
             control_totals=controls,
             non_negative_columns=non_negative,
+            approved_categories=approved_categories,
             column_types=column_types,
         ))
     if not sources:

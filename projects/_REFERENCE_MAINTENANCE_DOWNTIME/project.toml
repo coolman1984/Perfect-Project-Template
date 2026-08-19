@@ -1,0 +1,20 @@
+project_id = "reference_maintenance_downtime"
+project_version = 1
+mode = "prototype"
+outputs = ["dashboard", "standalone_html"]
+
+[template]
+template_id = "universal-excel-automation-engine"
+template_version = "0.2.0-development"
+baseline_digest = "PENDING_SEALED_TEMPLATE"
+
+[business]
+purpose = "Line downtime reuse proof (V10 Reference B), migrated from the legacy report-shaped reports/line_downtime onto the project-centric contract (V10 S4)"
+owner = "FIXTURE"
+decision = "Which line is losing the most production time, and is downtime improving?"
+
+[execution]
+fixture_adapter = true
+
+[security]
+policy = "policy/security_policy.toml"

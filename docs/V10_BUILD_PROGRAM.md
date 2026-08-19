@@ -173,20 +173,36 @@ may already be done.
 
 **Exit gate:** each of the six I3 properties maps to a named passing test.
 
-### S4 — References A and B
+### S4 — References A and B — DONE (2026-08-19)
 
 Migrate Production Quality and Maintenance onto the project surface. Not a
 numbered V10 phase, but required by §16 and §34 before reuse can be measured
 honestly.
 
-- `reports/_REFERENCE` and `reports/line_downtime` are still report-shaped
-  legacy; all four references must run on `projects/<id>/`.
-- Keep the legacy path working throughout — V10 §0 forbids deleting working
-  compatibility paths for conceptual cleanliness. Mark them for retirement
-  with a date instead.
+- `projects/_REFERENCE_PRODUCTION_QUALITY/` (Reference A) and
+  `projects/_REFERENCE_MAINTENANCE_DOWNTIME/` (Reference B) now run the same
+  fixtures and hand-checked numbers through `app.project_pipeline.ProjectPipeline`
+  as the legacy `reports/_REFERENCE` and `reports/line_downtime` do through
+  `app.pipeline.Pipeline`. Proof:
+  `tests/golden/test_reference_project_pipeline.py`,
+  `tests/golden/test_maintenance_downtime_project_pipeline.py`.
+- The legacy report contract had one quality capability the project contract
+  did not: `approved_categories` (a column value outside an approved list
+  loads and warns, per Part 9). This was a real faithfulness gap, not a
+  cosmetic one, so it was added as a small reusable capability
+  (`contracts/source_registry.schema.json`, `factory/project_contract.py`,
+  `app/project_pipeline.py`) rather than dropped. Both new references use it;
+  Supply Chain and Finance PPV are unaffected (the field is optional).
+- `reports/_REFERENCE` and `reports/line_downtime` are untouched and keep
+  working — V10 §0 forbids deleting a working compatibility path for
+  conceptual cleanliness. Not yet marked for retirement with a date; that is
+  a product decision, not an engineering one.
 
 **Exit gate:** References A, B and C all execute through the project
 pipeline · legacy endpoints dated for retirement.
+
+The first half is done. The second half — dating the legacy endpoints for
+retirement — is a product/ownership decision still open.
 
 ### S5 — Reference D (Finance PPV)
 

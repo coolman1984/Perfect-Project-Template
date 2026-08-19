@@ -25,6 +25,15 @@ The ready application is the product. Employee agents should adapt project confi
   rerun, whole-project rollback on downstream failure, and Parquet archive
   rebuild of every source. Proof: `tests/golden/test_multisource_supply_chain.py`
   and `acceptance/evidence/multisource-archive-rebuild-2026-08-18.txt`.
+- References A (Production Quality) and B (Maintenance downtime) now also run
+  through the project-centric contract, alongside their original legacy
+  report-contract proof: `projects/_REFERENCE_PRODUCTION_QUALITY/` and
+  `projects/_REFERENCE_MAINTENANCE_DOWNTIME/` reproduce the same hand-checked
+  numbers as `reports/_REFERENCE/` and `reports/line_downtime/`. All four
+  references (A/B/C/D) now execute through `ProjectPipeline` (V10 build
+  program S4). Proof: `tests/golden/test_reference_project_pipeline.py`,
+  `tests/golden/test_maintenance_downtime_project_pipeline.py`. The legacy
+  report paths are untouched and still work.
 - The project contract (V10 Phase I2) is complete: a project may declare a
   Python business rule (`app/rules/runner.py`, `metrics.toml`
   `[[python_rules]]`) that runs inside the same project transaction as

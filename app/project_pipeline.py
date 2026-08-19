@@ -434,6 +434,9 @@ class ProjectPipeline:
         self._build_clean(
             run_id, source,
             excluded=sorted(rejected_rows | filtered_rows))
+        for column, allowed in source.approved_categories.items():
+            engine.check_category_allowed(
+                report, self.clean_table(source), run_id, column, list(allowed))
         accepted = int(self.database.scalar(
             f"SELECT count(*) FROM {self.clean_table(source)} "
             "WHERE _run_id = ?", [run_id]) or 0)

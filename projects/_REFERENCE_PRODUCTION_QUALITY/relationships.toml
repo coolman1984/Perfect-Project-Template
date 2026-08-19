@@ -1,0 +1,4 @@
+# No relationships: Reference A has exactly one source. The array stays
+# present and empty so factory/project_contract.py's loader (which requires
+# the file to exist and parse) has something valid to read (Part 16).
+relationships = []
