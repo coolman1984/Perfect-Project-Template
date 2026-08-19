@@ -1,0 +1,24 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\m.labib\AppData\Local\Temp\claude\d--WORK-Software-Development-GitHub-Perfect-Project-Template\23992b4e-e328-4f0b-a8ca-f76fa568d90d\scratchpad\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\WORK\Software Development\GitHub\Perfect-Project-Template
+configfile: pyproject.toml
+plugins: anyio-4.14.2
+collecting ... collected 14 items
+
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_charts_are_given_an_accessible_name_and_the_correct_data PASSED [  7%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_every_kpi_on_screen_is_the_value_the_engine_computed PASSED [ 14%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_insight_text_is_rendered_without_false_precision PASSED [ 21%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_print_layout_keeps_trusted_content_and_drops_the_control PASSED [ 28%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_quality_and_watermark_state_reaches_the_page PASSED [ 35%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_reduced_motion_preference_is_respected PASSED [ 42%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_report_opens_offline_with_no_network_and_no_script_errors PASSED [ 50%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_right_to_left_layout_actually_flips PASSED [ 57%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_the_html_file_contains_no_remote_reference_at_all PASSED [ 64%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_the_theme_control_is_keyboard_reachable PASSED [ 71%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_theme_toggle_switches_and_keeps_content PASSED [ 78%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_trusted_text_meets_wcag_aa_contrast_in_both_themes PASSED [ 85%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardRealRendering::test_charts_render_as_real_canvas_elements_with_the_vendored_engine PASSED [ 92%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardRealRendering::test_the_vendored_asset_is_the_real_licensed_apache_echarts_build PASSED [100%]
+
+======================= 14 passed in 104.25s (0:01:44) ========================

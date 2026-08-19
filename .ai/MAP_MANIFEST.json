@@ -102,9 +102,9 @@
       "sha256": "1ac7efba25da843f94e8d7acbbc898624a766d58aad4624ec91379a291006275"
     },
     "IMPLEMENTATION_BASELINE.lock.json": {
-      "bytes": 8834,
+      "bytes": 9256,
       "scope": "unknown",
-      "sha256": "aae776c599667445bb23670d363305d2e210b26a859be81b746460137af24722"
+      "sha256": "855ec876be9a823807ad6baca890505da66f36f2d8f4b489eb51589dcda66118"
     },
     "PROJECT_SKILL.md": {
       "bytes": 10691,
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 21013,
+      "bytes": 21317,
       "scope": "unknown",
-      "sha256": "73f37ad2cae96fce1ddb7657a785fcbbc65ac54e4bbcd553ee6849b59e89fc0f"
+      "sha256": "a4a8645e1d4743a51f8828ab979e2a4f5e8d7484bf4d16045fb93757afafd03c"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -1042,9 +1042,9 @@
       "sha256": "8b0d9f647e03f5417da734a89526544a9690e6f932c82a11a76b170e97463b5c"
     },
     "tests/browser/test_standalone_dashboard_browser.py": {
-      "bytes": 16951,
+      "bytes": 20714,
       "scope": "test",
-      "sha256": "19d35d02395b051b7eda5e038f4285ec85451ab50149e3a48adce2486870ccd8"
+      "sha256": "93aa9b7889ee4dc37a0119d7ddc5475d4007b88d5f5e668ffd2388cc937bf2ce"
     },
     "tests/constitution/__init__.py": {
       "bytes": 26,
@@ -1467,6 +1467,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T12:16:27Z",
+  "generated_at": "2026-08-19T12:30:14Z",
   "schema_version": 2
 }

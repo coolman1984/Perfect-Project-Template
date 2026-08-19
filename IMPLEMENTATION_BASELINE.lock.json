@@ -117,8 +117,9 @@
       "capability": "professional interactive charts with accessible summaries",
       "delivery": "pinned local vendor asset",
       "required_paths": ["web/vendor/"],
-      "version": "PIN_AT_BUILD",
-      "sha256": "POPULATE_FROM_RELEASE",
+      "version": "6.1.0",
+      "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+      "provenance": "web/vendor/echarts.min.js extracted from the official npm tarball https://registry.npmjs.org/echarts/-/echarts-6.1.0.tgz (2026-08-19), whose SHA-1 shasum (ae0f68590f5ebbd728d900907c27acde7c5456d1) was verified against the npm registry's published metadata for echarts@6.1.0 before extraction. The sha256 above is of the extracted dist/echarts.min.js file itself.",
       "license": "Apache-2.0",
       "smoke_test": "browser verification: charts render offline",
       "forbidden_substitute": "CDN, online chart service, screenshot-only charts, reduced chart set"

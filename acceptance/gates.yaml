@@ -255,11 +255,11 @@
   title: Zero network requests, zero JS errors, charts/filters/theme/RTL/print all work
   severity: block
   status: in_progress
-  evidence: acceptance/evidence/browser-standalone-chromium-2026-08-19.txt
-  verified_at: "2026-08-19T04:02:51Z"
-  verified_by: tests/browser/test_standalone_dashboard_browser.py (12 tests in real Chromium)
+  evidence: acceptance/evidence/browser-echarts-real-rendering-2026-08-19.txt
+  verified_at: "2026-08-19T13:40:00Z"
+  verified_by: "tests/browser/test_standalone_dashboard_browser.py, now 14 tests in real Chromium (Playwright, chromium-1234 for this run). TestStandaloneDashboardRealRendering is new and uses the real vendored web/vendor/echarts.min.js (not the data-recording stand-in): asserts window.echarts.version === '6.1.0', a real <canvas> per chart, zero JS errors, zero extra network requests."
   conditional_reason: ""
-  next_action: "Zero-network, zero-JS-error, theme, RTL and print are PROVEN. Still open: (a) chart RENDERING needs the pinned Apache ECharts 6.1.0 binary vendored into web/vendor/ with a verified checksum; (b) filters/cross-filter/drill-through/reset live in the local app UI, not the standalone report, and need their own browser coverage."
+  next_action: "Zero-network, zero-JS-error, theme, RTL, print AND chart rendering are now PROVEN for the standalone report. Still open: filters/cross-filter/drill-through/reset live in the local app UI (web/app.js), not the standalone report, and need their own browser coverage — tracked by GATE_FILTER_RECONCILIATION and GATE_ONE_PAGE_DESIGN."
 
 - id: GATE_ACCESSIBILITY
   part: 22.9 / 31.1

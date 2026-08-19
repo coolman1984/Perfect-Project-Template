@@ -17,16 +17,18 @@ What it proves
 - the theme toggle and keyboard focus work;
 - print does not hide the trusted content.
 
-What it does NOT prove, and why
--------------------------------
-**Chart rendering is not proven here.** `web/vendor/echarts.min.js` is absent:
-the repository pins Apache ECharts 6.1.0 but the binary must be fetched from
-the official Apache release and checksummed as a deliberate, licensed
-vendoring step (see `web/vendor/README.md`). Substituting a stand-in and
-declaring "charts render" would be precisely the false proof V10 Part 37
-forbids. So these tests inject a minimal recorder in place of ECharts, assert
-the **data handed to it** is correct, and leave GATE_BROWSER_OFFLINE open on
-the rendering half until the real asset is vendored.
+What it does NOT prove here, and why
+-------------------------------------
+Most tests below still inject a minimal recorder in place of ECharts and
+assert the **data handed to it** is correct, independent of rendering-engine
+internals — that is a real and distinct thing to get right (Part 7.2's
+name-based projection could be correct while a chart spec mapping bug still
+sends the wrong series to the picture). `web/vendor/echarts.min.js` (the real,
+checksum-verified Apache ECharts 6.1.0 binary — see `web/vendor/README.md`) is
+now vendored, so `TestStandaloneDashboardRealRendering` below additionally
+proves actual rendering: real `<canvas>` elements appear, `window.echarts`
+reports version 6.1.0, and no JavaScript error is thrown. Both proofs matter;
+neither substitutes for the other.
 
 Browser binary: this suite never downloads one. It uses the Chromium already
 present in the image, and skips cleanly when neither Playwright nor a browser
@@ -400,6 +402,97 @@ class TestStandaloneDashboardInChromium(unittest.TestCase):
                 "fixture-sourced output must be watermarked on screen "
                 "(Part 44.3 rule 2)")
         self._assert_clean()
+
+
+_VENDORED_ECHARTS = Path("web/vendor/echarts.min.js")
+
+
+@unittest.skipUnless(_HAS_DUCKDB, "DuckDB is an application-tier dependency")
+@unittest.skipUnless(_HAS_PLAYWRIGHT, "Playwright is not installed")
+class TestStandaloneDashboardRealRendering(unittest.TestCase):
+    """The rendering half TestStandaloneDashboardInChromium deliberately skips.
+
+    Uses the real vendored `web/vendor/echarts.min.js`, not the data-recording
+    stand-in, so this proves pixels actually get drawn rather than only that
+    the right data was handed to a chart library.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from tools._common import REPO_ROOT
+
+        cls.executable = _browser_executable()
+        if cls.executable is None:
+            raise unittest.SkipTest(
+                "no local Chromium found; this suite never downloads one")
+        vendored = REPO_ROOT / _VENDORED_ECHARTS
+        if not vendored.is_file():
+            raise unittest.SkipTest(
+                "web/vendor/echarts.min.js is not vendored yet — see "
+                "web/vendor/README.md")
+        cls._temp = tempfile.TemporaryDirectory()
+        pack = TestStandaloneDashboardInChromium._build_pack(Path(cls._temp.name))
+        cls.pack = pack
+        cls.html_path = cls._build_html(Path(cls._temp.name), pack, vendored)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._temp.cleanup()
+
+    @classmethod
+    def _build_html(cls, temp: Path, pack: dict, echarts_path: Path) -> Path:
+        from app.dashboard.html_builder import build
+        from tools._common import REPO_ROOT
+
+        html = build(
+            pack,
+            styles_path=REPO_ROOT / "web" / "styles.css",
+            echarts_path=echarts_path,
+        )
+        target = temp / "report.html"
+        target.write_text(html, encoding="utf-8")
+        return target
+
+    def test_the_vendored_asset_is_the_real_licensed_apache_echarts_build(self):
+        from tools._common import REPO_ROOT
+
+        text = (REPO_ROOT / _VENDORED_ECHARTS).read_text("utf-8", errors="strict")
+        self.assertIn("Apache Software Foundation", text[:2000])
+
+    def test_charts_render_as_real_canvas_elements_with_the_vendored_engine(self):
+        from playwright.sync_api import sync_playwright
+
+        manager = sync_playwright().start()
+        self.addCleanup(manager.stop)
+        browser = manager.chromium.launch(executable_path=self.executable)
+        self.addCleanup(browser.close)
+        page = browser.new_context().new_page()
+
+        network: list[str] = []
+        errors: list[str] = []
+        page.on("request", lambda r: network.append(r.url))
+        page.on("pageerror", lambda e: errors.append(str(e)))
+        page.on("console", lambda m: (
+            errors.append(m.text) if m.type == "error" else None))
+
+        page.goto(self.html_path.as_uri())
+        page.wait_for_load_state("load")
+
+        version = page.evaluate("window.echarts && window.echarts.version")
+        self.assertEqual(version, "6.1.0")
+
+        chart_count = len(self.pack.get("charts", []))
+        self.assertGreater(chart_count, 0, "fixture must produce at least one chart")
+        canvases = page.eval_on_selector_all(
+            ".chart canvas", "nodes => nodes.length")
+        self.assertEqual(
+            canvases, chart_count,
+            "each chart container must contain a real rendered canvas")
+
+        remote = [u for u in network
+                 if not u.startswith("file://") and not u.startswith("data:")]
+        self.assertEqual(remote, [])
+        self.assertEqual(errors, [], f"JavaScript errors while rendering: {errors}")
 
 
 if __name__ == "__main__":
