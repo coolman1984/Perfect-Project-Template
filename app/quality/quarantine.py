@@ -18,6 +18,8 @@ from app.data.database import Database
 NEGATIVE_MEASURE = "NEGATIVE_MEASURE"
 BLANK_BUSINESS_KEY = "BLANK_BUSINESS_KEY"
 UNPARSEABLE_NUMBER = "UNPARSEABLE_NUMBER"
+UNPARSEABLE_DATE = "UNPARSEABLE_DATE"
+UNPARSEABLE_VALUE = "UNPARSEABLE_VALUE"
 CONFLICTING_DUPLICATE = "CONFLICTING_DUPLICATE"
 EXACT_DUPLICATE = "EXACT_DUPLICATE"
 
@@ -25,6 +27,8 @@ REASON_MESSAGES = {
     NEGATIVE_MEASURE: "A quantity was negative, which this report does not allow.",
     BLANK_BUSINESS_KEY: "The columns that identify this record were not all filled in.",
     UNPARSEABLE_NUMBER: "A value that should be a number could not be read as one.",
+    UNPARSEABLE_DATE: "A value that should be a date could not be read as one.",
+    UNPARSEABLE_VALUE: "A value did not match the type this column is configured to hold.",
     CONFLICTING_DUPLICATE: "The same record appears twice with different values.",
     EXACT_DUPLICATE: "An identical copy of this record appeared in the same file.",
 }

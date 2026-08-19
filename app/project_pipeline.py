@@ -35,7 +35,9 @@ from app.quality.engine import BLOCK, PASS, WARNING, CheckResult, QualityEngine,
 from app.quality.quarantine import (
     EXACT_DUPLICATE,
     NEGATIVE_MEASURE,
+    UNPARSEABLE_DATE,
     UNPARSEABLE_NUMBER,
+    UNPARSEABLE_VALUE,
     QuarantinedRow,
     quarantine_rows,
 )
@@ -487,19 +489,31 @@ class ProjectPipeline:
     ) -> tuple[set[int], list[QuarantinedRow]]:
         reasons: dict[int, str] = {}
         raw = self.raw_table(source)
-        numeric = [
-            name for name, kind in source.column_types.items()
-            if kind.startswith(NUMERIC_TYPES)
-        ]
-        for column in numeric:
-            kind = self._type(source.column_types[column])
+        # Every configured type is checked, not only the numeric ones. A value
+        # that is present but does not parse used to become NULL silently for
+        # DATE and BOOLEAN columns, and the row was accepted into trusted
+        # history with no quarantine entry at all. When the column is the
+        # source's event date that is especially damaging: the lookback window,
+        # replace-period boundary and archive partitioning all depend on it,
+        # and every one of them would have been working from a NULL nobody was
+        # told about (Part 9.5 — nothing is silently dropped, including a
+        # field).
+        for column, configured in source.column_types.items():
+            kind = self._type(configured)
+            if kind == "VARCHAR":
+                continue
+            reason = (
+                UNPARSEABLE_NUMBER if kind.startswith(NUMERIC_TYPES)
+                else UNPARSEABLE_DATE if kind == "DATE"
+                else UNPARSEABLE_VALUE
+            )
             for row_number, in self.database.query(f"""
                 SELECT _source_row_number FROM {raw}
                 WHERE _run_id = ?
                   AND {column} IS NOT NULL AND trim({column}) <> ''
                   AND TRY_CAST({column} AS {kind}) IS NULL
             """, [run_id]):
-                reasons.setdefault(int(row_number), UNPARSEABLE_NUMBER)
+                reasons.setdefault(int(row_number), reason)
         for column in source.non_negative_columns:
             kind = self._type(source.column_types[column])
             for row_number, in self.database.query(f"""
