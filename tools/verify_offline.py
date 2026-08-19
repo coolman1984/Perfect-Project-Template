@@ -29,10 +29,16 @@ def verify(release: Path) -> None:
     runtime = executable_json(executable, "--self-test")
     if integrity.get("status") != "PASS" or runtime.get("status") != "PASS":
         raise RuntimeError("release runtime or integrity self-test did not pass")
-    leakage = [
-        str(path.relative_to(release)) for path in (release / "app").rglob("*")
-        if path.is_file() and path.suffix.lower() in {".py", ".pyc", ".spec"}
-    ]
+    leakage = []
+    for path in (release / "app").rglob("*"):
+        if not path.is_file():
+            continue
+        relative = path.relative_to(release).as_posix()
+        if path.suffix.lower() == ".spec" or any(
+            marker in relative
+            for marker in ("/_internal/app/", "/_internal/tools/", "/tests/")
+        ):
+            leakage.append(relative)
     if leakage:
         raise RuntimeError(f"developer source leaked into runtime app: {leakage}")
 

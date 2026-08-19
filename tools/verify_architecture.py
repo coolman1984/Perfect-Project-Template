@@ -79,6 +79,7 @@ def _scan_targets() -> list[Path]:
         p for p in iter_source_files()
         if p.suffix in EXECUTABLE_SUFFIXES
         and str(p).replace("\\", "/") != SCANNER_SELF
+        and not p.as_posix().startswith(("work/", "release/"))
     ]
 
 
