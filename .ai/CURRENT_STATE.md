@@ -6,12 +6,12 @@
 
 The ready application is the product. Employee agents should adapt project configuration and isolated business logic rather than rebuild technical foundations.
 
-> **Read this before believing any "ready" claim.** Everything downstream of
-> extraction is built and proven. The extraction adapter — the door into real
-> protected Excel workbooks — was **written on 2026-08-19** and is unit-tested
-> against fakes, but it has **never been executed against a real Excel
-> workbook** (blocker 1). Code existing is not the same as the path working, and
-> the difference is exactly what `GATE_PROTECTED_FILE_PROOF` measures.
+> **Read this before believing any "ready" claim.** The production extraction
+> adapter opened a disposable real `.xlsx` twice through desktop Excel COM on
+> 2026-08-19 and preserved its SHA-256. That proves the ordinary COM boundary,
+> repeat cleanup and source immutability. It does **not** prove corporate DRM:
+> `GATE_PROTECTED_FILE_PROOF` still requires a real protected workbook on the
+> authorized corporate PC.
 
 ## Proven reusable foundation
 
@@ -74,10 +74,11 @@ The ready application is the product. Employee agents should adapt project confi
 
 ## Explicit blockers before employee distribution
 
-Architecture is no longer the blocker. Everything below is environment-bound,
-release-mechanical or documentation debt.
+The reusable code and local release mechanics are complete enough for a release
+candidate. Employee distribution remains blocked by environment-bound and
+human-owned acceptance work.
 
-1. **The COM binding layer is written but has never touched real Excel.** All
+1. **The COM binding layer is written and has touched real Excel.** All
    eight `app/excel/` modules now hold real implementations:
 
    | Module | Status |
@@ -97,44 +98,46 @@ release-mechanical or documentation debt.
    machine (`tests/unit/test_excel_discovery.py`,
    `tests/unit/test_excel_extractor.py`).
 
-   **What this does not mean.** The code has been exercised only against
-   in-process fakes. It has never opened a real `.xlsx`, never met a DRM
-   prompt, never been timed on a large workbook. Three specific things remain
-   unproven and cannot be proven from a development workspace:
+   `tests/windows/test_excel_com_smoke.py` created an `.xlsx` through a hidden,
+   dedicated Excel process, read it twice through `ComExtractionAdapter`, and
+   proved the source hash unchanged. The session now balances every
+   `CoInitialize` with `CoUninitialize`. Three specific things remain unproven:
 
    - `GATE_PROTECTED_FILE_PROOF` — needs a real DRM-protected workbook on the
      authorized Windows machine (Part 44.3 rule 3; fixtures never substitute).
    - `GATE_NO_CELL_BY_CELL` benchmark half — the static guard now runs against
      real code, but the measured block-vs-per-cell comparison needs a real
      large workbook.
-   - The recoverable `WAITING_FOR_USER` round trip for DRM prompts (Part 22.5)
-     is only partially built: prompts are suppressed and a permission failure
-     maps to `DRM_USER_ACTION_REQUIRED`, but the resume path is not written.
+   - The recoverable `WAITING_FOR_USER` round trip is implemented and tested,
+     including an authenticated retry on the same run ID, but has not met a
+     real corporate DRM prompt.
 
    Everything downstream of extraction (staging, quality, history, analytics,
    dashboard, runtime) is real and proven on the fixture port.
-2. **Environment-bound (cannot be closed from CI even once the code exists).**
+2. **Environment-bound (cannot be closed from this development PC).**
    Protected-file DRM proof, clean-offline-machine and standard-user startup
    runs all need the corporate Windows machine; the non-technical operator
    handoff needs a person. Fixture execution is never evidence for any of
    these (V10 Part 37).
-2. `requirements-lock.txt` is still an unpopulated template, so the offline
-   wheelhouse and GATE_ARCHITECTURE_BASELINE cannot be satisfied. DuckDB,
-   FastAPI, Uvicorn and httpx are installed ad hoc in CI instead of pinned.
-3. Actual pinned ECharts binary, full browser/offline/accessibility/RTL proof
-   and the final sealed offline package remain open.
-4. Project generation/UI still has legacy report-centric compatibility paths
+3. Dependency/runtime/build locks are populated and hash-verified. The local
+   release candidate contains the one-folder application, embedded runtime,
+   offline update wheelhouse, real ECharts 6.1.0, SBOM, licenses, component
+   hashes, repair payload and self-test evidence. Clean standard-user PC proof
+   remains a separate conditional gate.
+4. The browser suite proves zero remote requests/errors, real ECharts canvas
+   rendering, shared filter reconciliation, actual chart-mark drill-through,
+   keyboard operation, focus, contrast, reduced motion, theme, RTL and print.
+5. Project generation/UI still has legacy report-centric compatibility paths
    that must be migrated (V10 Phase I5).
-5. `TEMPLATE_BASELINE.json` is intentionally development-unsealed until
+6. `TEMPLATE_BASELINE.json` is intentionally development-unsealed until
    master-core work stabilizes.
-6. Template upgrade/migration/rollback is defined as a contract but not yet
-   executed/proven.
-7. The legacy 225k-line constitution still needs a mechanical reconciliation
+7. Template upgrade/migration/rollback is executed and proven, including a
+   real Finance project pack surviving upgrade and rollback.
+8. The legacy 225k-line constitution still needs a mechanical reconciliation
    with the V8.1 authority addendum, and V8.1 reference letters (A/B) need
    aligning with the V10 letters (A/B/C/D) wherever they still disagree.
-8. One canonical branch has not been chosen (V10 Part 28). `main` and
-   `agent/universal-excel-automation-engine` are still unreconciled; this is a
-   repository-owner decision, not an engineering one.
+9. `main` is the canonical local branch. Hosted GitHub default-branch state is
+   verified separately during publication.
 
 **Current approval verdict: NOT READY FOR EMPLOYEE DISTRIBUTION.**
 

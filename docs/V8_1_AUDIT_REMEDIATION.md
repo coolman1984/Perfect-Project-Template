@@ -14,7 +14,7 @@ This ledger exists because a prior implementation pass followed the adaptation i
 | C8 machine core scope | IMPLEMENTED | baseline scope rules + scoped map manifest |
 | C9 no-Git baseline | IMPLEMENTED | SHA-256 baseline seal/verify tooling; current master is deliberately unsealed |
 | C10 local core promotion | CONTRACT DEFINED | employee copies emit candidates only; authoritative master promotes |
-| C11 lineage/upgrades | CONTRACT DEFINED | project template lineage + ownership rules; executable migration/rollback remains OPEN |
+| C11 lineage/upgrades | IMPLEMENTED | project template lineage + ownership rules; upgrade/migration/rollback and project-pack survival are tested |
 | C12 overclaimed proof | FIXED | Supply Chain reference says contract proven / execution not yet proven |
 | H1 machine config direction | IN PROGRESS | project/source/relationship/presentation contracts exist; legacy report compatibility remains |
 | H2 source roles/relationships | CONTRACT DEFINED | explicit source/relationship contracts |
@@ -39,9 +39,9 @@ This ledger exists because a prior implementation pass followed the adaptation i
 
 1. Execute the **three-source** Supply Chain reference end to end through shared staging, quality, per-source history and relationship SQL.
 2. Complete project-centric generator/UI/runtime discovery so a new employee project does not rely on legacy `reports/<id>`.
-3. Implement and prove template upgrade/migration/rollback between sealed versions.
+3. Exercise template upgrade/migration/rollback on the eventual approved sealed production baseline.
 4. Seal a real baseline only after master-core work stabilizes.
-5. Bundle/hash ECharts; complete browser/offline/accessibility/RTL and final sealed offline package.
+5. Execute the built, hash-verified offline release on the approved clean standard-user PC.
 6. Complete real protected Excel COM/DRM proof on the authorized corporate Windows environment.
 7. Mechanically reconcile the legacy full constitution with the V8.1 authority and retire the temporary addendum.
 

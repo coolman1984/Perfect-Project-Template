@@ -1,0 +1,47 @@
+# Excel COM, release and interactive UI evidence
+# Build-machine evidence captured 2026-08-19; environment-bound gates remain conditional.
+
+## Production Excel COM smoke (unprotected disposable workbook)
+
+Command:
+  RUN_EXCEL_COM_SMOKE=1 python -m unittest tests.windows.test_excel_com_smoke
+
+Result:
+  Ran 1 test in 11.273s
+  OK
+
+The test creates a real .xlsx through a dedicated hidden Excel instance, writes
+one rectangular Value2 range, then performs two production
+ComExtractionAdapter reads. Both reads use rectangular Value2 chunks, map
+columns by approved name, close only their owned Excel process, balance COM
+initialization, and leave the source SHA-256 unchanged. The workbook is not
+DRM-protected, so this is not GATE_PROTECTED_FILE_PROOF evidence.
+
+## Browser interaction and accessibility
+
+Real Chrome tests prove:
+  - a click on an actual ECharts canvas mark updates the shared cross-filter;
+  - the accessible chart-point button and Enter key perform the same drill;
+  - reset/chip/select state reconcile;
+  - visible focus and 4.5:1 text contrast meet the asserted floor;
+  - real ECharts 6.1.0 canvas rendering, theme, RTL, print and reduced motion;
+  - zero remote network requests and zero JavaScript errors.
+
+Primary executable tests:
+  tests/browser/test_local_app_browser.py
+  tests/browser/test_standalone_dashboard_browser.py
+
+## Offline release candidate
+
+BUILD_RELEASE.bat builds only from the local hash-locked wheelhouse. The
+candidate contains the one-folder app, embedded Python runtime, production COM
+binding, web assets, project/contracts, update kit and wheelhouse, SPDX SBOM,
+third-party licenses/notices, release-specific component hashes, repair payload
+and checksums. VERIFY_OFFLINE.bat verifies integrity, rejects developer-source
+leakage and runs the packaged self-test against the loopback FastAPI/Uvicorn
+boundary. Final command output is re-run before publication.
+
+This evidence closes local build/UI/ordinary-COM claims only. It does not close
+the clean offline PC, standard-user startup, machine-mutation, real protected
+workbook, large-workbook benchmark, two production-like runs, business/IT
+approval, or operator-handoff gates.

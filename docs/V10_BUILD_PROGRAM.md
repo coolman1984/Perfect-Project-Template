@@ -220,7 +220,7 @@ this is the stage that tests whether the foundation is worth anything.
 **Exit gate:** Finance PPV runs with zero or individually justified
 shared-engine changes, evidenced by the reuse report.
 
-### S6 — Experience — IN PROGRESS (2026-08-19)
+### S6 — Experience — LOCALLY COMPLETE (2026-08-19)
 
 Finish the employee-facing flow. V10 I5. Project discovery, business
 questionnaire, source-role assignment, guided upload, durable progress,
@@ -240,10 +240,10 @@ quality explanation, dashboard, history, export, friendly recovery.
   `ar.json`; a conditional action-table region. Proof:
   `tests/browser/test_local_app_browser.py` (new), 10 tests against a real
   loopback server in real Chromium.
-- Still open: cross-filter (click a chart mark) and drill-through, WCAG
-  contrast/keyboard-reachability assertions for the local app's larger
-  control set, and the business questionnaire / guided-upload onboarding
-  flow this stage's title names but which was out of scope for this pass.
+- Completed: real chart-mark cross-filter/drill-through plus an accessible
+  keyboard equivalent; shared-state reconciliation and reset; explicit focus
+  and WCAG AA contrast assertions. The existing project picker and guided file
+  intake remain the onboarding boundary; business approvals remain human-owned.
 - Progress must be driven by durable events, never decorative animation
   (§22).
 
@@ -256,10 +256,11 @@ Package, and prove it on real corporate hardware. V10 I6 — the first
 employee pilot target, and where the long-lead track opened at S0 is finally
 consumed.
 
-- Bundle the ECharts binary. `web/vendor/` currently holds only a version
-  stamp, so `GATE_BROWSER_OFFLINE` cannot pass regardless of code quality.
-- Build the release: runtime, assets, SBOM, licences, checksums, repair
-  path.
+- ECharts 6.1.0 is vendored, licensed and hash-verified; real canvas rendering
+  and zero-network behavior pass in Chrome.
+- The release candidate includes the runtime, assets, SBOM, licences,
+  checksums, offline update wheelhouse and repair path, and passes its packaged
+  self-test on the build machine.
 - Run the environment proofs — clean offline PC, standard non-admin user,
   real protected Excel read twice with an unchanged hash, two stable runs,
   operator handoff.

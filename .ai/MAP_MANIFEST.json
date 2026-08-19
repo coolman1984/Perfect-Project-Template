@@ -12,9 +12,9 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 9088,
+      "bytes": 9247,
       "scope": "unknown",
-      "sha256": "247b8b0af1f4ab2bb45445f95b030a06ef2bc18a3dc821d3fd7c07a2f0077448"
+      "sha256": "872d665e83b4b44fa8fc2248a283b07bd6f0fad03eb7f9fec4f4085271fa1df0"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 16068,
+      "bytes": 16111,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 24046,
+      "bytes": 22916,
       "scope": "unknown",
-      "sha256": "a59736d6b923aa92f8fdf572ec4c1fdd6b928abd15cfedf0c60f5dc45ae3ba84"
+      "sha256": "396af9e4a6f01871bac7ce4aeded3fedebc45bf0d830c4963c3271ced8a91715"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -592,9 +592,9 @@
       "sha256": "fdc31a30ae6ff6a3db52c4f9ddacc100e57945fe1eb84b20d9a2556b36c095f3"
     },
     "docs/V10_BUILD_PROGRAM.md": {
-      "bytes": 16182,
+      "bytes": 16286,
       "scope": "documentation",
-      "sha256": "217c27dc418582ef7da2ae4ad74f05f1bed6ee93a8a3feb77b04fd5fcf8af58c"
+      "sha256": "043a9e33d5ec50051bc27127db23109693e0c6e990369e2777c4f6119fa2bd2f"
     },
     "docs/V10_CODING_PLAN.md": {
       "bytes": 17072,
@@ -602,9 +602,9 @@
       "sha256": "603cbdc0b9233ff27d8834209e2386ea2cb89ca535b8657fcf68c5c5c08bbf95"
     },
     "docs/V8_1_AUDIT_REMEDIATION.md": {
-      "bytes": 4602,
+      "bytes": 4626,
       "scope": "documentation",
-      "sha256": "28747d6ff9964ac048db024f379230bee640c0500db6aac5f0ab487b1f392792"
+      "sha256": "c139d7dd867c26bfa43b5b1c8e2b216c9fb27fc57c5457df83956a9c623bcc98"
     },
     "docs/decisions/ADR-0000-template-baseline.md": {
       "bytes": 2934,
@@ -1512,6 +1512,6 @@
       "sha256": "2ce209d223192c14faff82daf0f8251f60be276ec7922f2c06d1132c2821b5e1"
     }
   },
-  "generated_at": "2026-08-19T14:42:32Z",
+  "generated_at": "2026-08-19T14:47:10Z",
   "schema_version": 2
 }
