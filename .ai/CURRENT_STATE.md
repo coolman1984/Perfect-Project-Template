@@ -67,17 +67,30 @@ The ready application is the product. Employee agents should adapt project confi
 Architecture is no longer the blocker. Everything below is environment-bound,
 release-mechanical or documentation debt.
 
-1. **Production Excel extraction is NOT WRITTEN.** This is the single largest
-   gap and it is a code gap, not only an environment one. `app/excel/`
-   `com_adapter.py`, `session.py`, `discovery.py` and `extractor.py` are
-   documented stubs — every entry point raises `NotImplementedError`. The
-   engine today reads Excel-shaped data only through the test-only fixture
-   port. Everything downstream of extraction (staging, quality, history,
-   analytics, dashboard, runtime) is real and proven; the door into real
-   protected workbooks is not built. Implementing it needs the authorized
-   Windows + Excel machine, so it is both unwritten and environment-bound.
-   `tests/architecture/test_no_cell_by_cell_extraction.py` pins this status
-   and fails the moment it changes.
+1. **The COM binding layer of Excel extraction is NOT WRITTEN.** This is the
+   largest remaining gap and it is a code gap, not only an environment one.
+   Within `app/excel/`, four modules are documented stubs whose every entry
+   point raises `NotImplementedError`:
+
+   | Module | Status |
+   |---|---|
+   | `conversion.py` | **real** — dates/serials, separators, percentages, currency, leading zeros, errors, blanks (V10 Part 9 value rules) |
+   | `port.py` | **real** — ExtractionPort contract and adaptive `rows_per_chunk` |
+   | `identity.py` | **real** — exact-path workbook matching; a similar-but-wrong workbook is refused |
+   | `fixture_adapter.py` | **real** — test-only, never ships |
+   | `session.py` | **stub** — acquire/attach an Excel session |
+   | `discovery.py` | **stub** — table → named range → header row |
+   | `extractor.py` | **stub** — drive block reads into staging |
+   | `com_adapter.py` | **stub** — the production ExtractionPort itself |
+
+   So the hard, testable logic is done; what is missing is the Windows COM
+   binding that calls it. The engine today ingests only through the test-only
+   fixture port, so no employee can yet point it at a real workbook.
+   Everything downstream of extraction (staging, quality, history, analytics,
+   dashboard, runtime) is real and proven. Writing the missing layer needs the
+   authorized Windows + Excel machine, so it is both unwritten and
+   environment-bound. `tests/architecture/test_no_cell_by_cell_extraction.py`
+   pins this status and fails the moment it changes.
 2. **Environment-bound (cannot be closed from CI even once the code exists).**
    Protected-file DRM proof, clean-offline-machine and standard-user startup
    runs all need the corporate Windows machine; the non-technical operator

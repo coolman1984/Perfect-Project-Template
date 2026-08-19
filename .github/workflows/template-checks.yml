@@ -49,6 +49,7 @@ jobs:
           python3 -m unittest tests.adversarial.test_loopback_negative_probes --verbose
           python3 -m unittest tests.architecture.test_no_browser_arithmetic --verbose
           python3 -m unittest tests.architecture.test_no_cell_by_cell_extraction --verbose
+          python3 -m unittest tests.unit.test_workbook_identity --verbose
       - run: |
           python3 -m doctest app/excel/conversion.py -v
           python3 -m doctest app/excel/port.py
