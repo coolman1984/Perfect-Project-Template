@@ -71,7 +71,15 @@ def run(
                 _atomic_json(root / "output" / "latest_dashboard.json", outcome.dashboard)
             return outcome
         except Exception as error:
-            events.emit(rid, "FAILED", root=root / "runs", error_type=type(error).__name__)
+            if isinstance(error, AppError) and error.code == "DRM_USER_ACTION_REQUIRED":
+                events.emit(
+                    rid, "WAITING_FOR_USER", root=root / "runs",
+                    error=error.operator_screen("en"),
+                )
+            else:
+                events.emit(
+                    rid, "FAILED", root=root / "runs",
+                    error_type=type(error).__name__)
             raise
         finally:
             try:

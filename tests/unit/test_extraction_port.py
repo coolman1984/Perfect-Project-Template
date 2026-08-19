@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 from app.errors import AppError
 from app.excel.com_adapter import ComExtractionAdapter
@@ -71,6 +72,23 @@ class TestComAdapterContract(unittest.TestCase):
         adapter = ComExtractionAdapter()
         adapter.close()
         adapter.close()
+
+    def test_permission_failure_during_block_read_requests_user_action(self):
+        class ProtectedWorksheet:
+            def Range(self, _address):
+                raise PermissionError("IRM permission prompt is waiting")
+
+        adapter = ComExtractionAdapter()
+        adapter._worksheet = ProtectedWorksheet()
+        adapter._region = SimpleNamespace(
+            first_column=1, last_column=3, sheet_name="Protected")
+
+        with self.assertRaises(AppError) as caught:
+            adapter._read_block(2, 10)
+
+        self.assertEqual(caught.exception.code, "DRM_USER_ACTION_REQUIRED")
+        self.assertTrue(caught.exception.retryable)
+        self.assertEqual(caught.exception.context["first_row"], 2)
 
 
 class TestFixtureAdapter(unittest.TestCase):

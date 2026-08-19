@@ -141,9 +141,16 @@ def run_project(
                 )
             return outcome
         except Exception as error:
-            events.emit(
-                rid, "FAILED", root=root / "runs",
-                project_id=project_id, error_type=type(error).__name__)
+            if isinstance(error, AppError) and error.code == "DRM_USER_ACTION_REQUIRED":
+                events.emit(
+                    rid, "WAITING_FOR_USER", root=root / "runs",
+                    project_id=project_id,
+                    error=error.operator_screen("en"),
+                )
+            else:
+                events.emit(
+                    rid, "FAILED", root=root / "runs",
+                    project_id=project_id, error_type=type(error).__name__)
             raise
         finally:
             for adapter in adapters.values():

@@ -9,6 +9,7 @@ for compatibility while older reference/runtime tests are migrated.
 import asyncio
 import hashlib
 import json
+import os
 import secrets
 import threading
 import tomllib
@@ -36,6 +37,16 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 EXCEL_EXTENSIONS = frozenset({".xlsx", ".xlsm", ".xlsb", ".xls"})
 FIXTURE_EXTENSIONS = frozenset({".csv"})
 MAX_UPLOAD_BYTES = 512 * 1024 * 1024
+
+
+def _atomic_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(temporary, path)
 
 
 @dataclass
@@ -293,6 +304,39 @@ def _run_project_worker(
         return
 
 
+def _run_request_path(context: ServerContext, run_id: str) -> Path:
+    # `events.since` validates the identifier before any path is constructed.
+    events.since(run_id, -1, root=context.runs_root)
+    return context.runs_root / run_id / "request.json"
+
+
+def _save_run_request(
+    context: ServerContext, run_id: str, request: dict[str, Any]
+) -> None:
+    _atomic_json(_run_request_path(context, run_id), request)
+
+
+def _load_run_request(context: ServerContext, run_id: str) -> dict[str, Any]:
+    path = _run_request_path(context, run_id)
+    if not path.exists():
+        raise AppError(
+            "LOCAL_TRANSPORT_INTEGRITY_FAILED",
+            support_detail=f"run {run_id} has no durable retry request")
+    try:
+        request = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise AppError(
+            "LOCAL_TRANSPORT_INTEGRITY_FAILED",
+            support_detail=f"run {run_id} retry request is unreadable") from error
+    if not isinstance(request, dict) or request.get("kind") not in {
+        "project", "legacy"
+    }:
+        raise AppError(
+            "LOCAL_TRANSPORT_INTEGRITY_FAILED",
+            support_detail=f"run {run_id} retry request has an invalid shape")
+    return request
+
+
 def create_app(context: ServerContext | None = None):
     """Create the same-origin FastAPI app used by every employee project."""
     try:
@@ -508,6 +552,14 @@ def create_app(context: ServerContext | None = None):
                 runtime, project_id, str(source_id), str(upload_id))
             source_paths[str(source_id)] = Path(metadata["stored_path"])
         run_id = orchestrator.new_run_id()
+        _save_run_request(runtime, run_id, {
+            "kind": "project",
+            "project_id": project_id,
+            "uploads": {
+                str(source_id): str(upload_id)
+                for source_id, upload_id in upload_map.items()
+            },
+        })
         thread = threading.Thread(
             target=_run_project_worker,
             args=(runtime, project_id, source_paths, run_id),
@@ -587,6 +639,11 @@ def create_app(context: ServerContext | None = None):
         upload_id = str(payload.get("upload_id", ""))
         metadata = _load_legacy_upload(runtime, report_id, upload_id)
         run_id = orchestrator.new_run_id()
+        _save_run_request(runtime, run_id, {
+            "kind": "legacy",
+            "report_id": report_id,
+            "upload_id": upload_id,
+        })
         thread = threading.Thread(
             target=_run_worker,
             args=(runtime, report_id, Path(metadata["stored_path"]), run_id),
@@ -614,6 +671,69 @@ def create_app(context: ServerContext | None = None):
             "sequence": latest["sequence"],
             "event": latest,
         }
+
+    @app.post("/api/runs/{run_id}/retry")
+    async def retry_run(run_id: str):
+        batch = events.since(run_id, -1, root=runtime.runs_root)
+        if not batch:
+            return JSONResponse(
+                {"run_id": run_id, "status": "NOT_FOUND"},
+                status_code=404)
+        if batch[-1]["stage"] != "WAITING_FOR_USER":
+            raise AppError(
+                "LOCAL_TRANSPORT_INTEGRITY_FAILED",
+                support_detail=(
+                    f"run {run_id} is {batch[-1]['stage']}, not "
+                    "WAITING_FOR_USER"),
+            )
+
+        request_data = _load_run_request(runtime, run_id)
+        if request_data["kind"] == "project":
+            project_id = str(request_data.get("project_id", ""))
+            _directory, contract = _project(runtime, project_id)
+            uploads = request_data.get("uploads", {})
+            if not isinstance(uploads, dict):
+                raise AppError(
+                    "LOCAL_TRANSPORT_INTEGRITY_FAILED",
+                    support_detail="project retry upload map is invalid")
+            unknown = sorted(set(uploads) - contract.source_ids)
+            missing = sorted(
+                source.source_id for source in contract.sources
+                if source.required and source.source_id not in uploads)
+            if unknown or missing:
+                raise AppError(
+                    "LOCAL_TRANSPORT_INTEGRITY_FAILED",
+                    support_detail=(
+                        f"project retry roles changed; unknown={unknown}, "
+                        f"missing={missing}"),
+                )
+            source_paths = {
+                str(source_id): Path(_load_project_upload(
+                    runtime, project_id, str(source_id), str(upload_id)
+                )["stored_path"])
+                for source_id, upload_id in uploads.items()
+            }
+            worker = threading.Thread(
+                target=_run_project_worker,
+                args=(runtime, project_id, source_paths, run_id),
+                name=f"excel-project-retry-{run_id}", daemon=True)
+        else:
+            report_id = _safe_report_id(
+                str(request_data.get("report_id", "")))
+            _report_config(runtime, report_id)
+            upload_id = str(request_data.get("upload_id", ""))
+            metadata = _load_legacy_upload(
+                runtime, report_id, upload_id)
+            worker = threading.Thread(
+                target=_run_worker,
+                args=(runtime, report_id, Path(metadata["stored_path"]), run_id),
+                name=f"excel-run-retry-{run_id}", daemon=True)
+
+        events.emit(
+            run_id, "RETRY_REQUESTED", root=runtime.runs_root,
+            resumes_from="WAITING_FOR_USER")
+        worker.start()
+        return {"run_id": run_id, "status": "RETRY_REQUESTED"}
 
     @app.get("/api/runs/{run_id}/events")
     async def run_events(

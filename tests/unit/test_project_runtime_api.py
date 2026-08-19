@@ -4,6 +4,7 @@ import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 _HAS_WEB_STACK = bool(
     importlib.util.find_spec("fastapi") and importlib.util.find_spec("httpx"))
@@ -196,6 +197,48 @@ non_negative_columns = ["on_hand"]
             self.root / "inbox" / "projects" / "employee_demo" / "orders"
             / response.json()["upload_id"] / "upload.json")
         self.assertTrue(meta.exists())
+
+    def test_waiting_run_can_retry_same_durable_project_request(self):
+        from app import events
+
+        orders = self._upload(
+            "orders", "orders_week.csv",
+            b"order_id,order_date,item_id,qty\nO1,2026-08-01,I1,10\n")
+        inventory = self._upload(
+            "inventory", "inventory_week.csv",
+            b"snapshot_date,item_id,on_hand\n2026-08-01,I1,8\n")
+        with patch("app.server.threading.Thread") as thread_type:
+            response = self.client.post(
+                "/api/project-runs",
+                headers={**self.auth, "Content-Type": "application/json"},
+                json={
+                    "project_id": "employee_demo",
+                    "uploads": {
+                        "orders": orders.json()["upload_id"],
+                        "inventory": inventory.json()["upload_id"],
+                    },
+                },
+            )
+            self.assertEqual(response.status_code, 200, response.text)
+            run_id = response.json()["run_id"]
+            request_path = self.root / "runs" / run_id / "request.json"
+            self.assertTrue(request_path.exists())
+            events.emit(
+                run_id, "WAITING_FOR_USER", root=self.root / "runs",
+                error={"support_code": "DRM_USER_ACTION_REQUIRED"})
+
+            retry = self.client.post(
+                f"/api/runs/{run_id}/retry", headers=self.auth)
+
+        self.assertEqual(retry.status_code, 200, retry.text)
+        self.assertEqual(retry.json(), {
+            "run_id": run_id, "status": "RETRY_REQUESTED"})
+        self.assertEqual(thread_type.call_count, 2)
+        retry_args = thread_type.call_args.kwargs["args"]
+        self.assertEqual(retry_args[-1], run_id)
+        self.assertEqual(
+            events.since(run_id, -1, root=self.root / "runs")[-1]["stage"],
+            "RETRY_REQUESTED")
 
 
 if __name__ == "__main__":

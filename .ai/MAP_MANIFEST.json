@@ -1,5 +1,5 @@
 {
-  "file_count": 295,
+  "file_count": 297,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 2995,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 15830,
+      "bytes": 15948,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -312,9 +312,9 @@
       "sha256": "f11ca93f00f41f8533868465d055d024c23a4c9135748994d3aa103807a8278a"
     },
     "app/excel/com_adapter.py": {
-      "bytes": 11179,
+      "bytes": 11875,
       "scope": "universal_core",
-      "sha256": "826733224249af77293924c18a919e56b49509563e3faa2816f47fce50beecd3"
+      "sha256": "a632912b2381c35b5cdc282542ec68d6b03f17df5ecd0d47be75c87d1a0b412f"
     },
     "app/excel/conversion.py": {
       "bytes": 8368,
@@ -382,9 +382,9 @@
       "sha256": "c97920c117d0ee1455696c6377758bf10df07217ff4dc5989d12c89efe54ad82"
     },
     "app/orchestrator.py": {
-      "bytes": 3695,
+      "bytes": 4014,
       "scope": "universal_core",
-      "sha256": "a603a832f1eaa4505db6a027111e9e650c74b28ca275991b443bd14dd48c05f2"
+      "sha256": "9a6ce4d99d612a1696812a144f572e1431fbc9a0b60eedcb39379be3a5158d9c"
     },
     "app/pipeline.py": {
       "bytes": 10795,
@@ -392,9 +392,9 @@
       "sha256": "b0fc859d8a5fec1d0cda06ed82cd1b7e6feb8bed586fff9f93ef2fbe83ee0984"
     },
     "app/project_orchestrator.py": {
-      "bytes": 6173,
+      "bytes": 6502,
       "scope": "universal_core",
-      "sha256": "f736a4b0441ae8c1b2efe03a21b363f201f018829023f67fecc23bb569475410"
+      "sha256": "bf0b54c4adc3b92ad046e06f3bb6523d37a6013bbabd65760c46f93f45cea931"
     },
     "app/project_pipeline.py": {
       "bytes": 35574,
@@ -437,9 +437,9 @@
       "sha256": "c82b23fa5cd88c44386b5b927f5200d4dba7774ee21ddef8e6c4cda5e2e8083e"
     },
     "app/server.py": {
-      "bytes": 27688,
+      "bytes": 32569,
       "scope": "universal_core",
-      "sha256": "a17fc5359320325681115c127bfae046f4bb26f0191444a7097bc87c81c43ac4"
+      "sha256": "83ee0dabc0e393eaadc5d425b6128a7c8ea451301814a24ec87a51b744b9394f"
     },
     "app/settings.py": {
       "bytes": 851,
@@ -991,6 +991,16 @@
       "scope": "legacy_report_config",
       "sha256": "b32bc06d434dfb937d3ede61e16d12b16be3bba226f73dded3ad5de20a5cfd15"
     },
+    "tasks/plan.md": {
+      "bytes": 4130,
+      "scope": "unknown",
+      "sha256": "106f5a54bb4d9ee4648020dae3f7663820f7a22c7c41887323947483d856d8c0"
+    },
+    "tasks/todo.md": {
+      "bytes": 537,
+      "scope": "unknown",
+      "sha256": "b07b3b8b77f5d48257e6c06e2ab9b7131ba7de38598d958337ba42c05c449f8a"
+    },
     "tests/__init__.py": {
       "bytes": 339,
       "scope": "test",
@@ -1262,9 +1272,9 @@
       "sha256": "df8f5d9a96f51f4e81d6c7c356e5f385efbda781bb04e6444df60d11aa588f25"
     },
     "tests/unit/test_extraction_port.py": {
-      "bytes": 6067,
+      "bytes": 6817,
       "scope": "test",
-      "sha256": "d3888e9340b056c0b55ec0aba807369ecfcf03f0375de64e1032045c4dbcf05a"
+      "sha256": "39edddb71cf570365fa7a00e7d3491e8c19b4dc41057a66b679d3448ace16427"
     },
     "tests/unit/test_gates_ledger.py": {
       "bytes": 2840,
@@ -1292,9 +1302,9 @@
       "sha256": "8e87961dfadd83f8a2c684583147b3d7a6af2e4cdf1cbc96e2226d865f20f355"
     },
     "tests/unit/test_project_runtime_api.py": {
-      "bytes": 6965,
+      "bytes": 8863,
       "scope": "test",
-      "sha256": "4eda2690696c2f144f0403a661f8a227066e6c4979215fe22eb1213e131b9d7e"
+      "sha256": "b949053b0f36e2e62f92c342c2839256563901244475bb6f7d780398fe607e52"
     },
     "tests/unit/test_regression_fixes.py": {
       "bytes": 7979,
@@ -1317,9 +1327,9 @@
       "sha256": "d3c409207139ca43df89052343acc3af2764020bf7a342e5872b48bb67016243"
     },
     "tests/unit/test_template_upgrade.py": {
-      "bytes": 4144,
+      "bytes": 5837,
       "scope": "test",
-      "sha256": "bdc8d024dfed63b97c1ec2b3320add7a6205b96e814716f2cf235390d2572795"
+      "sha256": "d4d3e96fbc008ca7f61b7f8d3739afaf562a94af118c63825a156b41bc3d0de7"
     },
     "tests/unit/test_tooling_boundaries.py": {
       "bytes": 5555,
@@ -1477,6 +1487,6 @@
       "sha256": "c4e703ddaf28ec722c3f985074a97ea62d4abbc561a6aa082ac787fe2df6c84e"
     }
   },
-  "generated_at": "2026-08-19T13:07:57Z",
+  "generated_at": "2026-08-19T13:58:04Z",
   "schema_version": 2
 }

@@ -45,12 +45,12 @@ Implementation status against the Part 7 / 23.5 checklist:
     [~] Use timeouts, checkpoints and a recoverable WAITING_FOR_USER state for
         DRM prompts (22.5) — never click through a prompt blindly
 
-The last item is deliberately partial and must not be read as done. Prompts are
-suppressed and a permission failure is translated to DRM_USER_ACTION_REQUIRED,
-but the recoverable WAITING_FOR_USER round trip cannot be built — let alone
-proven — without real DRM-protected files on the authorized Windows machine.
-`GATE_PROTECTED_FILE_PROOF` remains open, and no amount of unprotected testing
-can close it (Part 44.3 rule 3).
+The recoverable round trip is wired through the runtime: a permission failure
+becomes DRM_USER_ACTION_REQUIRED, orchestration records WAITING_FOR_USER, and
+the authenticated retry endpoint re-enters the same run after the operator
+opens the workbook. `GATE_PROTECTED_FILE_PROOF` remains open until that path is
+exercised with a real protected file on the authorized Windows machine; an
+unprotected workbook or a fake can prove the control flow but not DRM itself.
 
 If COM is genuinely blocked, follow Part 7.8 plans B/C/D and the Part 0.7
 deviation process. Record which plan is active; never switch silently. Falling
@@ -190,7 +190,23 @@ class ComExtractionAdapter(ExtractionPort):
             raise RuntimeError("open() must be called before reading blocks")
         address = discovery.a1(
             first_row, region.first_column, last_row, region.last_column)
-        return self._worksheet.Range(address).Value2
+        try:
+            return self._worksheet.Range(address).Value2
+        except AppError:
+            raise
+        except BaseException as exc:
+            if _looks_like_drm(exc):
+                raise AppError(
+                    "DRM_USER_ACTION_REQUIRED",
+                    support_detail=(
+                        f"Excel needs user action before rows {first_row}-"
+                        f"{last_row} can be read. We never dismiss a rights, "
+                        f"password or Protected View prompt automatically. "
+                        f"Original detail: {exc}"),
+                    first_row=first_row,
+                    last_row=last_row,
+                ) from exc
+            raise
 
     def chunks(self) -> Iterator[Chunk]:
         """Yield rectangular blocks, projected to the approved columns."""
