@@ -20,3 +20,4 @@ Naming: `ADR-NNNN-short-title.md`.
 |---|---|---|---|---|
 | ADR-0000 | Template baseline | accepted | template author | 2026-08-17 |
 | ADR-0001 | Simple final-user product surface | accepted | product owner | 2026-08-19 |
+| ADR-0002 | Autonomous master-template delivery | accepted | product owner | 2026-08-19 |

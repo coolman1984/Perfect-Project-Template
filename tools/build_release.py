@@ -303,8 +303,14 @@ def build() -> Path:
     for lock in ("requirements-lock.txt", "requirements-build-lock.txt"):
         shutil.copy2(REPO_ROOT / lock, update_kit / lock)
 
-    commit = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True,
+            stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError):
+        baseline = json.loads(
+            (REPO_ROOT / "TEMPLATE_BASELINE.json").read_text(encoding="utf-8"))
+        commit = baseline.get("source_commit") or "downloaded-source-without-git"
     version = {
         "version": RELEASE_VERSION,
         "source_commit": commit,

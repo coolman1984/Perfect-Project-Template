@@ -186,6 +186,18 @@ the operator ZIP with `PROJECT_TOOL package build` and prove its surface with
 `PROJECT_TOOL package verify`. This wrapper never substitutes for PyInstaller,
 offline verification or the environment-bound acceptance gates.
 
+The first connected Windows commissioning uses `FINALIZE_MASTER.bat`. It
+prepares the hash-locked wheelhouse, validates the first project, runs the full
+suite, seals the source baseline, builds/verifies the Windows release and emits
+both `MASTER_TEMPLATE.zip` and the first `ProjectName.zip`.
+
+An uploaded `MASTER_TEMPLATE.zip` already contains `sealed_runtime/`. A capable
+cloud agent must verify the master, change only `projects/<project_id>/`, then
+run `PROJECT_TOOL delivery build`. That operation injects exactly one verified
+project pack into a private copy of the sealed runtime, refreshes its local
+repair payload/checksums and creates the non-technical operator ZIP. It does
+not rebuild or download the runtime.
+
 ## 12. References and current honesty
 
 - Legacy single-source Golden Reference: `reports/_REFERENCE/`.

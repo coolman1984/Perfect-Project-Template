@@ -23,7 +23,7 @@ not implement · version/changelog/amendment-index agreement.
 | Parts | 45 (0–44), in order, no duplicates, no gaps |
 | Cross-references | 32 distinct, all resolve |
 | Downgrade phrases | 7 checked in context, 0 unguarded |
-| Command groups | 7 named, 12 implemented; additive project commands are documented by their active contracts |
+| Command groups | 7 constitution-named, 15 implemented; additive project, packaging, delivery and wheelhouse commands are documented by their active contracts |
 | Result | **PASS** |
 
 ## Semantic review (Part 34.3)

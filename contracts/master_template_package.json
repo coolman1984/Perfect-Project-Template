@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "archive_name": "MASTER_TEMPLATE.zip",
+  "root_name": "MASTER_TEMPLATE",
+  "required_root_entries": [
+    "00_START_HERE_AI_AGENT.md",
+    "AGENTS.md",
+    "CHATGPT.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "PROJECT_SKILL.md",
+    "UNIVERSAL_ENGINE_SKILL.md",
+    "PROJECT_TOOL.bat",
+    "project_tool.sh",
+    "TEMPLATE_BASELINE.json",
+    "MASTER_TEMPLATE_MANIFEST.json",
+    "projects",
+    "tools",
+    "sealed_runtime"
+  ],
+  "required_runtime_entries": [
+    "app/excel-intelligence.exe",
+    "START_APP.bat",
+    "VERSION.json",
+    "checksums.sha256",
+    "IMPLEMENTATION_BASELINE.lock.json",
+    "projects",
+    "web",
+    "contracts"
+  ],
+  "mutable_patterns": [
+    "projects/[a-z]*/**",
+    "tests/projects/[a-z]*/**",
+    "acceptance/evidence/**",
+    ".ai/CONTEXT_PACK.md"
+  ],
+  "forbidden_anywhere": [
+    ".git",
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    "node_modules"
+  ],
+  "forbidden_source_suffixes": [
+    ".xlsx",
+    ".xlsm",
+    ".xlsb",
+    ".xls",
+    ".duckdb",
+    ".parquet",
+    ".log"
+  ]
+}
