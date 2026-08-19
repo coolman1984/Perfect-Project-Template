@@ -203,11 +203,30 @@ class TestScenarioFFailClosed(unittest.TestCase):
 
     def test_com_adapter_raises_rather_than_falling_back_to_fixtures(self):
         """Part 44.3 rule 4: COM failure must never silently select fixtures."""
+        from app.errors import AppError
         from app.excel.com_adapter import ComExtractionAdapter
 
         adapter = ComExtractionAdapter()
-        with self.assertRaises(NotImplementedError):
+        with self.assertRaises(AppError) as caught:
             adapter.open("C:/nowhere.xlsx", {})
+
+        # Fails closed on a registry code — never by quietly producing rows
+        # from somewhere else.
+        self.assertIn(caught.exception.code,
+                      {"SRC_NOT_FOUND", "EXCEL_NOT_AVAILABLE", "EXCEL_OPEN_FAILED"})
+
+    def test_com_adapter_source_module_contains_no_fixture_fallback(self):
+        """The fallback must be absent from the code, not merely untriggered.
+
+        A test that only proves the happy path raised cannot prove the *absence*
+        of a rescue branch on some other failure mode, which is exactly the
+        shape Part 44.3 rule 4 forbids.
+        """
+        from tools._common import REPO_ROOT
+
+        text = (REPO_ROOT / "app" / "excel" / "com_adapter.py").read_text("utf-8")
+        self.assertNotIn("FixtureExtractionAdapter", text)
+        self.assertNotIn("fixture_adapter", text)
 
     def test_unregistered_error_code_cannot_be_raised(self):
         from app.errors import AppError

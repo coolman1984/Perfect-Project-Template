@@ -138,3 +138,28 @@ def rows_per_chunk(
     if minimum > maximum:
         raise ValueError("minimum must not exceed maximum")
     return max(minimum, min(maximum, max(1, target_cells // column_count)))
+
+
+def as_row_major(values: Any) -> tuple[tuple[Any, ...], ...]:
+    """Normalise whatever `Range.Value2` returned into rows of cells.
+
+    COM does not hand back a consistent shape, and every caller would otherwise
+    re-derive the same three cases: a multi-cell range gives a tuple of row
+    tuples, a **single cell** gives a bare scalar, and a range whose values are
+    all empty can give `None`. Reading a one-row sheet must not take a different
+    code path from reading a million-row one.
+
+    Lives here beside `rows_per_chunk` because both are shape rules the port
+    defines and every adapter shares — and, unlike the COM calls themselves,
+    both are testable on any machine.
+    """
+    if values is None:
+        return ()
+    if not isinstance(values, (tuple, list)):
+        return ((values,),)
+    if not values:
+        return ()
+    if not isinstance(values[0], (tuple, list)):
+        # A single row (or single column) came back flat.
+        return (tuple(values),)
+    return tuple(tuple(row) for row in values)

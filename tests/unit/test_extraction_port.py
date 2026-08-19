@@ -6,6 +6,7 @@ import os
 import unittest
 from pathlib import Path
 
+from app.errors import AppError
 from app.excel.com_adapter import ComExtractionAdapter
 from app.excel.fixture_adapter import FixtureAdapterNotAcknowledged, FixtureExtractionAdapter
 from app.excel.port import ExtractionPort, rows_per_chunk
@@ -49,10 +50,27 @@ class TestComAdapterContract(unittest.TestCase):
         # Part 44.3 rule 3: only this adapter can satisfy the protected-file gate.
         self.assertTrue(ComExtractionAdapter.provides_production_evidence)
 
-    def test_com_adapter_is_not_implemented_yet_and_says_so_loudly(self):
+    def test_a_missing_source_file_fails_closed_with_a_registry_code(self):
+        # Never a raw OSError: every failure the operator can see carries a
+        # code from contracts/error_codes.json (Part 42.2).
         adapter = ComExtractionAdapter()
-        with self.assertRaises(NotImplementedError):
-            adapter.open("C:/nowhere.xlsx", {})
+        with self.assertRaises(AppError) as caught:
+            adapter.open("C:/nowhere/definitely-not-here.xlsx", {})
+        self.assertEqual(caught.exception.code, "SRC_NOT_FOUND")
+
+    def test_reading_before_open_is_a_programming_error_not_a_silent_empty(self):
+        adapter = ComExtractionAdapter()
+        with self.assertRaises(RuntimeError):
+            adapter.chunks()
+        with self.assertRaises(RuntimeError):
+            adapter.lineage()
+
+    def test_close_is_idempotent_and_safe_before_open(self):
+        # close() runs from `finally` and from open()'s own failure path, so it
+        # must never raise — including when there is nothing to release.
+        adapter = ComExtractionAdapter()
+        adapter.close()
+        adapter.close()
 
 
 class TestFixtureAdapter(unittest.TestCase):

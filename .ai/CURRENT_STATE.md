@@ -7,10 +7,11 @@
 The ready application is the product. Employee agents should adapt project configuration and isolated business logic rather than rebuild technical foundations.
 
 > **Read this before believing any "ready" claim.** Everything downstream of
-> extraction is built and proven. The extraction adapter itself — the door into
-> real protected Excel workbooks — is **not written** (blocker 1). The engine
-> currently ingests only through the test-only fixture port, so no employee can
-> yet point it at a real workbook.
+> extraction is built and proven. The extraction adapter — the door into real
+> protected Excel workbooks — was **written on 2026-08-19** and is unit-tested
+> against fakes, but it has **never been executed against a real Excel
+> workbook** (blocker 1). Code existing is not the same as the path working, and
+> the difference is exactly what `GATE_PROTECTED_FILE_PROOF` measures.
 
 ## Proven reusable foundation
 
@@ -67,30 +68,42 @@ The ready application is the product. Employee agents should adapt project confi
 Architecture is no longer the blocker. Everything below is environment-bound,
 release-mechanical or documentation debt.
 
-1. **The COM binding layer of Excel extraction is NOT WRITTEN.** This is the
-   largest remaining gap and it is a code gap, not only an environment one.
-   Within `app/excel/`, four modules are documented stubs whose every entry
-   point raises `NotImplementedError`:
+1. **The COM binding layer is written but has never touched real Excel.** All
+   eight `app/excel/` modules now hold real implementations:
 
    | Module | Status |
    |---|---|
    | `conversion.py` | **real** — dates/serials, separators, percentages, currency, leading zeros, errors, blanks (V10 Part 9 value rules) |
-   | `port.py` | **real** — ExtractionPort contract and adaptive `rows_per_chunk` |
+   | `port.py` | **real** — ExtractionPort contract, adaptive `rows_per_chunk`, `as_row_major` shape normalisation |
    | `identity.py` | **real** — exact-path workbook matching; a similar-but-wrong workbook is refused |
    | `fixture_adapter.py` | **real** — test-only, never ships |
-   | `session.py` | **stub** — acquire/attach an Excel session |
-   | `discovery.py` | **stub** — table → named range → header row |
-   | `extractor.py` | **stub** — drive block reads into staging |
-   | `com_adapter.py` | **stub** — the production ExtractionPort itself |
+   | `session.py` | **real** — dedicated/attach/dedicated_then_attach, settings snapshot+restore, owned-PID-only termination |
+   | `discovery.py` | **real** — table → named range → header row → bounded walk; never UsedRange |
+   | `extractor.py` | **real** — cell-sized chunking, name-based projection, row-count guard |
+   | `com_adapter.py` | **real** — the production ExtractionPort itself |
 
-   So the hard, testable logic is done; what is missing is the Windows COM
-   binding that calls it. The engine today ingests only through the test-only
-   fixture port, so no employee can yet point it at a real workbook.
+   `session.py` and `com_adapter.py` are the only modules importing COM
+   (Part 44.2), so `discovery.py` and `extractor.py` — which hold the rules
+   most likely to be subtly wrong — are covered by 70 tests that run on any
+   machine (`tests/unit/test_excel_discovery.py`,
+   `tests/unit/test_excel_extractor.py`).
+
+   **What this does not mean.** The code has been exercised only against
+   in-process fakes. It has never opened a real `.xlsx`, never met a DRM
+   prompt, never been timed on a large workbook. Three specific things remain
+   unproven and cannot be proven from a development workspace:
+
+   - `GATE_PROTECTED_FILE_PROOF` — needs a real DRM-protected workbook on the
+     authorized Windows machine (Part 44.3 rule 3; fixtures never substitute).
+   - `GATE_NO_CELL_BY_CELL` benchmark half — the static guard now runs against
+     real code, but the measured block-vs-per-cell comparison needs a real
+     large workbook.
+   - The recoverable `WAITING_FOR_USER` round trip for DRM prompts (Part 22.5)
+     is only partially built: prompts are suppressed and a permission failure
+     maps to `DRM_USER_ACTION_REQUIRED`, but the resume path is not written.
+
    Everything downstream of extraction (staging, quality, history, analytics,
-   dashboard, runtime) is real and proven. Writing the missing layer needs the
-   authorized Windows + Excel machine, so it is both unwritten and
-   environment-bound. `tests/architecture/test_no_cell_by_cell_extraction.py`
-   pins this status and fails the moment it changes.
+   dashboard, runtime) is real and proven on the fixture port.
 2. **Environment-bound (cannot be closed from CI even once the code exists).**
    Protected-file DRM proof, clean-offline-machine and standard-user startup
    runs all need the corporate Windows machine; the non-technical operator

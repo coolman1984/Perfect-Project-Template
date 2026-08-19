@@ -72,7 +72,7 @@
   verified_at: "2026-08-17T16:21:13Z"
   verified_by: template author
   conditional_reason: "No Windows host, no Microsoft Excel, and no DRM-protected files in this workspace. Part 44.3 rule 3: the fixture adapter can never advance this gate."
-  next_action: On a Windows PC with Excel and the real protected files, run the COM adapter twice and confirm the source hash is unchanged.
+  next_action: "On a Windows PC with Excel and the real protected files, run the COM adapter twice and confirm the source hash is unchanged. The adapter now exists (implemented 2026-08-19) and exposes ComExtractionAdapter.source_unchanged() for exactly this check, so the only thing still missing is the authorized machine and the protected files — not code."
 
 - id: GATE_SOURCE_IMMUTABILITY
   part: 31.1
@@ -91,10 +91,10 @@
   severity: block
   status: in_progress
   evidence: acceptance/evidence/security-immutability-browser-2026-08-19.txt
-  verified_at: "2026-08-19T03:48:13Z"
-  verified_by: "tests/architecture/test_no_cell_by_cell_extraction.py (static guard: per-cell COM access and nested row/column value loops both fail CI)"
+  verified_at: "2026-08-19T11:52:00Z"
+  verified_by: "tests/architecture/test_no_cell_by_cell_extraction.py (static guard: per-cell COM access and nested row/column value loops both fail CI) + tests/unit/test_excel_extractor.py::TestReadRegion::test_reads_rectangular_blocks_not_cells (400 cells are read in 4 block calls, not 400)"
   conditional_reason: ""
-  next_action: "Benchmark half is BLOCKED: app/excel/com_adapter.py, session.py, discovery.py and extractor.py are unimplemented stubs, so there is no production extraction code to time. Implement the COM adapter on the authorized Windows+Excel machine, then measure block vs per-cell."
+  next_action: "Static half now runs against real code: the COM adapter was implemented 2026-08-19 and the guard scans it. Benchmark half still open — it needs a real large workbook on the authorized Windows+Excel machine to time block vs per-cell reads. Fixture and fake-based tests cannot supply that measurement."
 
 - id: GATE_EXTRACTION_COMPLETENESS
   part: 31.1

@@ -7,15 +7,15 @@ a performance preference.
 
 **This file cannot close the gate on its own, and does not claim to.** The
 production COM adapter (`app/excel/com_adapter.py`, plus `session.py`,
-`discovery.py`, `extractor.py`) is still an unimplemented stub — every entry
-point raises NotImplementedError. There is therefore no production extraction
-code to benchmark, and the gate's second half (a measured block-vs-per-cell
-comparison) cannot exist yet.
+`discovery.py`, `extractor.py`) was written on 2026-08-19, so the static half
+of the gate now runs against real extraction code rather than stubs. The gate's
+second half — a measured block-vs-per-cell benchmark on a real workbook — still
+requires the authorized Windows machine and remains open.
 
-What this file does is make the rule enforceable *the moment* that adapter is
-written: the checks below run over whatever `app/excel/` contains, so the first
-per-cell loop added to the real implementation fails CI rather than being
-discovered on a 20-million-cell workbook.
+What this file does is keep the rule enforceable as that code changes: the
+checks below run over whatever `app/excel/` contains, so the first per-cell loop
+added to the implementation fails CI rather than being discovered on a
+20-million-cell workbook.
 """
 
 from __future__ import annotations
@@ -110,25 +110,50 @@ class TestNoPerCellComAccess(unittest.TestCase):
         self.assertIn("rows_per_chunk", text)
         self.assertRegex(text, r"per-cell loop|cell-by-cell|per-cell")
 
-    def test_production_extraction_is_still_an_unimplemented_stub(self):
+    def test_production_extraction_is_written(self):
         """Pins the honest status this gate depends on.
 
-        If someone implements the COM adapter, this test fails — and that
-        failure is the reminder that GATE_NO_CELL_BY_CELL's benchmark half now
-        becomes possible and required, and that CURRENT_STATE must stop saying
-        production extraction is unwritten.
+        This replaces an earlier assertion that all four modules were stubs.
+        They were written on 2026-08-19; the assertion is inverted rather than
+        deleted so the file keeps stating a checkable fact about the adapter's
+        status instead of quietly losing the claim.
         """
-        unimplemented = []
         for name in ("com_adapter", "extractor", "session", "discovery"):
             text = (EXCEL_ROOT / f"{name}.py").read_text("utf-8")
-            if "NotImplementedError" in text:
-                unimplemented.append(name)
-        self.assertEqual(
-            sorted(unimplemented),
-            ["com_adapter", "discovery", "extractor", "session"],
-            "production Excel extraction status changed; update "
-            "CURRENT_STATE.md and re-evaluate GATE_NO_CELL_BY_CELL and "
-            "GATE_PROTECTED_FILE_PROOF")
+            self.assertNotIn(
+                "NotImplementedError", text,
+                f"app/excel/{name}.py regressed to a stub; production "
+                f"extraction is written and CURRENT_STATE.md says so")
+
+    def test_only_the_permitted_modules_import_com(self):
+        """Part 44.2, checked here as well as in the source scanner.
+
+        `discovery` and `extractor` hold the rules most likely to be wrong —
+        bounds, chunk arithmetic, column mapping. Keeping COM out of them is
+        what lets those rules run in CI on Linux, so it is worth failing a test
+        over and not only a scanner pass.
+        """
+        permitted = {"com_adapter.py", "session.py"}
+        for path in self._python_files():
+            if path.name in permitted:
+                continue
+            for lineno, line in _code_lines(path):
+                self.assertNotRegex(
+                    line, r"\b(import\s+win32|from\s+win32|import\s+pythoncom)\b",
+                    f"{path.relative_to(REPO_ROOT)}:{lineno} imports COM "
+                    f"outside {sorted(permitted)} (Part 44.2)")
+
+    def test_the_protected_file_gate_is_not_claimed_by_this_suite(self):
+        """Writing the adapter does not close GATE_PROTECTED_FILE_PROOF.
+
+        Part 44.3 rule 3: only a real COM read of a real DRM-protected workbook
+        on the authorized machine advances that gate. No amount of unprotected
+        or fixture testing substitutes, and this test exists so that confusion
+        cannot creep back in as the adapter matures.
+        """
+        text = (EXCEL_ROOT / "com_adapter.py").read_text("utf-8")
+        self.assertIn("GATE_PROTECTED_FILE_PROOF", text)
+        self.assertRegex(text, r"remains open|cannot close it|still open")
 
 
 if __name__ == "__main__":

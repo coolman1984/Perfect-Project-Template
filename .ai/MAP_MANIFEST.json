@@ -1,5 +1,5 @@
 {
-  "file_count": 275,
+  "file_count": 277,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 2995,
@@ -12,9 +12,9 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 7570,
+      "bytes": 8450,
       "scope": "unknown",
-      "sha256": "544b01b92c2c5938fab73351b62043964bc5cd3a759bd010af3d78247eacddcf"
+      "sha256": "96c21b3c806b765ff2a5e248da09c9c2c48d5b6032bcddd9be48b867fd40efd5"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 14304,
+      "bytes": 14833,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 18757,
+      "bytes": 19152,
       "scope": "unknown",
-      "sha256": "d7d8471208cdeacaea1d6aa4a937223c7350a1613ab007171398a7a47cf4643a"
+      "sha256": "52c19bae8adf9fd00ad68ab6b41aca85991713bba61d617b491580c80163ef45"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -312,9 +312,9 @@
       "sha256": "f11ca93f00f41f8533868465d055d024c23a4c9135748994d3aa103807a8278a"
     },
     "app/excel/com_adapter.py": {
-      "bytes": 3894,
+      "bytes": 11179,
       "scope": "universal_core",
-      "sha256": "23a208311cfc4dc10f52f44dfc4d83563436ccbe106e5e57a73b736b82a93bbc"
+      "sha256": "826733224249af77293924c18a919e56b49509563e3faa2816f47fce50beecd3"
     },
     "app/excel/conversion.py": {
       "bytes": 8368,
@@ -322,14 +322,14 @@
       "sha256": "ad02cb3f62612b3ba4bfa8fe59e2001bee6995b3f4f636c034f60ca1e893c26f"
     },
     "app/excel/discovery.py": {
-      "bytes": 778,
+      "bytes": 11841,
       "scope": "universal_core",
-      "sha256": "34edc0cb5e9734bf4e25f05c8d80bfdd7faffe8be9fef53676d7f4805cdd33e5"
+      "sha256": "894804b9fc191e7baddafc83b3b2402689d32dce71674b465ee1648a9662f349"
     },
     "app/excel/extractor.py": {
-      "bytes": 786,
+      "bytes": 8207,
       "scope": "universal_core",
-      "sha256": "3fff710ad27bd04de7e7928195398cc21f51a71b87894bc8f29f94f02073e4a0"
+      "sha256": "7dff70bf2e964355a03d4c6670ab664b069368efa31270673d6fb4f948cf9d7d"
     },
     "app/excel/fixture_adapter.py": {
       "bytes": 5586,
@@ -342,14 +342,14 @@
       "sha256": "d2ed3d71b61c4493a2cc1cd423fb3a371466d0860a52eecb90f6816e97d771a9"
     },
     "app/excel/port.py": {
-      "bytes": 4462,
+      "bytes": 5501,
       "scope": "universal_core",
-      "sha256": "2d050b3e939eb4223aad342f8d8e8bd4487214f72e3f4392e23f0dc6613516d3"
+      "sha256": "9417e257f48c6b87a2a753ee65f366e6c9a79cb342d66c69bb6ce2df28cfae48"
     },
     "app/excel/session.py": {
-      "bytes": 802,
+      "bytes": 12658,
       "scope": "universal_core",
-      "sha256": "00bd595580b487979b75d8c69337f2ffd9cd5a202b00e312b7ac3dcf0f4e18b9"
+      "sha256": "7996ba110ff5903d140075919e0319d29696c9e5e825fdda3deda1ca4d202ea9"
     },
     "app/local_transport.py": {
       "bytes": 5001,
@@ -932,9 +932,9 @@
       "sha256": "2a9746c8b1c9a1abfb0d874aeccf9d00402ffda27718fead824669a491d0ce99"
     },
     "tests/adversarial/test_approval_bypass.py": {
-      "bytes": 12550,
+      "bytes": 13430,
       "scope": "test",
-      "sha256": "604d5115c80d75dc721bab3e52714d50a036ca9793ded07db0f0bb645ba7c627"
+      "sha256": "27055859597b65f8cc52615768eb629e5088220d5b507667892e88f3e103c24f"
     },
     "tests/adversarial/test_loopback_negative_probes.py": {
       "bytes": 8909,
@@ -957,9 +957,9 @@
       "sha256": "dc7703e1a9b5285e4822fcb59af9c0c0910358f788b47333a4ad1597d19844ec"
     },
     "tests/architecture/test_no_cell_by_cell_extraction.py": {
-      "bytes": 5784,
+      "bytes": 7121,
       "scope": "test",
-      "sha256": "744ef6ae45cc5a5d905019f49eed5a5ff034d11b0d2d913f946e51871645bad4"
+      "sha256": "51a6391c3eae3977d75e1e4da991d78cecbec03513c0ea9a810356b230782a51"
     },
     "tests/browser/README.md": {
       "bytes": 646,
@@ -1166,10 +1166,20 @@
       "scope": "test",
       "sha256": "49bb6021b1f1054b5de606ec8fa15ecae91053f480969d404942ee8aa4382e68"
     },
-    "tests/unit/test_extraction_port.py": {
-      "bytes": 5232,
+    "tests/unit/test_excel_discovery.py": {
+      "bytes": 11199,
       "scope": "test",
-      "sha256": "90508be06f05042fe18e5b636fbfb27ec82b0fba1553803272f7a574098bbd59"
+      "sha256": "acd890277b389bee44d9d5261df51878bb04e9b01c8eaeec355d694c86a62234"
+    },
+    "tests/unit/test_excel_extractor.py": {
+      "bytes": 9458,
+      "scope": "test",
+      "sha256": "df8f5d9a96f51f4e81d6c7c356e5f385efbda781bb04e6444df60d11aa588f25"
+    },
+    "tests/unit/test_extraction_port.py": {
+      "bytes": 6067,
+      "scope": "test",
+      "sha256": "d3888e9340b056c0b55ec0aba807369ecfcf03f0375de64e1032045c4dbcf05a"
     },
     "tests/unit/test_gates_ledger.py": {
       "bytes": 2840,
@@ -1377,6 +1387,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T11:13:13Z",
+  "generated_at": "2026-08-19T11:36:11Z",
   "schema_version": 2
 }
