@@ -1,5 +1,5 @@
 {
-  "file_count": 301,
+  "file_count": 302,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 2995,
@@ -347,9 +347,9 @@
       "sha256": "9417e257f48c6b87a2a753ee65f366e6c9a79cb342d66c69bb6ce2df28cfae48"
     },
     "app/excel/session.py": {
-      "bytes": 12796,
+      "bytes": 13557,
       "scope": "universal_core",
-      "sha256": "fcdcea8de224a79245b2f6aef8be1aa3ad0bd4176b5c0a4a0ee55f06c0c7fa1e"
+      "sha256": "b99a14ec50722a129b04e4c7ead4c3c5c3cd83d0f863524c42814197b5f54b10"
     },
     "app/local_transport.py": {
       "bytes": 5001,
@@ -1356,6 +1356,11 @@
       "scope": "test",
       "sha256": "afb6559093967bab137aaffc677a326e819b4bf87255619704f4e9eec6051388"
     },
+    "tests/windows/test_excel_com_smoke.py": {
+      "bytes": 3642,
+      "scope": "test",
+      "sha256": "2a2e9ed53c0f67193c805e04a3fb29d4eb2fadac1b406073eac1dd7c825ad8df"
+    },
     "tools/_common.py": {
       "bytes": 7172,
       "scope": "tooling",
@@ -1507,6 +1512,6 @@
       "sha256": "2ce209d223192c14faff82daf0f8251f60be276ec7922f2c06d1132c2821b5e1"
     }
   },
-  "generated_at": "2026-08-19T14:33:42Z",
+  "generated_at": "2026-08-19T14:42:32Z",
   "schema_version": 2
 }

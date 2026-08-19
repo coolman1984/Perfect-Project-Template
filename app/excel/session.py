@@ -107,6 +107,7 @@ class ExcelSession:
     #: Whether *we* opened this workbook. Attach-mode workbooks are borrowed.
     owns_workbook: bool = False
     _saved_settings: dict[str, Any] = field(default_factory=dict)
+    _pythoncom: Any = field(default=None, repr=False)
 
     @property
     def date_system_1904(self) -> bool:
@@ -127,28 +128,37 @@ class ExcelSession:
         step is individually guarded because this runs in a `finally` block
         during failures, where raising again would mask the original error.
         """
+        pythoncom = self._pythoncom
+        self._pythoncom = None
         try:
-            self._restore_settings()
+            try:
+                self._restore_settings()
+            finally:
+                workbook, application = self.workbook, self.application
+                self.workbook = None
+                self.application = None
+
+                if workbook is not None and self.owns_workbook:
+                    try:
+                        # SaveChanges=False is the whole point: the source file
+                        # is read-only input and must come back byte-identical
+                        # (GATE_SOURCE_IMMUTABILITY).
+                        workbook.Close(SaveChanges=False)
+                    except Exception:
+                        pass
+
+                if application is not None and self.owned_pid is not None:
+                    try:
+                        application.Quit()
+                    except Exception:
+                        pass
+                    self._terminate_owned_process()
         finally:
-            workbook, application = self.workbook, self.application
-            self.workbook = None
-            self.application = None
-
-            if workbook is not None and self.owns_workbook:
-                try:
-                    # SaveChanges=False is the whole point: the source file is
-                    # read-only input and must come back byte-identical
-                    # (GATE_SOURCE_IMMUTABILITY).
-                    workbook.Close(SaveChanges=False)
-                except Exception:
-                    pass
-
-            if application is not None and self.owned_pid is not None:
-                try:
-                    application.Quit()
-                except Exception:
-                    pass
-                self._terminate_owned_process()
+            # Every CoInitialize on this thread must be balanced. Leaving the
+            # COM apartment initialized leaks thread-scoped COM state into the
+            # next run and eventually makes repeat extraction unreliable.
+            if pythoncom is not None:
+                pythoncom.CoUninitialize()
 
     def _restore_settings(self) -> None:
         for name, value in self._saved_settings.items():
@@ -247,6 +257,7 @@ def _open_dedicated(source_path: str) -> ExcelSession:
         # close (Part 7.1).
         application = client.DispatchEx("Excel.Application")
     except Exception as exc:
+        pythoncom.CoUninitialize()
         raise AppError(
             "EXCEL_NOT_AVAILABLE",
             support_detail=f"could not start a dedicated Excel process: {exc}",
@@ -258,6 +269,7 @@ def _open_dedicated(source_path: str) -> ExcelSession:
         open_mode="dedicated",
         owned_pid=_process_id(application),
         owns_workbook=True,
+        _pythoncom=pythoncom,
     )
     session._saved_settings = _snapshot_and_configure(application, hide=True)
 
@@ -287,6 +299,7 @@ def _open_attached(source_path: str) -> ExcelSession:
     try:
         application = client.GetActiveObject("Excel.Application")
     except Exception as exc:
+        pythoncom.CoUninitialize()
         raise AppError(
             "EXCEL_NOT_AVAILABLE",
             support_detail=(
@@ -297,7 +310,11 @@ def _open_attached(source_path: str) -> ExcelSession:
     # `identity.verify` raises EXCEL_WORKBOOK_AMBIGUOUS when the open workbooks
     # cannot name a single answer. Refusing beats extracting `Q3 Orders (1).xlsx`
     # and reporting it as `Q3 Orders.xlsx`.
-    workbook = identity.verify(source_path, list(application.Workbooks))
+    try:
+        workbook = identity.verify(source_path, list(application.Workbooks))
+    except BaseException:
+        pythoncom.CoUninitialize()
+        raise
 
     return ExcelSession(
         application=application,
@@ -305,6 +322,7 @@ def _open_attached(source_path: str) -> ExcelSession:
         open_mode="attach",
         owned_pid=None,        # borrowed process: never quit it
         owns_workbook=False,   # borrowed workbook: never close it
+        _pythoncom=pythoncom,
     )
 
 
