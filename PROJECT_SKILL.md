@@ -11,6 +11,19 @@ This repository is the **Universal Excel Automation Engine + Adaptation Template
 
 The employee supplies Excel files and business meaning. The repository supplies extraction, staging, quality, history, database, analytics, local API, dashboard framework, offline runtime, security controls, tests, map and packaging foundations.
 
+The single visible product contract is:
+
+```text
+Template ZIP + Excel files + business explanation
+→ adapt the existing engine
+→ ProjectName.zip
+→ extract → double-click START → browser opens → work
+```
+
+The final operator ZIP root contains only `START.bat`, `QUICK_START.html` and
+`Application/`. Technical machinery remains available to the adapting agent but
+is never part of the employee's operating decisions.
+
 Canonical work order:
 
 ```text
@@ -167,6 +180,11 @@ A normal project adaptation does **not** rebuild/freeze the entire runtime when 
 A core/runtime change is master-template release work: rebuild the full release, seal a new baseline/version, migrate compatible project packs, verify, and preserve rollback.
 
 Core-owned paths may be replaced/migrated by a template upgrade. Project-owned paths must be preserved unless an explicit project migration says otherwise.
+
+After the existing sealed release build and release verification pass, assemble
+the operator ZIP with `PROJECT_TOOL package build` and prove its surface with
+`PROJECT_TOOL package verify`. This wrapper never substitutes for PyInstaller,
+offline verification or the environment-bound acceptance gates.
 
 ## 12. References and current honesty
 

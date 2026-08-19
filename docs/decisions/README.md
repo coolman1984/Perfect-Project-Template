@@ -19,3 +19,4 @@ Naming: `ADR-NNNN-short-title.md`.
 | ID | Title | Status | Approved by | Date |
 |---|---|---|---|---|
 | ADR-0000 | Template baseline | accepted | template author | 2026-08-17 |
+| ADR-0001 | Simple final-user product surface | accepted | product owner | 2026-08-19 |

@@ -5,13 +5,20 @@ point the agent at this repository. Nothing else is required.
 
 ---
 
-## 1. Build a new Excel automation project (the main one)
+## 1. Adapt the template in ChatGPT Work (the main path)
 
 > Copy everything between the lines.
 
 ---
 
 Use this repository as your project template and its constitution as your law.
+
+The user supplies the template ZIP, Excel files and a plain business
+explanation. Deliver a tested `ProjectName.zip` whose final-user journey is:
+extract → double-click `START.bat` → browser opens → work. Reuse existing
+capabilities first, then configuration, then project SQL, then isolated project
+Python only if required. Never rebuild an existing engine feature without
+evidence of a reusable gap.
 
 **Do not scan the repository.** Start exactly here:
 
@@ -53,6 +60,14 @@ Report progress as real passed gates, not narration. When you finish a slice,
 run every verifier, record gate evidence, refresh the map, update
 `.ai/CURRENT_STATE.md`, and give me the Part 34.4 completion declaration
 generated from the ledger.
+
+After the sealed release passes its existing checks, build and verify the
+simple operator package:
+
+```text
+PROJECT_TOOL package build --project-name "<Project Name>" --app-dir release/current --output-dir release/operator
+PROJECT_TOOL package verify --zip "release/operator/<Project Name>.zip"
+```
 
 ---
 

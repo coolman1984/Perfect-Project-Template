@@ -27,6 +27,12 @@ population changes. Cosmetic dashboard changes do not change metric versions.
 | Error codes | `contracts/error_codes.json` | 1.0 | every raising site, UI error screens, retry policy | new code = additive; changing a class is breaking |
 | Run states | `contracts/run_states.json` | 1.0 | `app/state_machine.py`, events, UI stages | adding a state is a versioned change (Part 42.3) |
 | Implementation baseline | `IMPLEMENTATION_BASELINE.lock.json` | 1 | architecture verifier, build, release | user-approved deviation only (Part 0.7) |
+| Final operator package | `contracts/operator_package.json` | 1 | release builder, package verifier | explicit product decision + matching verifier/test update |
+
+The operator-package contract exposes exactly `START.bat`, `QUICK_START.html`
+and `Application/` at the ZIP root. The sealed runtime remains inside
+`Application/`; developer and build machinery are not part of the employee's
+operating surface.
 
 ## Local API contract
 

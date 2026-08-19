@@ -8,13 +8,18 @@ REM
 REM Publishes ATOMICALLY: build to a new version folder, verify it, then switch
 REM the current pointer. Never patch a running folder in place.
 setlocal
+set "PROJECT_NAME=%~1"
+if "%PROJECT_NAME%"=="" set "PROJECT_NAME=Excel Intelligence"
 call "%~dp0PROJECT_TOOL.bat" doctor || exit /b 1
 call "%~dp0PROJECT_TOOL.bat" gates status || exit /b 1
 python -m tools.build_release || exit /b 1
 call "%~dp0PROJECT_TOOL.bat" architecture verify --release "%~dp0release\current" || exit /b 1
 call "%~dp0VERIFY_OFFLINE.bat" || exit /b 1
+call "%~dp0PROJECT_TOOL.bat" package build --project-name "%PROJECT_NAME%" --app-dir "%~dp0release\current" --output-dir "%~dp0release\operator" || exit /b 1
+call "%~dp0PROJECT_TOOL.bat" package verify --zip "%~dp0release\operator\%PROJECT_NAME%.zip" || exit /b 1
 echo.
 echo   Release candidate built and verified at release\current.
+echo   Final operator package: release\operator\%PROJECT_NAME%.zip
 echo   Clean offline PC, protected workbook and operator gates remain conditional.
 echo.
 exit /b 0

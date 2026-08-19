@@ -1,0 +1,30 @@
+Operator package contract evidence — 2026-08-19
+
+Scope
+-----
+This proves the simple final-user package wrapper introduced by ADR-0001. It
+does not replace or advance the environment-bound Windows acceptance gates.
+
+Required visible root
+---------------------
+START.bat
+QUICK_START.html
+Application/
+
+Verification
+------------
+python3 -m unittest tests.unit.test_operator_package -v
+PYTHONPATH=/tmp/perfect-project-deps python3 -m unittest discover -s tests -t .
+./project_tool.sh architecture verify --source-scan
+./project_tool.sh constitution audit
+
+Result
+------
+- Six focused operator-package tests passed.
+- Full suite: 451 tests passed; 56 environment-specific tests skipped.
+- The available isolated Linux test dependency was DuckDB 1.4.5. The locked
+  Windows 1.5.5 release build remains covered by its separate release process.
+- Architecture source scan passed with four existing loopback-URL warnings.
+- Constitution audit passed.
+- Clean offline Windows PC, protected workbook and standard-user gates remain
+  conditional and are not claimed by this evidence.

@@ -1,6 +1,20 @@
 # Perfect Project Template — Universal Excel Automation Engine
 
-One reusable offline Excel automation application that AI agents **adapt** to new departments and Excel files instead of rebuilding the same software repeatedly.
+One reusable offline Excel automation application that ChatGPT Work **adapts**
+to new departments and Excel files instead of rebuilding the same software.
+
+## The whole product
+
+```text
+Template ZIP + Excel files + business explanation
+→ ChatGPT Work reuses and configures the existing engine
+→ tests, reconciles and builds ProjectName.zip
+→ employee extracts, double-clicks START and uses the local browser app
+```
+
+The operator ZIP exposes only `START.bat`, `QUICK_START.html` and
+`Application/`. Python, databases, packages, terminals, Git, configuration,
+migrations, ports and build tools remain internal. See `docs/PRODUCT_GOAL.md`.
 
 ```text
 Employee gives Excel files + business meaning
