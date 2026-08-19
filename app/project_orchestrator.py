@@ -7,6 +7,7 @@ and presentation configuration. A normal department never gets its own server.
 from __future__ import annotations
 
 import json
+import importlib
 import os
 from pathlib import Path
 import tomllib
@@ -16,7 +17,6 @@ from app import events
 from app.data.database import Database
 from app.errors import AppError
 from app.excel.com_adapter import ComExtractionAdapter
-from app.excel.fixture_adapter import FixtureExtractionAdapter
 from app.locks import acquire_report_lock
 from app.orchestrator import new_run_id
 from app.project_pipeline import ProjectOutcome, ProjectPipeline
@@ -53,7 +53,8 @@ def _adapter_for(
                     "CSV fixture input is disabled for this employee project; "
                     "production Excel sources must use the authorized COM adapter"),
             )
-        return FixtureExtractionAdapter(source_path)
+        fixture_module = importlib.import_module("app.excel.fixture_adapter")
+        return fixture_module.FixtureExtractionAdapter(source_path)
     return ComExtractionAdapter()
 
 

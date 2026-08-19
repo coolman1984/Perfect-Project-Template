@@ -10,10 +10,11 @@ REM the current pointer. Never patch a running folder in place.
 setlocal
 call "%~dp0PROJECT_TOOL.bat" doctor || exit /b 1
 call "%~dp0PROJECT_TOOL.bat" gates status || exit /b 1
+python -m tools.build_release || exit /b 1
+call "%~dp0PROJECT_TOOL.bat" architecture verify --release "%~dp0release\current" || exit /b 1
+call "%~dp0VERIFY_OFFLINE.bat" || exit /b 1
 echo.
-echo   BUILD_RELEASE is not implemented yet.
-echo   Implement the PyInstaller one-folder spec, then verify with:
-echo     PROJECT_TOOL.bat architecture verify --release release\current
-echo     VERIFY_OFFLINE.bat
+echo   Release candidate built and verified at release\current.
+echo   Clean offline PC, protected workbook and operator gates remain conditional.
 echo.
-exit /b 1
+exit /b 0

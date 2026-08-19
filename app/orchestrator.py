@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import importlib
 import os
 import uuid
 from datetime import datetime, timezone
@@ -11,7 +12,6 @@ from typing import Any
 from app import events
 from app.data.database import Database
 from app.excel.com_adapter import ComExtractionAdapter
-from app.excel.fixture_adapter import FixtureExtractionAdapter
 from app.locks import acquire_report_lock
 from app.pipeline import Pipeline, ReportContract, RunOutcome
 
@@ -50,7 +50,11 @@ def run(
     rid = run_id or new_run_id()
     contract = ReportContract(root / "reports" / report_id)
     database = Database(database_path or root / "data" / "warehouse.duckdb")
-    adapter: Any = FixtureExtractionAdapter(source_path) if contract.uses_fixture_adapter else ComExtractionAdapter()
+    if contract.uses_fixture_adapter:
+        fixture_module = importlib.import_module("app.excel.fixture_adapter")
+        adapter: Any = fixture_module.FixtureExtractionAdapter(source_path)
+    else:
+        adapter = ComExtractionAdapter()
 
     with acquire_report_lock(report_id, root=root / "runs" / "locks"):
         events.emit(rid, "STARTING", root=root / "runs", report_id=report_id)

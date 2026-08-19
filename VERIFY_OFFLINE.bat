@@ -10,9 +10,9 @@ REM (Part 30.4) must also run on a machine with no Python, Node, package
 REM manager, editor or compiler.
 setlocal
 call "%~dp0PROJECT_TOOL.bat" architecture verify --release "%~dp0release\current" || exit /b 1
+python -m tools.verify_offline "%~dp0release\current" || exit /b 1
 echo.
-echo   VERIFY_OFFLINE is not implemented yet.
-echo   It must write release\ARCHITECTURE_EVIDENCE.json and
-echo   release\LOCAL_TRANSPORT_EVIDENCE.json before a release is accepted.
+echo   Local offline release verification passed.
+echo   This is build-machine evidence, not the clean-PC acceptance gate.
 echo.
-exit /b 1
+exit /b 0

@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 from tools._common import (
@@ -126,7 +127,7 @@ def _docstring_lines(path: Path, text: str) -> set[int]:
 def check_no_remote_assets(report: Report) -> None:
     """Part 23.10: no CDN, remote font, icon, telemetry or API in runtime code."""
     for relative in _scan_targets():
-        if str(relative).startswith(("tools/", "tests/", "scripts/")):
+        if relative.as_posix().startswith(("tools/", "tests/", "scripts/")):
             continue
         text = read_text(REPO_ROOT / relative)
         for url in REMOTE_URL.findall(text):
@@ -228,7 +229,7 @@ def check_dev_tools_isolated(report: Report) -> None:
 
 def check_portable_tool_tier(report: Report) -> None:
     """Part 37.2 rule 1: the portable tool tier is standard library only."""
-    stdlib_ok = {
+    stdlib_ok = set(getattr(sys, "stdlib_module_names", ())) | {
         "argparse", "ast", "collections", "dataclasses", "datetime", "fnmatch",
         "hashlib", "json", "os", "pathlib", "re", "subprocess", "sys",
         "tomllib", "typing", "textwrap", "shutil", "itertools", "math",

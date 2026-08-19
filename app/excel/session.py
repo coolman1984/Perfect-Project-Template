@@ -84,6 +84,11 @@ def _com_modules() -> tuple[Any, Any, Any]:
     return pythoncom, win32com.client, win32process
 
 
+def verify_com_binding() -> None:
+    """Prove the packaged pywin32 binding imports through the authorized layer."""
+    _com_modules()
+
+
 @dataclass
 class ExcelSession:
     """An open, read-only workbook plus everything needed to put Excel back.
