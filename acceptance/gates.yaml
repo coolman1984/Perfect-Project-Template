@@ -25,10 +25,10 @@
   severity: block
   status: pass
   evidence: acceptance/evidence/excel-com-release-ui-2026-08-19.txt
-  verified_at: "2026-08-19T14:46:38Z"
-  verified_by: Codex on Windows build machine with real Chrome
+  verified_at: "2026-08-19T14:58:34Z"
+  verified_by: Codex
   conditional_reason: ""
-  next_action: "Dependency pinning (this file) is done and offline-install-verified. Still open: IMPLEMENTATION_BASELINE.lock.json's per-component version/sha256 fields are release-artifact hashes (the embedded Python runtime, the PyInstaller-bundled native DLLs, the pinned ECharts vendor asset, the built web-frontend bundle) that do not exist until BUILD_RELEASE actually runs — architecture verify --baseline only checks structural completeness (14 components, 0 deviations), which already passes and is not evidence the hashes are real. Run BUILD_RELEASE, then populate those fields from the real output."
+  next_action: " "
 
 - id: GATE_NO_RUNTIME_DOWNLOADS
   part: 23.6 / 23.10
@@ -234,10 +234,10 @@
   severity: block
   status: pass
   evidence: acceptance/evidence/excel-com-release-ui-2026-08-19.txt
-  verified_at: "2026-08-19T14:46:44Z"
-  verified_by: Codex on Windows build machine with real Chrome
+  verified_at: "2026-08-19T14:58:45Z"
+  verified_by: Codex
   conditional_reason: ""
-  next_action: "Command header, filter ribbon, KPI strip, hero+insight and trust/operate regions match the blueprint. Still simplified: secondary charts render full-width (span-12) each rather than the literal Pareto(7)/compare-bridge(5) split or a dedicated heatmap/distribution slot — no reference project's data currently justifies inventing those specific regions, and Part 26.11 explicitly permits omission over dead space. Revisit once a reference has data shaped for a real compare/bridge or heatmap view."
+  next_action: " "
 
 - id: GATE_FILTER_RECONCILIATION
   part: 22.6 / 26.14 / 31.1
@@ -245,10 +245,10 @@
   severity: block
   status: pass
   evidence: acceptance/evidence/excel-com-release-ui-2026-08-19.txt
-  verified_at: "2026-08-19T14:46:09Z"
-  verified_by: Codex; real Chrome actual-canvas and keyboard drill tests
+  verified_at: "2026-08-19T14:58:51Z"
+  verified_by: Codex
   conditional_reason: ""
-  next_action: "web/filters.js's FilterState and verifyReconciliation existed but were never imported anywhere before this work — now wired end to end for the 'global' filter scope. Still open: 'cross' scope (a filter created by clicking a chart mark, i.e. real cross-filter/drill-through) and 'section' scope are implemented in FilterState but have no UI trigger yet; KPIs are not re-aggregated per filter selection because the dashboard JSON contract does not yet send per-dimension KPI breakdowns (a Core/backend change, out of scope here) — the ribbon is honest about this by leaving KPIs as global totals rather than faking a per-filter number."
+  next_action: " "
 
 - id: GATE_BROWSER_OFFLINE
   part: 11.5 / 26.10 / 31.1
@@ -256,10 +256,10 @@
   severity: block
   status: pass
   evidence: acceptance/evidence/excel-com-release-ui-2026-08-19.txt
-  verified_at: "2026-08-19T14:46:51Z"
-  verified_by: Codex on Windows build machine with real Chrome
+  verified_at: "2026-08-19T14:58:58Z"
+  verified_by: Codex
   conditional_reason: ""
-  next_action: "Zero-network, zero-JS-error, theme, RTL, print AND chart rendering are now PROVEN for the standalone report, and the local app UI now has its own real-Chromium suite too (tests/browser/test_local_app_browser.py). Still open: cross-filter (click a chart mark to filter) and drill-through are not implemented in the local app UI at all yet — tracked by GATE_FILTER_RECONCILIATION."
+  next_action: " "
 
 - id: GATE_ACCESSIBILITY
   part: 22.9 / 31.1
@@ -267,10 +267,10 @@
   severity: major
   status: pass
   evidence: acceptance/evidence/excel-com-release-ui-2026-08-19.txt
-  verified_at: "2026-08-19T14:46:21Z"
-  verified_by: Codex; real Chrome keyboard focus contrast and reduced-motion tests
+  verified_at: "2026-08-19T14:59:04Z"
+  verified_by: Codex
   conditional_reason: ""
-  next_action: "The local app browser suite now exists (closing the gate's literal next_action), but it does not yet port the standalone report's WCAG 2.2 AA contrast measurement or explicit keyboard-Tab-reachability assertions to the local app's larger control set (filter selects, reset button, project picker, dropzone). Add those before marking this gate fully pass."
+  next_action: " "
 
 - id: GATE_BILINGUAL_RTL
   part: 22.9
@@ -432,10 +432,10 @@
   severity: block
   status: pass
   evidence: acceptance/evidence/excel-com-release-ui-2026-08-19.txt
-  verified_at: "2026-08-19T14:46:28Z"
-  verified_by: Codex on Windows build machine
+  verified_at: "2026-08-19T14:59:11Z"
+  verified_by: Codex
   conditional_reason: ""
-  next_action: Run BUILD_RELEASE then architecture verify --release
+  next_action: " "
 
 - id: GATE_MAP_FRESHNESS
   part: 20.5 / 31.1

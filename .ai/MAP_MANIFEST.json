@@ -92,9 +92,9 @@
       "sha256": "37df5c01a5932c7feb934cc8f7309c382cacb4de84cb3e8ffab9c2dd45e63e23"
     },
     "BUILD_RELEASE.bat": {
-      "bytes": 904,
+      "bytes": 913,
       "scope": "unknown",
-      "sha256": "9d122e55905d9c736c777849abb8db88020b4082f8c44652ca27439e1e2f3e04"
+      "sha256": "d71190e0c32f62536108fbc12828739e21f4ab1b1dc6f66da5245dbbf936c949"
     },
     "CLAUDE.md": {
       "bytes": 658,
@@ -172,9 +172,9 @@
       "sha256": "8329292bd07fd95e34326704df94e44207b6c4543af16e15fca69a02411a7983"
     },
     "VERIFY_OFFLINE.bat": {
-      "bytes": 841,
+      "bytes": 848,
       "scope": "unknown",
-      "sha256": "b1630ebd44209eb765753e545a6a77d4c95e3c1424827bc0e16b412fc6234ef4"
+      "sha256": "ffd4de5bfa5defbef1198e094f0a3161529390b0a76bd77397479abb2a2d1a05"
     },
     "acceptance/evidence/README.md": {
       "bytes": 917,
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 22916,
+      "bytes": 20143,
       "scope": "unknown",
-      "sha256": "396af9e4a6f01871bac7ce4aeded3fedebc45bf0d830c4963c3271ced8a91715"
+      "sha256": "548f9375f2f3f34084ef398c0ffbb6fd5ce7c9dd09216c5fe4298abf304bdad4"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -1512,6 +1512,6 @@
       "sha256": "2ce209d223192c14faff82daf0f8251f60be276ec7922f2c06d1132c2821b5e1"
     }
   },
-  "generated_at": "2026-08-19T14:47:10Z",
+  "generated_at": "2026-08-19T14:59:45Z",
   "schema_version": 2
 }
