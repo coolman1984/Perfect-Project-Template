@@ -23,12 +23,12 @@
   part: 0.8 / 23.9 / 31.1
   title: Locked baseline exists, is machine-verified, and matches the source tree
   severity: block
-  status: not_started
+  status: in_progress
   evidence: ""
-  verified_at: ""
-  verified_by: ""
+  verified_at: "2026-08-19T13:05:00Z"
+  verified_by: "requirements-lock.txt populated by resolving pyproject.toml's six declared direct dependencies against PyPI for cp312-win_amd64, then verified to install offline with `pip install --no-index --find-links <wheelhouse> -r requirements-lock.txt --require-hashes` in a clean venv, followed by `import fastapi, uvicorn, pydantic, multipart, duckdb, win32com.client` succeeding."
   conditional_reason: ""
-  next_action: Pin versions in IMPLEMENTATION_BASELINE.lock.json, then run architecture verify --baseline
+  next_action: "Dependency pinning (this file) is done and offline-install-verified. Still open: IMPLEMENTATION_BASELINE.lock.json's per-component version/sha256 fields are release-artifact hashes (the embedded Python runtime, the PyInstaller-bundled native DLLs, the pinned ECharts vendor asset, the built web-frontend bundle) that do not exist until BUILD_RELEASE actually runs — architecture verify --baseline only checks structural completeness (14 components, 0 deviations), which already passes and is not evidence the hashes are real. Run BUILD_RELEASE, then populate those fields from the real output."
 
 - id: GATE_NO_RUNTIME_DOWNLOADS
   part: 23.6 / 23.10

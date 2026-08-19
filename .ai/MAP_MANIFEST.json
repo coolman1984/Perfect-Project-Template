@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 20114,
+      "bytes": 21013,
       "scope": "unknown",
-      "sha256": "b994a53b64ba3a4ec68af34523e364f1572b5256060abb3113875b2ea5468338"
+      "sha256": "73f37ad2cae96fce1ddb7657a785fcbbc65ac54e4bbcd553ee6849b59e89fc0f"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -1467,6 +1467,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T12:10:09Z",
+  "generated_at": "2026-08-19T12:16:27Z",
   "schema_version": 2
 }
