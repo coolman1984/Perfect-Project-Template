@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
 
+from tools._common import REPO_ROOT
 from tools.template_upgrade import (
     UpgradeError, apply_upgrade, rollback_upgrade, verify_sealed_root)
 
@@ -40,6 +42,46 @@ def make_sealed(root: Path, version: str, files: dict[str, str]) -> None:
 
 
 class TestTemplateUpgrade(unittest.TestCase):
+    def test_real_project_pack_survives_upgrade_and_rollback(self):
+        """A sealed core upgrade preserves and revalidates a real project pack."""
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            current = base / "current"
+            payload = base / "payload"
+            current.mkdir()
+            payload.mkdir()
+            make_sealed(current, "1.0.0", {"app/core.txt": "old core"})
+            make_sealed(payload, "2.0.0", {"app/core.txt": "new core"})
+
+            project = current / "projects" / "_REFERENCE_FINANCE_PPV"
+            shutil.copytree(
+                REPO_ROOT / "projects" / "_REFERENCE_FINANCE_PPV", project)
+            before = {
+                path.relative_to(project): digest(path)
+                for path in project.rglob("*") if path.is_file()
+            }
+
+            backup = apply_upgrade(current, payload, validate_projects=True)
+            history = [
+                json.loads(line)
+                for line in (current / "UPGRADE_HISTORY.jsonl")
+                .read_text("utf-8").splitlines()
+            ]
+            self.assertIn(
+                "reference_finance_ppv", history[-1]["verified_projects"])
+            self.assertEqual(
+                before,
+                {path.relative_to(project): digest(path)
+                 for path in project.rglob("*") if path.is_file()},
+            )
+
+            rollback_upgrade(current, backup)
+            self.assertEqual(
+                before,
+                {path.relative_to(project): digest(path)
+                 for path in project.rglob("*") if path.is_file()},
+            )
+
     def test_apply_changes_only_core_and_rollback_restores_previous_core(self):
         with tempfile.TemporaryDirectory() as temp:
             base = Path(temp)
