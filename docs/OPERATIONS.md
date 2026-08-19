@@ -4,16 +4,17 @@ Constitution Parts 12, 30.6.
 
 ## Weekly operation
 
-1. Start the app (`START_APP.bat`).
-2. Choose the report.
-3. Add the new or corrected files.
-4. Confirm the detected period and source roles.
-5. Process, and watch real progress.
-6. Resolve only explicit user-action requests.
-7. Review quality and reconciliation.
-8. Open the new dashboard **only after** publication succeeds.
-9. Confirm the week appears in history.
-10. Back up according to the retention policy.
+1. Extract the delivered ZIP once.
+2. Double-click `START.bat`; the browser opens automatically.
+3. Choose the report.
+4. Add the new or corrected files.
+5. Confirm the detected period and source roles.
+6. Process, and watch real progress.
+7. Resolve only explicit user-action requests.
+8. Review quality and reconciliation.
+9. Open the new dashboard **only after** publication succeeds.
+10. Confirm the week appears in history.
+11. Back up according to the retention policy.
 
 ## The golden operating rule
 

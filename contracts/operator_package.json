@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "purpose": "The final non-technical user's package surface",
+  "root_entries": [
+    "START.bat",
+    "QUICK_START.html",
+    "Application"
+  ],
+  "required_application_entry": "Application/app/excel-intelligence.exe",
+  "forbidden_root_entries": [
+    ".git",
+    ".ai",
+    "app",
+    "build",
+    "constitution",
+    "contracts",
+    "docs",
+    "factory",
+    "migrations",
+    "offline_packages",
+    "projects",
+    "reports",
+    "tests",
+    "tools"
+  ],
+  "forbidden_start_terms": [
+    "pip ",
+    "npm ",
+    "python ",
+    "python.exe",
+    "py -",
+    "py.exe",
+    "curl ",
+    "wget ",
+    "git ",
+    "runas",
+    "netsh"
+  ]
+}

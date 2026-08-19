@@ -106,6 +106,16 @@ def build_parser() -> argparse.ArgumentParser:
     for name in ("validate", "core-guard", "reuse-report"):
         x = c.add_parser(name); x.add_argument("--project", required=True, dest="project_id")
 
+    p = groups.add_parser(
+        "package", help="build or verify the simple final-user ZIP")
+    c = p.add_subparsers(dest="command")
+    x = c.add_parser("build")
+    x.add_argument("--project-name", required=True)
+    x.add_argument("--app-dir", required=True)
+    x.add_argument("--output-dir", required=True)
+    x = c.add_parser("verify")
+    x.add_argument("--zip", required=True, dest="zip_path")
+
     groups.add_parser("doctor")
     return parser
 
@@ -143,6 +153,8 @@ def _dispatch(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
         print("template-upgrade rollback: PASS"); return EXIT_PASS
     if args.group == "adaptation":
         from tools import adaptation_tool; return adaptation_tool.main(args)
+    if args.group == "package":
+        from tools import operator_package; return operator_package.main(args)
     if args.group == "doctor":
         from tools import doctor; return doctor.main(args)
     parser.print_help(); return EXIT_USAGE

@@ -6,6 +6,13 @@
 
 The ready application is the product. Employee agents should adapt project configuration and isolated business logic rather than rebuild technical foundations.
 
+The approved final-user surface is separate from the technical template:
+`PROJECT_TOOL package build` wraps an already sealed `release/current` as
+`ProjectName.zip`, and `package verify` enforces a root containing only
+`START.bat`, `QUICK_START.html` and `Application/`. This proves the simple
+package contract; it does not close the environment-bound gates listed below.
+Evidence: `acceptance/evidence/operator-package-contract-2026-08-19.txt`.
+
 > **Read this before believing any "ready" claim.** The production extraction
 > adapter opened a disposable real `.xlsx` twice through desktop Excel COM on
 > 2026-08-19 and preserved its SHA-256. That proves the ordinary COM boundary,
