@@ -2,9 +2,9 @@
   "file_count": 275,
   "files": {
     ".ai/BUILD_BRIEF.md": {
-      "bytes": 4323,
+      "bytes": 2995,
       "scope": "unknown",
-      "sha256": "83a3f093763a1b097deddb44a1d56c8395aba201f37c29e16241e882b44e3483"
+      "sha256": "eaef5c2c3e53bcde8b8ebfb26e37c8d1d8cbdc19e306c5b3169f3d8a054fb308"
     },
     ".ai/CONTRACTS.md": {
       "bytes": 4047,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 14254,
+      "bytes": 14304,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -1377,6 +1377,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T04:33:07Z",
+  "generated_at": "2026-08-19T11:13:13Z",
   "schema_version": 2
 }
