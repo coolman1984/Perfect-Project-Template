@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Excel Intelligence</title>
+  <title data-i18n="app.title">Excel Intelligence</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%232563EB'/%3E%3Ctext x='8' y='12' font-size='10' font-family='sans-serif' text-anchor='middle' fill='white'%3EX%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,26 +14,43 @@
     <div class="state-strip">
       <span class="badge" id="quality-badge" data-status="unknown"><span class="badge-icon" aria-hidden="true">•</span><span id="quality-text">No data</span></span>
       <span class="freshness" id="freshness">—</span>
-      <span class="watermark" id="demo-watermark" hidden>DEMO DATA</span>
-      <span class="watermark" id="unapproved-watermark" hidden>UNAPPROVED DEFINITION</span>
+      <span class="watermark" id="demo-watermark" hidden data-i18n="watermark.demo">DEMO DATA</span>
+      <span class="watermark" id="unapproved-watermark" hidden data-i18n="watermark.unapproved">UNAPPROVED DEFINITION</span>
     </div>
     <div class="header-controls"><button type="button" id="lang-toggle">العربية</button><button type="button" id="theme-toggle">Theme</button><button type="button" id="help-toggle">?</button></div>
   </header>
 
+  <nav class="filter-ribbon" id="filter-ribbon" aria-label="Filters" hidden>
+    <div class="filter-controls" id="filter-controls"></div>
+    <ul class="active-chips" id="active-chips"></ul>
+    <button type="button" id="reset-filters" data-i18n="filters.reset">Reset</button>
+    <p class="filter-status" id="filter-status" role="status" aria-live="polite"></p>
+  </nav>
+
   <main>
     <section id="first-viewport" class="region kpi-region" aria-labelledby="kpi-heading">
       <h2 id="kpi-heading" class="visually-hidden">Key results</h2><div class="kpi-strip" id="kpi-strip"></div>
-      <p class="partial-warning" id="partial-warning" hidden>This period is incomplete and is excluded from automatic comparison.</p>
+      <p class="partial-warning" id="partial-warning" hidden data-i18n="partial.warning">This period is incomplete and is excluded from automatic comparison.</p>
     </section>
 
     <section class="region story-region" aria-labelledby="story-heading">
       <h2 id="story-heading" class="visually-hidden">Performance story</h2>
-      <div class="grid" id="chart-grid"></div>
-      <aside class="panel span-12" id="insight-focus"><h3 class="panel-title">What this means</h3><div id="insight-focus-body"></div></aside>
+      <div class="grid" id="chart-grid">
+        <aside class="panel span-4" id="insight-focus"><h3 class="panel-title">What this means</h3><div id="insight-focus-body"></div></aside>
+      </div>
+    </section>
+
+    <section class="region action-region" aria-labelledby="action-heading" id="action-region" hidden>
+      <h2 id="action-heading" data-i18n="action.heading">Where to act</h2>
+      <table class="action-table" id="action-table">
+        <caption class="visually-hidden">Ranked investigation priorities</caption>
+        <thead><tr><th>Item</th><th>Why now</th><th>Evidence</th><th>Owner</th><th>Status</th></tr></thead>
+        <tbody id="action-table-body"></tbody>
+      </table>
     </section>
 
     <section class="region operate-region" aria-labelledby="operate-heading">
-      <h2 id="operate-heading">Update automation</h2>
+      <h2 id="operate-heading" data-i18n="operate.heading">Update automation</h2>
       <p class="operation-help">Choose the business automation, then add every required source file. The system keeps each source role separate and will not combine unrelated workbooks just because their columns look similar.</p>
       <label for="project-select">Automation project</label>
       <select id="project-select"><option value="">Choose automation</option></select>
@@ -43,13 +61,14 @@
       </div>
       <ul class="file-list" id="file-list"></ul>
       <div id="unmatched-files" class="unmatched-files" hidden></div>
-      <button type="button" id="process-button" disabled>Process complete project</button>
+      <button type="button" id="process-button" disabled data-i18n="operate.process">Process</button>
       <div class="progress" id="progress" hidden><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div><p class="progress-message" id="progress-message" role="status" aria-live="polite"></p></div>
     </section>
 
-    <section class="region trust-region" aria-labelledby="trust-heading"><h2 id="trust-heading">Trust and history</h2><div id="quality-detail"></div><table class="history-table" id="history-table"><caption class="visually-hidden">Run history</caption><thead><tr><th>Run</th><th>Project</th><th>Status</th><th>Rows</th><th>Quality</th></tr></thead><tbody id="history-table-body"></tbody></table></section>
-    <section class="region support-region" aria-labelledby="support-heading"><h2 id="support-heading">Exports and support</h2><div id="downloads"></div><details><summary>Support details</summary><div id="support-details"></div></details></section>
+    <section class="region trust-region" aria-labelledby="trust-heading"><h2 id="trust-heading" data-i18n="trust.heading">Trust and history</h2><div id="quality-detail"></div><table class="history-table" id="history-table"><caption class="visually-hidden">Run history</caption><thead><tr><th>Run</th><th>Project</th><th>Status</th><th>Rows</th><th>Quality</th></tr></thead><tbody id="history-table-body"></tbody></table></section>
+    <section class="region support-region" aria-labelledby="support-heading"><h2 id="support-heading" data-i18n="support.heading">Exports and support</h2><div id="downloads"></div><details><summary data-i18n="support.details">Support details</summary><div id="support-details"></div></details></section>
   </main>
+  <script src="vendor/echarts.min.js"></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>

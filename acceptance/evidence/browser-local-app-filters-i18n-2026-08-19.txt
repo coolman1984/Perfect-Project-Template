@@ -1,0 +1,34 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\m.labib\AppData\Local\Temp\claude\d--WORK-Software-Development-GitHub-Perfect-Project-Template\23992b4e-e328-4f0b-a8ca-f76fa568d90d\scratchpad\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\WORK\Software Development\GitHub\Perfect-Project-Template
+configfile: pyproject.toml
+plugins: anyio-4.14.2
+collecting ... collected 24 items
+
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_charts_render_as_real_canvas_with_the_vendored_engine PASSED [  4%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_filter_ribbon_renders_real_controls_from_the_dashboard_config PASSED [  8%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_language_toggle_back_to_english_restores_ltr PASSED [ 12%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_language_toggle_sets_lang_and_dir_and_translates_text PASSED [ 16%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_removing_a_chip_deselects_the_underlying_option PASSED [ 20%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_reset_clears_active_filters PASSED [ 25%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_selecting_a_filter_value_filters_the_matching_chart PASSED [ 29%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_shell_loads_the_real_dashboard_with_no_js_errors PASSED [ 33%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_theme_choice_persists_across_reload PASSED [ 37%]
+tests/browser/test_local_app_browser.py::TestLocalAppInChromium::test_theme_toggle_changes_the_rendered_background PASSED [ 41%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_charts_are_given_an_accessible_name_and_the_correct_data PASSED [ 45%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_every_kpi_on_screen_is_the_value_the_engine_computed PASSED [ 50%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_insight_text_is_rendered_without_false_precision PASSED [ 54%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_print_layout_keeps_trusted_content_and_drops_the_control PASSED [ 58%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_quality_and_watermark_state_reaches_the_page PASSED [ 62%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_reduced_motion_preference_is_respected PASSED [ 66%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_report_opens_offline_with_no_network_and_no_script_errors PASSED [ 70%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_right_to_left_layout_actually_flips PASSED [ 75%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_the_html_file_contains_no_remote_reference_at_all PASSED [ 79%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_the_theme_control_is_keyboard_reachable PASSED [ 83%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_theme_toggle_switches_and_keeps_content PASSED [ 87%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardInChromium::test_trusted_text_meets_wcag_aa_contrast_in_both_themes PASSED [ 91%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardRealRendering::test_charts_render_as_real_canvas_elements_with_the_vendored_engine PASSED [ 95%]
+tests/browser/test_standalone_dashboard_browser.py::TestStandaloneDashboardRealRendering::test_the_vendored_asset_is_the_real_licensed_apache_echarts_build PASSED [100%]
+
+======================= 24 passed in 188.97s (0:03:08) ========================

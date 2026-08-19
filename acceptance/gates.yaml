@@ -232,23 +232,23 @@
   part: 22.2 / 26.11 / 31.1
   title: First viewport answers status and action; evidence, action and trust regions present
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: in_progress
+  evidence: acceptance/evidence/browser-local-app-filters-i18n-2026-08-19.txt
+  verified_at: "2026-08-19T14:30:00Z"
+  verified_by: "tests/browser/test_local_app_browser.py, real Chromium against the real local app server. Added: sticky filter ribbon (12 span) below the command header; hero chart (span-8) beside insight-focus (span-4) per the Part 26.11 blueprint; a conditional action-table region that renders only when a project declares [[actions]] (none do yet, so it stays hidden — Part 26.11's 'unavailable regions disappear cleanly')."
   conditional_reason: ""
-  next_action: Build the one-page shell to the Part 26.11 grid and review against Part 26.3
+  next_action: "Command header, filter ribbon, KPI strip, hero+insight and trust/operate regions match the blueprint. Still simplified: secondary charts render full-width (span-12) each rather than the literal Pareto(7)/compare-bridge(5) split or a dedicated heatmap/distribution slot — no reference project's data currently justifies inventing those specific regions, and Part 26.11 explicitly permits omission over dead space. Revisit once a reference has data shaped for a real compare/bridge or heatmap view."
 
 - id: GATE_FILTER_RECONCILIATION
   part: 22.6 / 26.14 / 31.1
   title: One shared filter state; cross-filter, drill-through and reset all reconcile
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: in_progress
+  evidence: acceptance/evidence/browser-local-app-filters-i18n-2026-08-19.txt
+  verified_at: "2026-08-19T14:30:00Z"
+  verified_by: "tests/browser/test_local_app_browser.py (real Chromium): selecting a value in a real filter control filters the matching chart's points client-side, adds a removable chip, Reset restores the unfiltered chart, removing a chip deselects the underlying <select> option, and the Part 26.14 post-change check (filters.js verifyReconciliation, extended with an arithmetic-free stale-value scan over point.x) reports no problem after a correct filter change."
   conditional_reason: ""
-  next_action: Implement the typed filter-state object and the Part 26.14 checks
+  next_action: "web/filters.js's FilterState and verifyReconciliation existed but were never imported anywhere before this work — now wired end to end for the 'global' filter scope. Still open: 'cross' scope (a filter created by clicking a chart mark, i.e. real cross-filter/drill-through) and 'section' scope are implemented in FilterState but have no UI trigger yet; KPIs are not re-aggregated per filter selection because the dashboard JSON contract does not yet send per-dimension KPI breakdowns (a Core/backend change, out of scope here) — the ribbon is honest about this by leaving KPIs as global totals rather than faking a per-filter number."
 
 - id: GATE_BROWSER_OFFLINE
   part: 11.5 / 26.10 / 31.1
@@ -259,29 +259,29 @@
   verified_at: "2026-08-19T13:40:00Z"
   verified_by: "tests/browser/test_standalone_dashboard_browser.py, now 14 tests in real Chromium (Playwright, chromium-1234 for this run). TestStandaloneDashboardRealRendering is new and uses the real vendored web/vendor/echarts.min.js (not the data-recording stand-in): asserts window.echarts.version === '6.1.0', a real <canvas> per chart, zero JS errors, zero extra network requests."
   conditional_reason: ""
-  next_action: "Zero-network, zero-JS-error, theme, RTL, print AND chart rendering are now PROVEN for the standalone report. Still open: filters/cross-filter/drill-through/reset live in the local app UI (web/app.js), not the standalone report, and need their own browser coverage — tracked by GATE_FILTER_RECONCILIATION and GATE_ONE_PAGE_DESIGN."
+  next_action: "Zero-network, zero-JS-error, theme, RTL, print AND chart rendering are now PROVEN for the standalone report, and the local app UI now has its own real-Chromium suite too (tests/browser/test_local_app_browser.py). Still open: cross-filter (click a chart mark to filter) and drill-through are not implemented in the local app UI at all yet — tracked by GATE_FILTER_RECONCILIATION."
 
 - id: GATE_ACCESSIBILITY
   part: 22.9 / 31.1
   title: Keyboard, focus, labels, WCAG 2.2 AA contrast and reduced motion all pass
   severity: major
   status: in_progress
-  evidence: acceptance/evidence/browser-standalone-chromium-2026-08-19.txt
-  verified_at: "2026-08-19T04:02:51Z"
-  verified_by: tests/browser/test_standalone_dashboard_browser.py (keyboard reachability + Enter activation, chart role=img and accessible name, WCAG 2.2 AA contrast measured in both themes, prefers-reduced-motion respected)
+  evidence: acceptance/evidence/browser-local-app-filters-i18n-2026-08-19.txt
+  verified_at: "2026-08-19T14:30:00Z"
+  verified_by: "tests/browser/test_standalone_dashboard_browser.py covers the standalone report fully. tests/browser/test_local_app_browser.py (new) now exists and covers the local app UI's charts (role=img via the shared renderer), filter controls (labelled selects, aria-label on remove-chip buttons) and zero-JS-error loading, all in real Chromium."
   conditional_reason: ""
-  next_action: Standalone report is covered. Extend the same assertions to the local app UI (web/app.js) once its browser suite exists.
+  next_action: "The local app browser suite now exists (closing the gate's literal next_action), but it does not yet port the standalone report's WCAG 2.2 AA contrast measurement or explicit keyboard-Tab-reachability assertions to the local app's larger control set (filter selects, reset button, project picker, dropzone). Add those before marking this gate fully pass."
 
 - id: GATE_BILINGUAL_RTL
   part: 22.9
   title: Arabic renders as correct right-to-left layout, not only translated words
   severity: major
-  status: in_progress
-  evidence: acceptance/evidence/browser-standalone-chromium-2026-08-19.txt
-  verified_at: "2026-08-19T04:02:52Z"
-  verified_by: "tests/browser/test_standalone_dashboard_browser.py::test_right_to_left_layout_actually_flips (computed direction flips to rtl and content survives)"
+  status: pass
+  evidence: acceptance/evidence/browser-local-app-filters-i18n-2026-08-19.txt
+  verified_at: "2026-08-19T14:30:00Z"
+  verified_by: "tests/browser/test_standalone_dashboard_browser.py::test_right_to_left_layout_actually_flips proves the standalone report. tests/browser/test_local_app_browser.py::test_language_toggle_sets_lang_and_dir_and_translates_text (new) proves the local app UI: clicking the language toggle sets both html[lang=ar] and html[dir=rtl], the browser tab title translates via web/i18n/ar.json, and a visible control's text (Reset -> 'إعادة تعيين') translates — real translation via web/i18n.js's applyDictionary, not CSS mirroring. A companion test proves toggling back restores lang=en/dir=ltr."
   conditional_reason: ""
-  next_action: "RTL layout is proven on the standalone report. Still open: prove web/i18n/ar.json actually drives the local app UI so Arabic is translated, not only mirrored."
+  next_action: ""
 
 - id: GATE_STANDARD_USER_STARTUP
   part: 31.1 / 33

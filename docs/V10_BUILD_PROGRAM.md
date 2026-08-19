@@ -220,15 +220,30 @@ this is the stage that tests whether the foundation is worth anything.
 **Exit gate:** Finance PPV runs with zero or individually justified
 shared-engine changes, evidenced by the reuse report.
 
-### S6 — Experience
+### S6 — Experience — IN PROGRESS (2026-08-19)
 
 Finish the employee-facing flow. V10 I5. Project discovery, business
 questionnaire, source-role assignment, guided upload, durable progress,
 quality explanation, dashboard, history, export, friendly recovery.
 
 - Closes `GATE_ONE_PAGE_DESIGN`, `GATE_FILTER_RECONCILIATION`,
-  `GATE_ACCESSIBILITY` and `GATE_BILINGUAL_RTL` — four of the 20 outstanding
-  block gates.
+  `GATE_ACCESSIBILITY` and `GATE_BILINGUAL_RTL` — four of the outstanding
+  block/major gates. `GATE_BILINGUAL_RTL` now fully passes; the other three
+  moved from not_started to in_progress with real, browser-tested progress
+  (see acceptance/gates.yaml for what remains on each).
+- Built: the sticky filter ribbon and hero/insight grid region
+  (`web/index.html`, `web/styles.css`); `web/filters.js`'s FilterState and
+  verifyReconciliation — written earlier but never imported anywhere — wired
+  into `web/app.js` for real client-side chart filtering, chips and reset;
+  `web/i18n.js` (new) driving real `lang`/`dir` switching and text
+  translation from the pre-existing but unused `web/i18n/en.json` /
+  `ar.json`; a conditional action-table region. Proof:
+  `tests/browser/test_local_app_browser.py` (new), 10 tests against a real
+  loopback server in real Chromium.
+- Still open: cross-filter (click a chart mark) and drill-through, WCAG
+  contrast/keyboard-reachability assertions for the local app's larger
+  control set, and the business questionnaire / guided-upload onboarding
+  flow this stage's title names but which was out of scope for this pass.
 - Progress must be driven by durable events, never decorative animation
   (§22).
 

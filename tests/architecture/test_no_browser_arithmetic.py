@@ -47,7 +47,13 @@ COMMENT = re.compile(r"^\s*(//|/\*|\*)")
 
 class TestNoTrustedArithmeticInTheBrowser(unittest.TestCase):
     def _javascript_files(self):
-        files = sorted(WEB_ROOT.rglob("*.js"))
+        # web/vendor/ holds unmodified third-party code (Apache ECharts) that
+        # this project does not author or review line by line; scanning it
+        # only produces false positives from its own internal variable names
+        # (e.g. its many internal "points" arrays), never a real finding.
+        files = sorted(
+            path for path in WEB_ROOT.rglob("*.js")
+            if "vendor" not in path.relative_to(WEB_ROOT).parts)
         self.assertTrue(files, "no browser JavaScript found to check")
         return files
 
