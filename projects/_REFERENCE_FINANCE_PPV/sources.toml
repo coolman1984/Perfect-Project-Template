@@ -1,0 +1,128 @@
+# Reference D — Finance Purchase Price Variance.
+#
+# Four independent source roles. Deliberately different from the Supply Chain
+# reference: a required target source with replace_period history, and an
+# optional source whose absence must warn rather than block.
+
+[[sources]]
+source_id = "purchases"
+role = "transaction"
+required = true
+grain = "One purchase order line for one item from one vendor"
+business_key = ["po_number", "po_line"]
+event_date = "posting_date"
+
+[sources.column_types]
+po_number = "VARCHAR"
+po_line = "INTEGER"
+posting_date = "DATE"
+period = "VARCHAR"
+item_id = "VARCHAR"
+vendor_id = "VARCHAR"
+quantity = "DECIMAL(18,4)"
+actual_unit_price = "DECIMAL(18,4)"
+line_amount = "DECIMAL(18,4)"
+
+[sources.match]
+file_patterns = ["purchases*.xlsx", "purchases*.csv"]
+[sources.discovery]
+sheet = "Purchases"
+header_row = 1
+[sources.history]
+# Invoice corrections restate a posted line; the key stays the same.
+mode = "upsert"
+lookback_days = 45
+deletion_rule = "mark_inactive"
+[sources.quality]
+required_columns = ["po_number", "po_line", "posting_date", "period", "item_id", "vendor_id", "quantity", "actual_unit_price", "line_amount"]
+control_totals = ["quantity", "line_amount"]
+non_negative_columns = ["quantity", "actual_unit_price", "line_amount"]
+
+[[sources]]
+source_id = "standard_cost"
+role = "master"
+required = true
+grain = "One approved standard unit cost for one item"
+business_key = ["item_id"]
+event_date = "cost_effective_date"
+
+[sources.column_types]
+item_id = "VARCHAR"
+item_name = "VARCHAR"
+category = "VARCHAR"
+standard_unit_cost = "DECIMAL(18,4)"
+cost_effective_date = "DATE"
+
+[sources.match]
+file_patterns = ["standard_cost*.xlsx", "standard_cost*.csv"]
+[sources.discovery]
+sheet = "Standard Cost"
+header_row = 1
+[sources.history]
+mode = "upsert"
+lookback_days = 365
+deletion_rule = "mark_inactive"
+[sources.quality]
+required_columns = ["item_id", "item_name", "category", "standard_unit_cost", "cost_effective_date"]
+control_totals = []
+non_negative_columns = ["standard_unit_cost"]
+
+[[sources]]
+source_id = "vendors"
+role = "master"
+required = true
+grain = "One vendor master record"
+business_key = ["vendor_id"]
+event_date = "vendor_updated_at"
+
+[sources.column_types]
+vendor_id = "VARCHAR"
+vendor_name = "VARCHAR"
+vendor_country = "VARCHAR"
+vendor_updated_at = "DATE"
+
+[sources.match]
+file_patterns = ["vendors*.xlsx", "vendors*.csv"]
+[sources.discovery]
+sheet = "Vendors"
+header_row = 1
+[sources.history]
+mode = "upsert"
+lookback_days = 365
+deletion_rule = "mark_inactive"
+[sources.quality]
+required_columns = ["vendor_id", "vendor_name", "vendor_country", "vendor_updated_at"]
+control_totals = []
+non_negative_columns = []
+
+[[sources]]
+source_id = "ppv_budget"
+role = "target"
+# Optional on purpose: a period may be processed before Finance has approved
+# its PPV budget. The engine must warn on the unmatched relationship and still
+# publish trusted actuals rather than blocking the whole run.
+required = false
+grain = "One approved PPV budget amount for one accounting period"
+business_key = ["period"]
+event_date = "budget_effective_date"
+
+[sources.column_types]
+period = "VARCHAR"
+ppv_budget_amount = "DECIMAL(18,4)"
+budget_effective_date = "DATE"
+
+[sources.match]
+file_patterns = ["ppv_budget*.xlsx", "ppv_budget*.csv"]
+[sources.discovery]
+sheet = "PPV Budget"
+header_row = 1
+[sources.history]
+# A restated budget replaces that period wholesale rather than merging into it,
+# so a withdrawn budget line cannot survive as trusted history.
+mode = "replace_period"
+lookback_days = 0
+deletion_rule = "ignore"
+[sources.quality]
+required_columns = ["period", "ppv_budget_amount", "budget_effective_date"]
+control_totals = ["ppv_budget_amount"]
+non_negative_columns = []

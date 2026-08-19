@@ -184,6 +184,17 @@
   conditional_reason: ""
   next_action: ""
 
+- id: GATE_INDEPENDENT_ADAPTATION
+  part: V10 34 Reference D / 43
+  title: A new department is adaptable with zero Universal Core changes
+  severity: block
+  status: pass
+  evidence: acceptance/evidence/reference-d-finance-ppv-2026-08-19.txt
+  verified_at: "2026-08-19T03:37:15Z"
+  verified_by: tests/golden/test_reference_reuse_boundary.py (6 tests) + projects/_REFERENCE_FINANCE_PPV/reuse_report.json core_files_changed=[]
+  conditional_reason: ""
+  next_action: ""
+
 - id: GATE_NO_BROWSER_ARITHMETIC
   part: 1.4 rule 6 / 26.10
   title: No trusted KPI is calculated only in browser JavaScript

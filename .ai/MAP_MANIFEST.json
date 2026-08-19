@@ -1,5 +1,5 @@
 {
-  "file_count": 253,
+  "file_count": 266,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -12,9 +12,9 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 4560,
+      "bytes": 5672,
       "scope": "unknown",
-      "sha256": "c3be4fb5ee12880fd889c8cea784b197d892abecd28c8c744d5cf6de340f1f55"
+      "sha256": "f35d23879f8ba2fc94a828792c75046bb0c4c4bb570ee3ff17b9813c510a829c"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 13154,
+      "bytes": 13843,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -67,9 +67,9 @@
       "sha256": "d7772d22ffeab4e1b30319d84ba8da48b491498d4f21ee8a919b248d8d4f2f00"
     },
     ".github/workflows/template-checks.yml": {
-      "bytes": 5024,
+      "bytes": 5348,
       "scope": "unknown",
-      "sha256": "2446ad200468696f7e24e4a765098847f7c1d9e66ca74e6e933939af0ed92576"
+      "sha256": "7c9026e7588feea8cf70a6856a3e43aa942bc6edb38148eecba645b259c2a309"
     },
     ".gitignore": {
       "bytes": 1078,
@@ -107,9 +107,9 @@
       "sha256": "aae776c599667445bb23670d363305d2e210b26a859be81b746460137af24722"
     },
     "PROJECT_SKILL.md": {
-      "bytes": 9779,
+      "bytes": 10691,
       "scope": "unknown",
-      "sha256": "26796644c4d559708eb8cb8864481427a87cfd5e1e646a5c01210c7f823c3949"
+      "sha256": "9cd3d24ec9bb3a614d8437397e8a5f3eb6347bf9b0749bbe74a04214c161a795"
     },
     "PROJECT_TOOL.bat": {
       "bytes": 1127,
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 16009,
+      "bytes": 16478,
       "scope": "unknown",
-      "sha256": "5d0d9919eae45548bb38acacc62c64a0a08707f29d2204d639dbc412ebb14ed8"
+      "sha256": "37b7161802addf6e9c3c2cd0a38b87e24d78b62c5339d6e650bee7f7015799ac"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -711,10 +711,55 @@
       "scope": "unknown",
       "sha256": "2c57f7ed1a3c4b9afa261ad6d29ad9e27a0e3a596b45e69e397bfe4915861b10"
     },
-    "projects/_REFERENCE_SUPPLY_CHAIN/README.md": {
-      "bytes": 1030,
+    "projects/_REFERENCE_FINANCE_PPV/README.md": {
+      "bytes": 2976,
       "scope": "project_config",
-      "sha256": "a062c86eaa02d9f93c3bea846a92df70d411a994ef0337e64449c6e5183a74f7"
+      "sha256": "0ba10f24b5b590dc16372f29fd41a6d9dcdea5a65d4f32ab0c3fde9a1835ca5a"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/adaptation_manifest.json": {
+      "bytes": 507,
+      "scope": "project_config",
+      "sha256": "1d75259b4b82deb2b52b7de8f70fef5ba808053e064536dd204426b144b093d2"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/business_rules/insights.sql": {
+      "bytes": 1209,
+      "scope": "business_logic",
+      "sha256": "6fa2fa27ec15f429b0b0d1ee901483931d1ea210f2010277702489b009f6fdf1"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/business_rules/metrics.sql": {
+      "bytes": 3028,
+      "scope": "business_logic",
+      "sha256": "7c5e2586c16ba2c9f56ec4b8fda6c15e4b3008fec0d9a8e1e6cb50ec0842e0d4"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/dashboard.toml": {
+      "bytes": 1473,
+      "scope": "presentation",
+      "sha256": "b5209cf40fa6ec38cb3d37590b17ae497e4729da26d8f1f2b6c6f335df3ec317"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/project.toml": {
+      "bytes": 653,
+      "scope": "project_config",
+      "sha256": "ebd7e15ad60d9741d6ab4dee304f0e88c266a0d78c17030786c4818d9e53b26f"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/relationships.toml": {
+      "bytes": 1189,
+      "scope": "project_config",
+      "sha256": "450a1b2b962ffbd3c371904a3870a690e0d807f100f603768f7940246e355b07"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/reuse_report.json": {
+      "bytes": 1027,
+      "scope": "project_config",
+      "sha256": "f9f4662b4a5f5749261e5b197e45bfb25a47b5378118b913c2978741c62d6d3b"
+    },
+    "projects/_REFERENCE_FINANCE_PPV/sources.toml": {
+      "bytes": 3713,
+      "scope": "project_config",
+      "sha256": "77c89209c7ab36ecd0a497d08af740e89f8ca1a87e20a4311a5da518e3087812"
+    },
+    "projects/_REFERENCE_SUPPLY_CHAIN/README.md": {
+      "bytes": 1325,
+      "scope": "project_config",
+      "sha256": "7a87f9ebd4629dc417996e9df5276852405666a03c7ed6cec5c628cc58f6906c"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/business_rules/metrics.sql": {
       "bytes": 2637,
@@ -735,6 +780,11 @@
       "bytes": 509,
       "scope": "project_config",
       "sha256": "e48948781cb8ff9c42b2e956a100962e06dd91a4b9fa50b4d757cef8829656f2"
+    },
+    "projects/_REFERENCE_SUPPLY_CHAIN/reuse_report.json": {
+      "bytes": 846,
+      "scope": "project_config",
+      "sha256": "7a5f3dba6682341abec3a9f350abfc4fecf52231e7bc0e229b30ddd40280f07d"
     },
     "projects/_REFERENCE_SUPPLY_CHAIN/sources.toml": {
       "bytes": 2248,
@@ -921,6 +971,11 @@
       "scope": "test",
       "sha256": "bf48c294b02f51947a19209a4d7325a0df39c58fd4f19322fa3af78adeaa424e"
     },
+    "tests/expected/finance_ppv/expected.json": {
+      "bytes": 1358,
+      "scope": "test",
+      "sha256": "32ebf7535fb5d42bc0e823c11708893e779fef723367f6f4ed5d2a9e5b13485d"
+    },
     "tests/expected/reference/expected.json": {
       "bytes": 1529,
       "scope": "test",
@@ -1001,6 +1056,11 @@
       "scope": "test",
       "sha256": "25a278097efe29e4ce388ccb9014d64707a3ab9f2e772cb833202dc13370368d"
     },
+    "tests/golden/test_finance_ppv_reference.py": {
+      "bytes": 13862,
+      "scope": "test",
+      "sha256": "564d94fc983f7db40af6c58332ee93075a12a99c58aad2eaaf28165c0a5e7ad8"
+    },
     "tests/golden/test_multisource_supply_chain.py": {
       "bytes": 15123,
       "scope": "test",
@@ -1020,6 +1080,11 @@
       "bytes": 17292,
       "scope": "test",
       "sha256": "01faae229fe04ea8256eb6b38df97dfc12aedb7ba9e6429e1d272e73ab248222"
+    },
+    "tests/golden/test_reference_reuse_boundary.py": {
+      "bytes": 7613,
+      "scope": "test",
+      "sha256": "99346aa89a981a737081a72388c1ca99c39531f52427a07e4f691fce8ef0b72b"
     },
     "tests/golden/test_second_report_pipeline.py": {
       "bytes": 3989,
@@ -1142,9 +1207,9 @@
       "sha256": "2cd233a9551b9667af7fdde1f53d9449311a66ffc086122961dfa216fbe704fa"
     },
     "tools/adaptation_tool.py": {
-      "bytes": 4135,
+      "bytes": 4378,
       "scope": "tooling",
-      "sha256": "26bf3f024d3cfbb9a6a2cc447fb67d39d9a7de04da179d9d8389fd5994c213b6"
+      "sha256": "ee525b88f86cc4582f9ab730cc7358e57cbe89de1236430bade5f87339b90d2d"
     },
     "tools/doctor.py": {
       "bytes": 2704,
@@ -1267,6 +1332,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-18T15:28:55Z",
+  "generated_at": "2026-08-19T03:37:45Z",
   "schema_version": 2
 }

@@ -1,0 +1,36 @@
+{
+  "_comment": "Hand-derived from the fixtures, independently of the engine. PPV = (actual_unit_price - standard_unit_cost) * quantity. Positive is unfavourable.",
+
+  "period_1": {
+    "quality_status": "PASS",
+    "ppv_amount": "-175.00",
+    "purchase_spend": "3850.00",
+    "standard_spend": "4025.00",
+    "ppv_rate": -4.347826086956522,
+    "ppv_budget_amount": "-100.00",
+    "purchases_active": 3,
+    "purchases_inserted": 3,
+    "budget_active": 1,
+    "top_vendor": "Acme Supplies",
+    "top_vendor_ppv": 25.0,
+    "ppv_by_vendor": [["Acme Supplies", 25.0], ["Globex Trading", -200.0]],
+    "ppv_by_category": [["Packaging", -25.0], ["Components", -150.0]]
+  },
+
+  "period_2": {
+    "_comment": "No ppv_budget file this period. The optional source is absent, so purchases_to_ppv_budget is unmatched and must WARN, not BLOCK.",
+    "quality_status": "WARNING",
+    "ppv_amount": "-125.00",
+    "purchase_spend": "5820.00",
+    "standard_spend": "5945.00",
+    "ppv_rate": -2.102607233810765,
+    "purchases_active": 4,
+    "purchases_inserted": 1,
+    "purchases_updated": 1,
+    "purchases_unchanged": 2,
+    "top_vendor": "Initech Metals",
+    "top_vendor_ppv": 80.0,
+    "ppv_by_vendor": [["Initech Metals", 80.0], ["Acme Supplies", -5.0], ["Globex Trading", -200.0]],
+    "ppv_by_category": [["Packaging", -25.0], ["Components", -100.0]]
+  }
+}

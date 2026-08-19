@@ -1,0 +1,28 @@
+{
+  "project_id": "reference_finance_ppv",
+  "core_files_changed": [],
+  "project_config_files_changed": [
+    "projects/_REFERENCE_FINANCE_PPV/README.md",
+    "projects/_REFERENCE_FINANCE_PPV/adaptation_manifest.json",
+    "projects/_REFERENCE_FINANCE_PPV/dashboard.toml",
+    "projects/_REFERENCE_FINANCE_PPV/project.toml",
+    "projects/_REFERENCE_FINANCE_PPV/relationships.toml",
+    "projects/_REFERENCE_FINANCE_PPV/reuse_report.json",
+    "projects/_REFERENCE_FINANCE_PPV/sources.toml"
+  ],
+  "business_logic_files_changed": [
+    "projects/_REFERENCE_FINANCE_PPV/business_rules/insights.sql",
+    "projects/_REFERENCE_FINANCE_PPV/business_rules/metrics.sql"
+  ],
+  "reused_capabilities": [],
+  "reused_tests": [],
+  "new_architecture_decisions": 0,
+  "context_proxy": {
+    "estimated_tokens": 3780,
+    "files_selected": 1,
+    "bytes_selected": 15123,
+    "expansions": 0
+  },
+  "provider_tokens": null,
+  "note": "No reuse percentage is used as acceptance evidence. Counts/scopes/context are the primary measures."
+}

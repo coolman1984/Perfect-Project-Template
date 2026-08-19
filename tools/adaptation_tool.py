@@ -80,9 +80,13 @@ def core_guard(project_id: str) -> int:
 def reuse_report(project_id: str) -> int:
     report = Report(f"adaptation reuse-report --project {project_id}")
     try:
-        directory, _project = _load(project_id)
+        directory, project = _load(project_id)
+        # Pass the declared project_id, never the directory name: a reference
+        # pack lives in projects/_REFERENCE_FINANCE_PPV but declares
+        # reference_finance_ppv, and the directory name is not a valid
+        # identifier.
         payload = build_reuse_report(
-            directory.name, projects_root=directory.parent)
+            project.project_id, projects_root=directory.parent)
     except (FileNotFoundError, ProjectContractError) as error:
         report.fail(str(error))
         return report.emit()

@@ -44,23 +44,45 @@ The ready application is the product. Employee agents should adapt project confi
 - IT-owned security policy with metadata-only AI profiling default.
 - Machine schemas for baseline/project/sources/relationships/adaptation/reuse/source-profile/capability contracts.
 - Supply Chain reference contract for orders + inventory + item master with different history modes.
+- Independent adaptation proven (V10 Reference D / Phase I4):
+  `projects/_REFERENCE_FINANCE_PPV/` adds a whole finance department — four
+  sources including an optional `target` source, an optional relationship and
+  `replace_period` history — with **zero Universal Core files changed**. The
+  claim is machine-checked by `tests/golden/test_reference_reuse_boundary.py`
+  against `TEMPLATE_BASELINE.json` (the same authority the core-change guard
+  uses) and recorded in that project's `reuse_report.json`. All four V10 load
+  modes and both required and optional relationship semantics are now covered
+  by references.
 - Canonical quality semantics are PASS/WARNING/BLOCK; run state remains FAILED on a block.
 - Normal history behavior is Universal Core, not per-report `history.sql`.
 
 ## Explicit blockers before employee distribution
 
-1. No independent adaptation proof yet. V10 Phase I4 requires a Finance Purchase
-   Price Variance project built through the normal employee workflow to show
-   low-change reuse. Until it exists, reuse is asserted rather than measured.
-2. Project generation/UI still has legacy report-centric compatibility paths that must be migrated.
-3. `TEMPLATE_BASELINE.json` is intentionally development-unsealed until master-core work stabilizes.
-4. Template upgrade/migration/rollback is defined as a contract but not yet executed/proven.
-5. Real protected Excel COM/DRM proof requires the authorized corporate Windows + Excel environment.
-6. Actual pinned ECharts binary, full browser/offline/accessibility/RTL proof and final sealed offline package remain open.
-7. `requirements-lock.txt` is still an unpopulated template, so the offline
+Architecture is no longer the blocker. Everything below is environment-bound,
+release-mechanical or documentation debt.
+
+1. **Environment-bound (cannot be closed from CI).** Real protected Excel
+   COM/DRM proof needs the authorized corporate Windows + Excel machine; the
+   clean-offline-machine and standard-user startup runs need that machine too;
+   the non-technical operator handoff needs a person. Fixture execution is
+   never evidence for any of these (V10 Part 37).
+2. `requirements-lock.txt` is still an unpopulated template, so the offline
    wheelhouse and GATE_ARCHITECTURE_BASELINE cannot be satisfied. DuckDB,
    FastAPI, Uvicorn and httpx are installed ad hoc in CI instead of pinned.
-8. The legacy 225k-line constitution still needs a mechanical reconciliation with the V8.1 authority addendum.
+3. Actual pinned ECharts binary, full browser/offline/accessibility/RTL proof
+   and the final sealed offline package remain open.
+4. Project generation/UI still has legacy report-centric compatibility paths
+   that must be migrated (V10 Phase I5).
+5. `TEMPLATE_BASELINE.json` is intentionally development-unsealed until
+   master-core work stabilizes.
+6. Template upgrade/migration/rollback is defined as a contract but not yet
+   executed/proven.
+7. The legacy 225k-line constitution still needs a mechanical reconciliation
+   with the V8.1 authority addendum, and V8.1 reference letters (A/B) need
+   aligning with the V10 letters (A/B/C/D) wherever they still disagree.
+8. One canonical branch has not been chosen (V10 Part 28). `main` and
+   `agent/universal-excel-automation-engine` are still unreconciled; this is a
+   repository-owner decision, not an engineering one.
 
 **Current approval verdict: NOT READY FOR EMPLOYEE DISTRIBUTION.**
 

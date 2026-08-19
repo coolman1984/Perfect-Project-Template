@@ -1,0 +1,39 @@
+# Every relationship is declared and human-confirmed. None is inferred from
+# similar column names (V10 Part 10).
+
+[[relationships]]
+relationship_id = "purchases_to_standard_cost"
+left_source = "purchases"
+right_source = "standard_cost"
+left_keys = ["item_id"]
+right_keys = ["item_id"]
+cardinality = "many_to_one"
+join_type = "left"
+approval_state = "CONFIRMED"
+# PPV is undefined without an approved standard cost, so an unmatched purchase
+# line must block rather than silently score as zero variance.
+require_match = true
+
+[[relationships]]
+relationship_id = "purchases_to_vendor"
+left_source = "purchases"
+right_source = "vendors"
+left_keys = ["vendor_id"]
+right_keys = ["vendor_id"]
+cardinality = "many_to_one"
+join_type = "left"
+approval_state = "CONFIRMED"
+require_match = true
+
+[[relationships]]
+relationship_id = "purchases_to_ppv_budget"
+left_source = "purchases"
+right_source = "ppv_budget"
+left_keys = ["period"]
+right_keys = ["period"]
+cardinality = "many_to_one"
+join_type = "left"
+approval_state = "CONFIRMED"
+# Optional: actual PPV is trustworthy whether or not a budget exists for the
+# period. An unapproved-budget period warns and still publishes.
+require_match = false

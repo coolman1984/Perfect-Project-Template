@@ -1,0 +1,20 @@
+project_id = "reference_finance_ppv"
+project_version = 1
+mode = "prototype"
+outputs = ["dashboard", "standalone_html"]
+
+[template]
+template_id = "universal-excel-automation-engine"
+template_version = "0.2.0-development"
+baseline_digest = "PENDING_SEALED_TEMPLATE"
+
+[business]
+purpose = "Synthetic finance purchase-price-variance independent adaptation proof (V10 Reference D)"
+owner = "FIXTURE"
+decision = "Which vendors and items are driving unfavourable purchase price variance against standard cost, and how does the period compare with the approved PPV budget?"
+
+[execution]
+fixture_adapter = true
+
+[security]
+policy = "policy/security_policy.toml"

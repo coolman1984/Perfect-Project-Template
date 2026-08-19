@@ -184,8 +184,21 @@ That proof runs through the fixture extraction port. It is REFERENCE_PROVEN, not
 ENVIRONMENT_PROVEN — real protected Excel/COM on the authorized corporate PC
 remains a separate open gate, and fixture execution is never evidence for it.
 
-The outstanding universality question is now **independent adaptation** (V10
-Reference D / Phase I4), not multi-source execution.
+Independent adaptation is proven too. `projects/_REFERENCE_FINANCE_PPV/`
+(V10 Reference D, Phase I4) adds an entire finance department — four sources
+including an optional target source, an optional relationship and
+`replace_period` history — with **zero Universal Core files changed**. That
+claim is machine-checked by `tests/golden/test_reference_reuse_boundary.py`
+and recorded in the project's `reuse_report.json`, not asserted in prose.
+
+Under the V10 letters (Part 34) the references are: A Production Quality
+(`reports/_REFERENCE/`), B Maintenance (`reports/line_downtime/`), C Supply
+Chain, D Finance PPV. Older V8.1 wording called Supply Chain "Reference B";
+V10 is the controlling authority.
+
+The outstanding blockers are now environment-bound rather than architectural:
+real protected Excel/COM, the sealed offline package, browser/accessibility
+proof and operator handoff.
 
 Detailed finding/status ledger: `docs/V8_1_AUDIT_REMEDIATION.md`.
 Controlling adaptation addendum: `constitution/V8_1_ADAPTATION_AUTHORITY.md`.
@@ -204,8 +217,10 @@ requirements: reuse/config/project-logic/candidate counts
 core files changed: NONE / justified list
 security policy: PASS / IT ACTION REQUIRED
 quality vocabulary: PASS/WARNING/BLOCK
-reference A: PASS / BLOCKED
-reference B multi-source: CONTRACT_ONLY / EXECUTION_PASS / BLOCKED
+reference A production quality: PASS / BLOCKED
+reference B maintenance: PASS / BLOCKED
+reference C supply chain (multi-source): CONTRACT_ONLY / EXECUTION_PASS / BLOCKED
+reference D finance (independent adaptation): CORE_FILES_CHANGED=<n> / BLOCKED
 offline/browser/COM gates: exact evidence or CONDITIONAL
 map/context metrics: files + bytes + estimated tokens (+ actual tokens only if exposed)
 ```

@@ -1,0 +1,77 @@
+[meta]
+title = "Finance Purchase Price Variance"
+period_query = "latest_posting_date"
+
+[[kpis]]
+id = "purchase_spend"
+label = "Purchase spend at actual"
+query = "purchase_spend"
+format = "decimal"
+unit = "USD"
+
+[[kpis]]
+id = "standard_spend"
+label = "Purchase spend at standard"
+query = "standard_spend"
+format = "decimal"
+unit = "USD"
+
+[[kpis]]
+id = "ppv_amount"
+label = "Purchase price variance"
+query = "ppv_amount"
+format = "decimal"
+unit = "USD"
+
+[[kpis]]
+id = "ppv_rate"
+label = "PPV against standard spend"
+query = "ppv_rate"
+format = "percent"
+unit = "%"
+
+[[kpis]]
+id = "ppv_budget_amount"
+label = "Approved PPV budget"
+query = "ppv_budget_amount"
+format = "decimal"
+unit = "USD"
+
+[[charts]]
+id = "ppv_by_vendor"
+type = "bar"
+title = "Purchase price variance by vendor"
+query = "ppv_by_vendor"
+dimension = "vendor"
+series_name = "PPV"
+x_index = 0
+y_index = 1
+unit = "USD"
+summary_format = "{x}: {y} USD variance"
+
+[[charts]]
+id = "ppv_by_category"
+type = "bar"
+title = "Purchase price variance by category"
+query = "ppv_by_category"
+dimension = "category"
+series_name = "PPV"
+x_index = 0
+y_index = 1
+unit = "USD"
+summary_format = "{x}: {y} USD variance"
+
+[[insights]]
+id = "top_unfavourable_vendor"
+type = "top_contributor"
+query = "top_unfavourable_vendor_evidence"
+metric_id = "ppv_amount"
+value_label = "USD variance"
+dimension_index = 0
+value_index = 1
+share_index = 2
+
+[lineage]
+rows_query = "purchases_lineage_rows"
+mapping_version = "1"
+metric_version = "1"

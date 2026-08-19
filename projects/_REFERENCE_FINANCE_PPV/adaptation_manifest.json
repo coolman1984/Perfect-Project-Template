@@ -1,0 +1,24 @@
+{
+  "project_id": "reference_finance_ppv",
+  "template": {
+    "template_id": "universal-excel-automation-engine",
+    "template_version": "0.2.0-development",
+    "sealed": false
+  },
+  "sources": [
+    "purchases",
+    "standard_cost",
+    "vendors",
+    "ppv_budget"
+  ],
+  "relationships": [
+    "purchases_to_standard_cost",
+    "purchases_to_vendor",
+    "purchases_to_ppv_budget"
+  ],
+  "requirements": [],
+  "core_changes": [],
+  "verification": {},
+  "context_metrics": {},
+  "schema_version": 1
+}

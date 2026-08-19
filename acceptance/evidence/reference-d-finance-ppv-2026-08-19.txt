@@ -1,0 +1,69 @@
+# Reference D — Finance PPV independent adaptation (V10 Phase I4)
+# Generated 2026-08-19T03:35:56Z on Linux CI-equivalent (duckdb/fastapi/uvicorn/httpx installed)
+
+## Full portable suite (0 skipped)
+----------------------------------------------------------------------
+Ran 296 tests in 25.458s
+
+OK
+
+## Reference D golden proof
+test_absent_optional_budget_warns_and_still_publishes (tests.golden.test_finance_ppv_reference.TestFinancePpvReference.test_absent_optional_budget_warns_and_still_publishes)
+test_correction_restates_variance_without_duplicating_history (tests.golden.test_finance_ppv_reference.TestFinancePpvReference.test_correction_restates_variance_without_duplicating_history) ... ok
+test_insight_names_the_largest_unfavourable_vendor_with_evidence (tests.golden.test_finance_ppv_reference.TestFinancePpvReference.test_insight_names_the_largest_unfavourable_vendor_with_evidence) ... ok
+test_period_one_matches_hand_derived_variance (tests.golden.test_finance_ppv_reference.TestFinancePpvReference.test_period_one_matches_hand_derived_variance) ... ok
+test_replace_period_restates_a_budget_without_merging_into_it (tests.golden.test_finance_ppv_reference.TestFinancePpvReference.test_replace_period_restates_a_budget_without_merging_into_it)
+test_rerunning_the_same_period_is_idempotent (tests.golden.test_finance_ppv_reference.TestFinancePpvReference.test_rerunning_the_same_period_is_idempotent) ... ok
+test_unmatched_required_standard_cost_blocks_the_run (tests.golden.test_finance_ppv_reference.TestFinancePpvReference.test_unmatched_required_standard_cost_blocks_the_run)
+Ran 7 tests in 4.359s
+OK
+
+## Zero-core-change boundary (machine-checked against TEMPLATE_BASELINE.json)
+test_every_reference_d_file_exists (tests.golden.test_reference_reuse_boundary.TestReferenceDChangedNoCore.test_every_reference_d_file_exists) ... ok
+test_no_reference_d_file_is_core_owned (tests.golden.test_reference_reuse_boundary.TestReferenceDChangedNoCore.test_no_reference_d_file_is_core_owned)
+test_reference_d_files_are_only_config_logic_and_tests (tests.golden.test_reference_reuse_boundary.TestReferenceDChangedNoCore.test_reference_d_files_are_only_config_logic_and_tests) ... ok
+test_reuse_report_records_zero_core_files_changed (tests.golden.test_reference_reuse_boundary.TestReferenceDChangedNoCore.test_reuse_report_records_zero_core_files_changed)
+test_reuse_report_resolves_every_reference_by_declared_project_id (tests.golden.test_reference_reuse_boundary.TestReferenceDChangedNoCore.test_reuse_report_resolves_every_reference_by_declared_project_id)
+test_running_the_finance_reference_mutates_no_core_source_file (tests.golden.test_reference_reuse_boundary.TestReferenceDChangedNoCore.test_running_the_finance_reference_mutates_no_core_source_file)
+Ran 6 tests in 4.520s
+OK
+
+## Measured reuse evidence (V10 Part 4 — counts, not a percentage)
+  .  project reference_finance_ppv: 4 source(s), 3 relationship(s)
+  .  all declared relationships are confirmed
+
+adaptation validate --project reference_finance_ppv: PASS (0 warning(s))
+  .  wrote projects/_REFERENCE_FINANCE_PPV/reuse_report.json
+  .  core files changed: 0; project config: 7; business logic: 2
+
+adaptation reuse-report --project reference_finance_ppv: PASS (0 warning(s))
+
+### reuse_report.json
+{
+  "project_id": "reference_finance_ppv",
+  "core_files_changed": [],
+  "project_config_files_changed": [
+    "projects/_REFERENCE_FINANCE_PPV/README.md",
+    "projects/_REFERENCE_FINANCE_PPV/adaptation_manifest.json",
+    "projects/_REFERENCE_FINANCE_PPV/dashboard.toml",
+    "projects/_REFERENCE_FINANCE_PPV/project.toml",
+    "projects/_REFERENCE_FINANCE_PPV/relationships.toml",
+    "projects/_REFERENCE_FINANCE_PPV/reuse_report.json",
+    "projects/_REFERENCE_FINANCE_PPV/sources.toml"
+  ],
+  "business_logic_files_changed": [
+    "projects/_REFERENCE_FINANCE_PPV/business_rules/insights.sql",
+    "projects/_REFERENCE_FINANCE_PPV/business_rules/metrics.sql"
+  ],
+  "reused_capabilities": [],
+  "reused_tests": [],
+  "new_architecture_decisions": 0,
+  "context_proxy": {
+    "estimated_tokens": 3780,
+    "files_selected": 1,
+    "bytes_selected": 15123,
+    "expansions": 0
+  },
+  "provider_tokens": null,
+  "note": "No reuse percentage is used as acceptance evidence. Counts/scopes/context are the primary measures."
+}

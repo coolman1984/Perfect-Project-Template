@@ -1,0 +1,25 @@
+{
+  "project_id": "reference_supply_chain",
+  "core_files_changed": [],
+  "project_config_files_changed": [
+    "projects/_REFERENCE_SUPPLY_CHAIN/README.md",
+    "projects/_REFERENCE_SUPPLY_CHAIN/dashboard.toml",
+    "projects/_REFERENCE_SUPPLY_CHAIN/project.toml",
+    "projects/_REFERENCE_SUPPLY_CHAIN/relationships.toml",
+    "projects/_REFERENCE_SUPPLY_CHAIN/sources.toml"
+  ],
+  "business_logic_files_changed": [
+    "projects/_REFERENCE_SUPPLY_CHAIN/business_rules/metrics.sql"
+  ],
+  "reused_capabilities": [],
+  "reused_tests": [],
+  "new_architecture_decisions": 0,
+  "context_proxy": {
+    "estimated_tokens": 3780,
+    "files_selected": 1,
+    "bytes_selected": 15123,
+    "expansions": 0
+  },
+  "provider_tokens": null,
+  "note": "No reuse percentage is used as acceptance evidence. Counts/scopes/context are the primary measures."
+}

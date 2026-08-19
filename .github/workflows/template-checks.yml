@@ -36,6 +36,8 @@ jobs:
           python3 -m unittest tests.golden.test_reference_pipeline --verbose
           python3 -m unittest tests.golden.test_second_report_pipeline --verbose
           python3 -m unittest tests.golden.test_multisource_supply_chain --verbose
+          python3 -m unittest tests.golden.test_finance_ppv_reference --verbose
+          python3 -m unittest tests.golden.test_reference_reuse_boundary --verbose
       - run: python3 -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine tests.factory.test_v81_audit_contracts tests.factory.test_v81_adaptation_commands --verbose
       - name: Local runtime, real socket and standalone export
         run: python3 -m unittest tests.unit.test_runtime_core tests.unit.test_loopback_listener tests.unit.test_standalone_html --verbose
@@ -87,6 +89,8 @@ jobs:
           python -m unittest tests.golden.test_reference_pipeline --verbose
           python -m unittest tests.golden.test_second_report_pipeline --verbose
           python -m unittest tests.golden.test_multisource_supply_chain --verbose
+          python -m unittest tests.golden.test_finance_ppv_reference --verbose
+          python -m unittest tests.golden.test_reference_reuse_boundary --verbose
       - name: V8.1 factory/adaptation proofs
         shell: cmd
         run: python -m unittest tests.factory.test_factory_flow tests.factory.test_universal_engine tests.factory.test_v81_audit_contracts tests.factory.test_v81_adaptation_commands --verbose

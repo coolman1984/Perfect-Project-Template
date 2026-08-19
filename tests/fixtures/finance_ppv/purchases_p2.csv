@@ -1,0 +1,5 @@
+po_number,po_line,posting_date,period,item_id,vendor_id,quantity,actual_unit_price,line_amount
+PO-1001,1,2026-08-03,2026-08,ITM-A,V-100,100,12.20,1220.00
+PO-1001,2,2026-08-03,2026-08,ITM-B,V-100,50,8.00,400.00
+PO-1002,1,2026-08-05,2026-08,ITM-A,V-200,200,11.00,2200.00
+PO-2001,1,2026-09-02,2026-09,ITM-C,V-300,80,25.00,2000.00
