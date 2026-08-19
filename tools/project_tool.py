@@ -113,8 +113,39 @@ def build_parser() -> argparse.ArgumentParser:
     x.add_argument("--project-name", required=True)
     x.add_argument("--app-dir", required=True)
     x.add_argument("--output-dir", required=True)
+    x.add_argument("--project-id")
+    x.add_argument("--project-dir")
     x = c.add_parser("verify")
     x.add_argument("--zip", required=True, dest="zip_path")
+
+    p = groups.add_parser(
+        "master-template", help="build or verify the reusable AI-facing master ZIP")
+    c = p.add_subparsers(dest="command")
+    x = c.add_parser("build")
+    x.add_argument("--source-root", default=".")
+    x.add_argument("--release-dir", required=True)
+    x.add_argument("--output-dir", required=True)
+    x = c.add_parser("verify")
+    x.add_argument("--zip", required=True, dest="zip_path")
+    x = c.add_parser("verify-folder")
+    x.add_argument("--root", required=True)
+
+    p = groups.add_parser(
+        "delivery", help="build the final offline ZIP from a verified master template")
+    c = p.add_subparsers(dest="command")
+    x = c.add_parser("build")
+    x.add_argument("--project", required=True, dest="project_id")
+    x.add_argument("--project-name", required=True)
+    x.add_argument("--master-root", default=".")
+    x.add_argument("--output-dir", default="dist")
+
+    p = groups.add_parser(
+        "wheelhouse", help="prepare or verify the pinned Windows build wheelhouse")
+    c = p.add_subparsers(dest="command")
+    x = c.add_parser("prepare")
+    x.add_argument("--output-dir", default="offline_packages")
+    x = c.add_parser("verify")
+    x.add_argument("--wheelhouse", default="offline_packages")
 
     groups.add_parser("doctor")
     return parser
@@ -155,6 +186,10 @@ def _dispatch(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
         from tools import adaptation_tool; return adaptation_tool.main(args)
     if args.group == "package":
         from tools import operator_package; return operator_package.main(args)
+    if args.group in {"master-template", "delivery"}:
+        from tools import master_template_package; return master_template_package.main(args)
+    if args.group == "wheelhouse":
+        from tools import prepare_wheelhouse; return prepare_wheelhouse.main(args)
     if args.group == "doctor":
         from tools import doctor; return doctor.main(args)
     parser.print_help(); return EXIT_USAGE

@@ -6,8 +6,8 @@ to new departments and Excel files instead of rebuilding the same software.
 ## The whole product
 
 ```text
-Template ZIP + Excel files + business explanation
-→ ChatGPT Work reuses and configures the existing engine
+MASTER_TEMPLATE.zip + Excel files + business explanation
+→ a capable ChatGPT, Claude or Gemini coding environment reuses the engine
 → tests, reconciles and builds ProjectName.zip
 → employee extracts, double-clicks START and uses the local browser app
 ```
@@ -29,7 +29,7 @@ The application is the reusable asset. The agent is mainly the adapter.
 
 ## Agent start
 
-`AGENTS.md → PROJECT_SKILL.md → UNIVERSAL_ENGINE_SKILL.md → .ai/READ_FIRST.md → PROJECT_TOOL doctor → map context`
+`00_START_HERE_AI_AGENT.md → AGENTS.md → PROJECT_SKILL.md → UNIVERSAL_ENGINE_SKILL.md → .ai/READ_FIRST.md → PROJECT_TOOL doctor → map context`
 
 Do not broad-read the repository or huge workbooks into context.
 
@@ -37,7 +37,24 @@ Do not broad-read the repository or huge workbooks into context.
 
 Authorized desktop Excel COM/Value2 extraction, chunked staging/lineage, DuckDB + Parquet history, four update modes, idempotent reruns, quality/quarantine/reconciliation, versioned SQL analytics, reusable evidence patterns, configuration-driven dashboard JSON, shared web architecture, FastAPI/Uvicorn loopback, offline packaging, map/context controls, approvals and gates.
 
-A normal project should mostly change `reports/<id>/`, its additive migration and focused tests.
+A normal project should mostly change `projects/<id>/`, project configuration,
+isolated project rules and focused tests.
+
+## One-time Windows commissioning
+
+On a connected Windows x64 machine with desktop Excel and 64-bit Python 3.12,
+the agent adapts the first project and runs:
+
+```text
+FINALIZE_MASTER.bat <template-version> <project-id> "<Project Name>"
+```
+
+That command prepares the exact dependency cache, validates reuse boundaries,
+runs the full tests, seals the Git-independent baseline, builds and exercises
+the offline runtime, then produces and verifies:
+
+- `release/operator/MASTER_TEMPLATE.zip` for future AI adaptations.
+- `release/operator/ProjectName.zip` for the non-technical offline user.
 
 ## Two executable references
 

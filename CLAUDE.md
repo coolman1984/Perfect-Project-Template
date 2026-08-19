@@ -4,7 +4,8 @@ Claude entry pointer (Constitution Part 20.2). This file deliberately contains
 **no rules of its own** — forking the rules across entry files is how projects
 drift.
 
-👉 **Read [`AGENTS.md`](AGENTS.md) first, then [`PROJECT_SKILL.md`](PROJECT_SKILL.md).**
+👉 **Read [`00_START_HERE_AI_AGENT.md`](00_START_HERE_AI_AGENT.md) first, then
+[`AGENTS.md`](AGENTS.md) and [`PROJECT_SKILL.md`](PROJECT_SKILL.md).**
 
 Quick start for this session:
 

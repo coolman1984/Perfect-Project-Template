@@ -1,0 +1,30 @@
+AUTONOMOUS MASTER-TEMPLATE CONTRACT EVIDENCE
+Date: 2026-08-19
+Environment: Linux portable test workspace (not the Windows release machine)
+
+Implemented and exercised:
+- Canonical provider-neutral autonomous guide plus Codex/ChatGPT, Claude and
+  Gemini entry files.
+- PROJECT_TOOL master-template build/verify/verify-folder commands.
+- PROJECT_TOOL delivery build command.
+- PROJECT_TOOL wheelhouse prepare/verify commands with exact hash locks.
+- FINALIZE_MASTER.bat connected-Windows commissioning command.
+- Master source filter excludes non-reference projects and Excel/runtime data.
+- Master immutable source hashes and sealed-runtime checksums are verified.
+- Final delivery composes exactly one project into a private runtime copy and
+  refreshes repair_payload.zip, SETUP_OFFLINE.bat and checksums.sha256.
+- Operator ZIP surface remains START.bat, QUICK_START.html and Application/.
+
+Portable proof:
+- python -m unittest discover -s tests -t .
+- Result: PASS, 455 tests, 56 skipped (Windows/environment-bound tests)
+- architecture verify --source-scan: PASS (loopback URL warnings only)
+- constitution audit: PASS
+- memory validate: PASS
+- targeted master/operator package tests: PASS (10 tests)
+
+Not claimed by this evidence:
+- No Windows executable or delivery ZIP was built in this Linux workspace.
+- No protected corporate workbook was opened here.
+- Clean offline PC, standard-user launch, authorized Excel/COM and human
+  operator acceptance remain environment-bound gates for commissioning.

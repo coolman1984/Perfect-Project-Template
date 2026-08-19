@@ -13,6 +13,19 @@ The approved final-user surface is separate from the technical template:
 package contract; it does not close the environment-bound gates listed below.
 Evidence: `acceptance/evidence/operator-package-contract-2026-08-19.txt`.
 
+The autonomous two-archive workflow is now implemented in source.
+`FINALIZE_MASTER.bat` is the single connected-Windows commissioning command.
+It prepares the exact wheelhouse and produces `MASTER_TEMPLATE.zip` plus the
+first project ZIP only after portable tests, project/core guards, release and
+archive verifiers pass. The master includes provider entry files for Codex,
+ChatGPT, Claude and Gemini, a sealed runtime and the portable
+`PROJECT_TOOL delivery build` path. Master packaging excludes non-reference
+project packs and Excel/runtime data; final delivery contains exactly one
+project pack. Linux contract tests prove these composition/privacy rules.
+Evidence: `acceptance/evidence/autonomous-master-template-contract-2026-08-19.txt`.
+The actual Windows archives are intentionally not committed and must still be
+built on the authorized connected Windows x64 commissioning machine.
+
 > **Read this before believing any "ready" claim.** The production extraction
 > adapter opened a disposable real `.xlsx` twice through desktop Excel COM on
 > 2026-08-19 and preserved its SHA-256. That proves the ordinary COM boundary,
@@ -136,8 +149,9 @@ human-owned acceptance work.
    keyboard operation, focus, contrast, reduced motion, theme, RTL and print.
 5. Project generation/UI still has legacy report-centric compatibility paths
    that must be migrated (V10 Phase I5).
-6. `TEMPLATE_BASELINE.json` is intentionally development-unsealed until
-   master-core work stabilizes.
+6. `TEMPLATE_BASELINE.json` is intentionally development-unsealed in source.
+   `FINALIZE_MASTER.bat` seals the exact commissioned copy immediately before
+   building the runtime and both verified archives.
 7. Template upgrade/migration/rollback is executed and proven, including a
    real Finance project pack surviving upgrade and rollback.
 8. The legacy 225k-line constitution still needs a mechanical reconciliation

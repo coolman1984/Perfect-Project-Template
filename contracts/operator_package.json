@@ -7,6 +7,11 @@
     "Application"
   ],
   "required_application_entry": "Application/app/excel-intelligence.exe",
+  "required_application_entries": [
+    "Application/app/excel-intelligence.exe",
+    "Application/VERSION.json",
+    "Application/checksums.sha256"
+  ],
   "forbidden_root_entries": [
     ".git",
     ".ai",

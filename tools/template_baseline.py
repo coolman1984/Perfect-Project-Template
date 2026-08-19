@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -36,6 +37,12 @@ def seal(*, template_version: str) -> int:
     data["status"] = "sealed_master_template"
     data["sealed"] = True
     data["sealed_at"] = utc_now()
+    try:
+        data["source_commit"] = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True,
+            stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError):
+        data.setdefault("source_commit", "downloaded-source-without-git")
     data["core_files"] = snapshot()
     BASELINE_PATH.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"template baseline sealed: {len(data['core_files'])} core/tooling files")

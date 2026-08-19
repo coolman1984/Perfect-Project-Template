@@ -11,6 +11,7 @@ from tools.operator_package import (
     PackageError,
     build,
     start_script,
+    validate_project_id,
     validate_project_name,
     verify_zip,
 )
@@ -24,6 +25,16 @@ class TestOperatorPackage(unittest.TestCase):
         (release / "web").mkdir()
         (release / "web" / "index.html").write_text(
             "offline app", encoding="utf-8")
+        (release / "projects" / "alpha").mkdir(parents=True)
+        (release / "projects" / "alpha" / "project.toml").write_text(
+            'id = "alpha"\n', encoding="utf-8")
+        (release / "projects" / "other").mkdir()
+        (release / "projects" / "other" / "project.toml").write_text(
+            'id = "other"\n', encoding="utf-8")
+        (release / "VERSION.json").write_text(
+            '{"version":"test"}\n', encoding="utf-8")
+        from tools.build_release import write_checksums
+        write_checksums(release)
         return release
 
     def test_builds_the_exact_simple_root(self):
@@ -63,6 +74,29 @@ class TestOperatorPackage(unittest.TestCase):
         for unsafe in ("../Project", "A/B", "A\\B", "", "."):
             with self.assertRaises(PackageError, msg=unsafe):
                 validate_project_name(unsafe)
+
+    def test_project_id_cannot_be_a_path_or_reference_pack(self):
+        for unsafe in ("../alpha", "Alpha", "_REFERENCE_A", "a/b", ""):
+            with self.assertRaises(PackageError, msg=unsafe):
+                validate_project_id(unsafe)
+
+    def test_project_delivery_contains_only_the_selected_project(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            package = build(
+                "Alpha App", self._sealed_app(root), root / "out",
+                project_id="alpha")
+            self.assertEqual(verify_zip(package), [])
+            with zipfile.ZipFile(package) as archive:
+                names = set(archive.namelist())
+                version = archive.read(
+                    "Alpha App/Application/VERSION.json").decode("utf-8")
+            self.assertIn(
+                "Alpha App/Application/projects/alpha/project.toml", names)
+            self.assertFalse(any("/projects/other/" in name for name in names))
+            self.assertIn('"delivery_project_id": "alpha"', version)
+            self.assertIn("Alpha App/Application/repair_payload.zip", names)
+            self.assertIn("Alpha App/Application/checksums.sha256", names)
 
     def test_launcher_preserves_the_application_exit_code(self):
         launcher = start_script()

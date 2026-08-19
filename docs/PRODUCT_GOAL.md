@@ -5,7 +5,7 @@ into a finished offline application without rebuilding the shared engine.
 
 ```text
 INPUT
-Template ZIP + Excel files + business explanation
+MASTER_TEMPLATE.zip + Excel files + business explanation
 
 → CHATGPT WORK
 Understand structure and meaning
@@ -27,8 +27,18 @@ Extract → double-click START → browser opens → work
 
 ## Two packages
 
-The template/build package is technical because ChatGPT Work is its user. It
-retains source, tests, locks, maps, build inputs and every internal capability.
+The first connected Windows commissioning produces both packages. Run:
+
+```text
+FINALIZE_MASTER.bat <template-version> <project-id> "<Project Name>"
+```
+
+`MASTER_TEMPLATE.zip` is technical because a capable AI coding environment is
+its user. It contains the canonical autonomous guide, portable source and
+tests, sealed verified Windows runtime and exact offline dependencies. It may
+be uploaded with new Excel files to ChatGPT Work, Claude Code, Gemini CLI or a
+similarly capable environment. The agent changes only the project pack and
+returns a verified `ProjectName.zip`.
 
 The operator package is for the business user. Its visible root is exactly:
 
@@ -41,6 +51,10 @@ ProjectName/
 
 The user does not operate Python, SQL, databases, packages, terminals, Git,
 configuration, migrations, agents, ports or build tools.
+
+A browser-only chat that cannot extract files, edit code, execute tests and
+create ZIP files must report that limitation. It may not claim to have built a
+working application.
 
 ## Adaptation order
 

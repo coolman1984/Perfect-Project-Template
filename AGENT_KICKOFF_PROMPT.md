@@ -1,7 +1,10 @@
 # Agent kickoff prompt
 
-**This is the file you hand to an AI agent.** Copy one block below, paste it,
-point the agent at this repository. Nothing else is required.
+This file is retained for human reference. Agents must begin with
+`00_START_HERE_AI_AGENT.md`; the user no longer needs to copy a technical
+prompt. A request such as **"complete the project"** is sufficient after the
+repository or `MASTER_TEMPLATE.zip`, Excel files and business explanation are
+available.
 
 ---
 
@@ -11,7 +14,8 @@ point the agent at this repository. Nothing else is required.
 
 ---
 
-Use this repository as your project template and its constitution as your law.
+Read `00_START_HERE_AI_AGENT.md` and execute the complete detected mode. Use
+this repository as your project template and its constitution as your law.
 
 The user supplies the template ZIP, Excel files and a plain business
 explanation. Deliver a tested `ProjectName.zip` whose final-user journey is:
@@ -23,13 +27,14 @@ evidence of a reusable gap.
 **Do not scan the repository.** Start exactly here:
 
 ```text
-1. Read AGENTS.md
-2. Read PROJECT_SKILL.md
-3. Read .ai/READ_FIRST.md
-4. Run  ./project_tool.sh doctor        (Windows: PROJECT_TOOL.bat doctor)
-5. Run  ./project_tool.sh map context --task "<the task I gave you>" --budget 4000
-6. Read .ai/CURRENT_STATE.md and .ai/CONTEXT_PACK.md
-7. Open only the files the task router names
+1. Read 00_START_HERE_AI_AGENT.md
+2. Read AGENTS.md
+3. Read PROJECT_SKILL.md
+4. Read .ai/READ_FIRST.md
+5. Run  ./project_tool.sh doctor        (Windows: PROJECT_TOOL.bat doctor)
+6. Run  ./project_tool.sh map context --task "<the task I gave you>" --budget 4000
+7. Read .ai/CURRENT_STATE.md and .ai/CONTEXT_PACK.md
+8. Open only the files the task router names
 ```
 
 Then read `constitution/EXCEL_AUTOMATION_CONSTITUTION.md` **once, in full** —
@@ -61,13 +66,14 @@ run every verifier, record gate evidence, refresh the map, update
 `.ai/CURRENT_STATE.md`, and give me the Part 34.4 completion declaration
 generated from the ledger.
 
-After the sealed release passes its existing checks, build and verify the
-simple operator package:
+For first connected-Windows commissioning, build and verify both archives with:
 
 ```text
-PROJECT_TOOL package build --project-name "<Project Name>" --app-dir release/current --output-dir release/operator
-PROJECT_TOOL package verify --zip "release/operator/<Project Name>.zip"
+FINALIZE_MASTER.bat <template-version> <project-id> "<Project Name>"
 ```
+
+For an uploaded sealed master, follow Mode B in the canonical guide and use
+`PROJECT_TOOL delivery build`.
 
 ---
 
