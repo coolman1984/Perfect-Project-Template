@@ -16,7 +16,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 EXCLUDED_ROOTS = {
     "runtime", "offline_packages", "repair_payload", "release", "dist", "build",
-    "inbox", "workspace", "data", "archive", "output", "runs", "logs",
+    "inbox", "workspace", "work", "data", "archive", "output", "runs", "logs",
     "licenses",
 }
 EXCLUDED_PREFIXES = ("web/vendor",)
