@@ -1,0 +1,69 @@
+# Security, immutability and browser-arithmetic gate evidence
+# Generated 2026-08-19T03:47:03Z on Linux CI-equivalent (duckdb/fastapi/uvicorn/httpx installed)
+
+## Full portable suite
+----------------------------------------------------------------------
+Ran 323 tests in 33.310s
+
+OK (skipped=1)
+
+## GATE_LOOPBACK_SECURITY — negative probes against a real bound socket
+test_empty_launch_secret_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_empty_launch_secret_is_rejected) ... ok
+test_launch_secret_of_a_different_launch_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_launch_secret_of_a_different_launch_is_rejected)
+test_listener_is_bound_only_to_loopback (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_listener_is_bound_only_to_loopback) ... ok
+test_mutating_request_with_a_wrong_launch_secret_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_mutating_request_with_a_wrong_launch_secret_is_rejected) ... ok
+test_mutating_request_with_foreign_origin_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_mutating_request_with_foreign_origin_is_rejected) ... ok
+test_mutating_request_with_null_origin_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_mutating_request_with_null_origin_is_rejected) ... ok
+test_mutating_request_without_origin_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_mutating_request_without_origin_is_rejected) ... ok
+test_mutating_request_without_the_launch_secret_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_mutating_request_without_the_launch_secret_is_rejected) ... ok
+test_no_launch_secret_is_echoed_into_a_response_body (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_no_launch_secret_is_echoed_into_a_response_body)
+test_no_wildcard_cross_origin_header_is_ever_returned (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_no_wildcard_cross_origin_header_is_ever_returned)
+test_path_traversal_cannot_escape_the_web_directory (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_path_traversal_cannot_escape_the_web_directory)
+test_port_is_not_reachable_on_a_non_loopback_address (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_port_is_not_reachable_on_a_non_loopback_address)
+test_security_headers_are_present_on_a_normal_response (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_security_headers_are_present_on_a_normal_response) ... ok
+test_wrong_host_header_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_wrong_host_header_is_rejected) ... ok
+test_wrong_port_in_host_header_is_rejected (tests.adversarial.test_loopback_negative_probes.TestLoopbackNegativeProbes.test_wrong_port_in_host_header_is_rejected) ... ok
+Ran 15 tests in 4.098s
+OK (skipped=1)
+
+## GATE_LOOPBACK_TRANSPORT — real listener, loopback host, high port, clean shutdown
+test_real_socket_is_loopback_high_port_and_stops_cleanly (tests.unit.test_loopback_listener.TestRealLoopbackListener.test_real_socket_is_loopback_high_port_and_stops_cleanly) ... ok
+test_secret_is_long_and_unique_per_launch (tests.unit.test_local_transport.TestLaunchSecret.test_secret_is_long_and_unique_per_launch) ... ok
+test_secret_is_url_safe_but_still_must_not_go_in_a_url (tests.unit.test_local_transport.TestLaunchSecret.test_secret_is_url_safe_but_still_must_not_go_in_a_url) ... ok
+test_every_approved_fallback_port_is_legal (tests.unit.test_local_transport.TestLoopbackBindRules.test_every_approved_fallback_port_is_legal) ... ok
+test_loopback_high_port_is_legal (tests.unit.test_local_transport.TestLoopbackBindRules.test_loopback_high_port_is_legal) ... ok
+test_non_loopback_addresses_are_rejected (tests.unit.test_local_transport.TestLoopbackBindRules.test_non_loopback_addresses_are_rejected) ... ok
+test_os_assigned_port_is_legal (tests.unit.test_local_transport.TestLoopbackBindRules.test_os_assigned_port_is_legal) ... ok
+test_privileged_web_ports_are_rejected (tests.unit.test_local_transport.TestLoopbackBindRules.test_privileged_web_ports_are_rejected) ... ok
+test_reserved_low_ports_are_rejected (tests.unit.test_local_transport.TestLoopbackBindRules.test_reserved_low_ports_are_rejected) ... ok
+Ran 9 tests in 0.601s
+OK
+
+## GATE_NO_BROWSER_ARITHMETIC — static guard over web/
+test_no_arithmetic_is_applied_to_a_trusted_value (tests.architecture.test_no_browser_arithmetic.TestNoTrustedArithmeticInTheBrowser.test_no_arithmetic_is_applied_to_a_trusted_value) ... ok
+test_no_javascript_file_reimplements_a_reference_metric_name (tests.architecture.test_no_browser_arithmetic.TestNoTrustedArithmeticInTheBrowser.test_no_javascript_file_reimplements_a_reference_metric_name)
+test_renderer_uses_the_preformatted_display_string (tests.architecture.test_no_browser_arithmetic.TestNoTrustedArithmeticInTheBrowser.test_renderer_uses_the_preformatted_display_string)
+Ran 3 tests in 0.021s
+OK
+
+## GATE_NO_BROWSER_ARITHMETIC — dashboard package equals trusted SQL, both references
+test_every_reference_chart_point_equals_its_trusted_sql_rows (tests.golden.test_dashboard_equals_trusted_sql.TestDashboardEqualsTrustedSql.test_every_reference_chart_point_equals_its_trusted_sql_rows) ... ok
+test_every_reference_kpi_equals_its_trusted_sql_result (tests.golden.test_dashboard_equals_trusted_sql.TestDashboardEqualsTrustedSql.test_every_reference_kpi_equals_its_trusted_sql_result) ... ok
+Ran 2 tests in 1.489s
+OK
+
+## GATE_SOURCE_IMMUTABILITY — source hash unchanged across success and blocked runs
+test_a_blocked_run_also_leaves_sources_untouched (tests.golden.test_source_immutability.TestSourceFilesAreNeverModified.test_a_blocked_run_also_leaves_sources_untouched)
+test_recorded_lineage_hash_matches_the_file_on_disk (tests.golden.test_source_immutability.TestSourceFilesAreNeverModified.test_recorded_lineage_hash_matches_the_file_on_disk)
+test_source_hash_is_identical_before_and_after_two_runs (tests.golden.test_source_immutability.TestSourceFilesAreNeverModified.test_source_hash_is_identical_before_and_after_two_runs) ... ok
+Ran 3 tests in 1.376s
+OK
+
+## GATE_NO_CELL_BY_CELL — static guard only; benchmark half NOT satisfiable
+## (production COM adapter is an unimplemented stub - see CURRENT_STATE blocker 1)
+test_no_module_reads_excel_cell_by_cell (tests.architecture.test_no_cell_by_cell_extraction.TestNoPerCellComAccess.test_no_module_reads_excel_cell_by_cell) ... ok
+test_no_nested_row_and_column_loop_indexes_a_worksheet (tests.architecture.test_no_cell_by_cell_extraction.TestNoPerCellComAccess.test_no_nested_row_and_column_loop_indexes_a_worksheet)
+test_production_extraction_is_still_an_unimplemented_stub (tests.architecture.test_no_cell_by_cell_extraction.TestNoPerCellComAccess.test_production_extraction_is_still_an_unimplemented_stub)
+test_the_com_adapter_still_documents_the_block_read_requirement (tests.architecture.test_no_cell_by_cell_extraction.TestNoPerCellComAccess.test_the_com_adapter_still_documents_the_block_read_requirement)
+Ran 4 tests in 0.011s
+OK

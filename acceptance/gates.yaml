@@ -78,23 +78,23 @@
   part: 31.1
   title: Source file hash before equals hash after, on every run
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: pass
+  evidence: acceptance/evidence/security-immutability-browser-2026-08-19.txt
+  verified_at: "2026-08-19T03:47:55Z"
+  verified_by: tests/golden/test_source_immutability.py (hash identical across two runs and across a blocked run; lineage hash matches disk)
   conditional_reason: ""
-  next_action: Assert hash equality in the extraction integration test
+  next_action: ""
 
 - id: GATE_NO_CELL_BY_CELL
   part: 1.4 rule 2 / 16.2
   title: Extraction reads rectangular Value2 blocks; no per-cell COM loop exists
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: in_progress
+  evidence: acceptance/evidence/security-immutability-browser-2026-08-19.txt
+  verified_at: "2026-08-19T03:48:13Z"
+  verified_by: "tests/architecture/test_no_cell_by_cell_extraction.py (static guard: per-cell COM access and nested row/column value loops both fail CI)"
   conditional_reason: ""
-  next_action: Add the static check and a benchmark comparing block vs per-cell timing
+  next_action: "Benchmark half is BLOCKED: app/excel/com_adapter.py, session.py, discovery.py and extractor.py are unimplemented stubs, so there is no production extraction code to time. Implement the COM adapter on the authorized Windows+Excel machine, then measure block vs per-cell."
 
 - id: GATE_EXTRACTION_COMPLETENESS
   part: 31.1
@@ -199,12 +199,12 @@
   part: 1.4 rule 6 / 26.10
   title: No trusted KPI is calculated only in browser JavaScript
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: pass
+  evidence: acceptance/evidence/security-immutability-browser-2026-08-19.txt
+  verified_at: "2026-08-19T03:47:55Z"
+  verified_by: tests/architecture/test_no_browser_arithmetic.py (static guard over web/) + tests/golden/test_dashboard_equals_trusted_sql.py (package equals trusted SQL for every KPI and chart point in both reference projects)
   conditional_reason: ""
-  next_action: Add the static check over web/ plus a dashboard-vs-SQL equality test
+  next_action: ""
 
 - id: GATE_INSIGHT_EVIDENCE
   part: 10.3 / 26.6 / 31.1
@@ -298,23 +298,23 @@
   part: 0.9 / 31.1
   title: Bundled API retained, bound only to 127.0.0.1; port conflict and lifecycle pass
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: pass
+  evidence: acceptance/evidence/security-immutability-browser-2026-08-19.txt
+  verified_at: "2026-08-19T03:47:55Z"
+  verified_by: tests/unit/test_loopback_listener.py + tests/unit/test_local_transport.py + tests/adversarial/test_loopback_negative_probes.py (real bound socket on 127.0.0.1, high port, clean shutdown)
   conditional_reason: ""
-  next_action: Implement app/local_transport.py and prove the bound socket address
+  next_action: ""
 
 - id: GATE_LOOPBACK_SECURITY
   part: 22.10 / 31.1
   title: Wrong Origin, Host, launch secret and non-loopback probes are all rejected
   severity: block
-  status: not_started
-  evidence: ""
-  verified_at: ""
-  verified_by: ""
+  status: pass
+  evidence: acceptance/evidence/security-immutability-browser-2026-08-19.txt
+  verified_at: "2026-08-19T03:47:55Z"
+  verified_by: "tests/adversarial/test_loopback_negative_probes.py (15 probes: Host, Origin, launch-secret, wildcard CORS, path traversal, security headers, secret non-leakage)"
   conditional_reason: ""
-  next_action: Add the negative probe suite; confirm no wildcard CORS
+  next_action: ""
 
 - id: GATE_NO_MACHINE_MUTATION
   part: 31.1 / 33

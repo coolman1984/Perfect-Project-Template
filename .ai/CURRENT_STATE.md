@@ -6,6 +6,12 @@
 
 The ready application is the product. Employee agents should adapt project configuration and isolated business logic rather than rebuild technical foundations.
 
+> **Read this before believing any "ready" claim.** Everything downstream of
+> extraction is built and proven. The extraction adapter itself — the door into
+> real protected Excel workbooks — is **not written** (blocker 1). The engine
+> currently ingests only through the test-only fixture port, so no employee can
+> yet point it at a real workbook.
+
 ## Proven reusable foundation
 
 - Single-source Golden Production Quality pipeline executes through extraction-port fixture → staging → quality/reconciliation → clean → universal history → DuckDB/Parquet → SQL analytics → evidence insights → dashboard JSON.
@@ -61,11 +67,22 @@ The ready application is the product. Employee agents should adapt project confi
 Architecture is no longer the blocker. Everything below is environment-bound,
 release-mechanical or documentation debt.
 
-1. **Environment-bound (cannot be closed from CI).** Real protected Excel
-   COM/DRM proof needs the authorized corporate Windows + Excel machine; the
-   clean-offline-machine and standard-user startup runs need that machine too;
-   the non-technical operator handoff needs a person. Fixture execution is
-   never evidence for any of these (V10 Part 37).
+1. **Production Excel extraction is NOT WRITTEN.** This is the single largest
+   gap and it is a code gap, not only an environment one. `app/excel/`
+   `com_adapter.py`, `session.py`, `discovery.py` and `extractor.py` are
+   documented stubs — every entry point raises `NotImplementedError`. The
+   engine today reads Excel-shaped data only through the test-only fixture
+   port. Everything downstream of extraction (staging, quality, history,
+   analytics, dashboard, runtime) is real and proven; the door into real
+   protected workbooks is not built. Implementing it needs the authorized
+   Windows + Excel machine, so it is both unwritten and environment-bound.
+   `tests/architecture/test_no_cell_by_cell_extraction.py` pins this status
+   and fails the moment it changes.
+2. **Environment-bound (cannot be closed from CI even once the code exists).**
+   Protected-file DRM proof, clean-offline-machine and standard-user startup
+   runs all need the corporate Windows machine; the non-technical operator
+   handoff needs a person. Fixture execution is never evidence for any of
+   these (V10 Part 37).
 2. `requirements-lock.txt` is still an unpopulated template, so the offline
    wheelhouse and GATE_ARCHITECTURE_BASELINE cannot be satisfied. DuckDB,
    FastAPI, Uvicorn and httpx are installed ad hoc in CI instead of pinned.

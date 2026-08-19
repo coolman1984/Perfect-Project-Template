@@ -1,5 +1,5 @@
 {
-  "file_count": 266,
+  "file_count": 271,
   "files": {
     ".ai/BUILD_BRIEF.md": {
       "bytes": 4323,
@@ -12,9 +12,9 @@
       "sha256": "dbb5a66d817f5666f725f1d59d4fa34b86dac25cdcd302e766049e18253e6844"
     },
     ".ai/CURRENT_STATE.md": {
-      "bytes": 5672,
+      "bytes": 6781,
       "scope": "unknown",
-      "sha256": "f35d23879f8ba2fc94a828792c75046bb0c4c4bb570ee3ff17b9813c510a829c"
+      "sha256": "fbb635e26bc085113372bd688ae513f6dc56542d9c285f4d7528d6b059fcc52d"
     },
     ".ai/LESSONS.md": {
       "bytes": 7005,
@@ -27,7 +27,7 @@
       "sha256": "ff301c19298d6b42cd10be9046e42130752caa225b1343a4f098beddf69fc556"
     },
     ".ai/PROJECT_MAP.md": {
-      "bytes": 13843,
+      "bytes": 14108,
       "scope": "unknown",
       "sha256": "0ca430f192fb12eb09580a81dee8e76a3c435ee162d3a040d9f5fca9c7c891f8"
     },
@@ -67,9 +67,9 @@
       "sha256": "d7772d22ffeab4e1b30319d84ba8da48b491498d4f21ee8a919b248d8d4f2f00"
     },
     ".github/workflows/template-checks.yml": {
-      "bytes": 5348,
+      "bytes": 6008,
       "scope": "unknown",
-      "sha256": "7c9026e7588feea8cf70a6856a3e43aa942bc6edb38148eecba645b259c2a309"
+      "sha256": "df109eaedfd6485e35b84e83fdecd32b0f1e101320dfd9c15ff22fbee4f5bba1"
     },
     ".gitignore": {
       "bytes": 1078,
@@ -187,9 +187,9 @@
       "sha256": "5366079593445dd37bb60f02208bb884c5c2cd34bd0e33f085cfd1c800f5153c"
     },
     "acceptance/gates.yaml": {
-      "bytes": 16478,
+      "bytes": 17636,
       "scope": "unknown",
-      "sha256": "37b7161802addf6e9c3c2cd0a38b87e24d78b62c5339d6e650bee7f7015799ac"
+      "sha256": "c60079aa740c1775a58fa88f569e3c3667e801f33e29980cb0ad484e93750e85"
     },
     "app/__init__.py": {
       "bytes": 1028,
@@ -936,6 +936,11 @@
       "scope": "test",
       "sha256": "604d5115c80d75dc721bab3e52714d50a036ca9793ded07db0f0bb645ba7c627"
     },
+    "tests/adversarial/test_loopback_negative_probes.py": {
+      "bytes": 8909,
+      "scope": "test",
+      "sha256": "1224e8d86ed604322e2442268f4c0d5e69d1ebcdbb465e01d2d9650d546d42fc"
+    },
     "tests/architecture/__init__.py": {
       "bytes": 26,
       "scope": "test",
@@ -945,6 +950,16 @@
       "bytes": 3447,
       "scope": "test",
       "sha256": "89d0ecc62e6912cec8e6da8df7619999d097e801ce43901307410c6b49fe373b"
+    },
+    "tests/architecture/test_no_browser_arithmetic.py": {
+      "bytes": 4858,
+      "scope": "test",
+      "sha256": "dc7703e1a9b5285e4822fcb59af9c0c0910358f788b47333a4ad1597d19844ec"
+    },
+    "tests/architecture/test_no_cell_by_cell_extraction.py": {
+      "bytes": 5784,
+      "scope": "test",
+      "sha256": "744ef6ae45cc5a5d905019f49eed5a5ff034d11b0d2d913f946e51871645bad4"
     },
     "tests/browser/README.md": {
       "bytes": 646,
@@ -1056,6 +1071,11 @@
       "scope": "test",
       "sha256": "25a278097efe29e4ce388ccb9014d64707a3ab9f2e772cb833202dc13370368d"
     },
+    "tests/golden/test_dashboard_equals_trusted_sql.py": {
+      "bytes": 7300,
+      "scope": "test",
+      "sha256": "c3881488144fb2481012f4fe8be2f6884e59ef360557983d0ebdf3232621383a"
+    },
     "tests/golden/test_finance_ppv_reference.py": {
       "bytes": 13862,
       "scope": "test",
@@ -1090,6 +1110,11 @@
       "bytes": 3989,
       "scope": "test",
       "sha256": "6bf1c01e16a52fe5965718b7d2fdeb23713303d0d17ab17a765e1b795531b83c"
+    },
+    "tests/golden/test_source_immutability.py": {
+      "bytes": 7376,
+      "scope": "test",
+      "sha256": "f103439a8ad3dc3b6854aa90236499990b63d8559c10e6fe4de80d5b6c2024bb"
     },
     "tests/integration/README.md": {
       "bytes": 323,
@@ -1332,6 +1357,6 @@
       "sha256": "191a842486a8f6c7ad45df6833020c06e267d60cd81f71ff59f136a307415384"
     }
   },
-  "generated_at": "2026-08-19T03:37:45Z",
+  "generated_at": "2026-08-19T03:49:12Z",
   "schema_version": 2
 }
