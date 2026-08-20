@@ -1,0 +1,33 @@
+name: Export Project Template Archive
+
+on:
+  pull_request:
+    branches:
+      - claude/excel-automation-template-ewsbzf
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build clean source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact/Project-Template
+          rsync -a ./ artifact/Project-Template/ \
+            --exclude '.git/' \
+            --exclude 'artifact/' \
+            --exclude '.github/workflows/export-project-template-archive.yml'
+          cd artifact
+          zip -qr Project-Template-Source.zip Project-Template
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-template-source
+          path: artifact/Project-Template-Source.zip
+          if-no-files-found: error
+          retention-days: 1
